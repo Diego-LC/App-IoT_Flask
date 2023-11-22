@@ -61,15 +61,8 @@ def get_last_10_data_csv():
     for data in cursor:
         csv_data.append([data['time'], data['medicionLuz']])
 
-    # Crea un objeto StringIO para escribir datos CSV en memoria
-    csv_buffer = StringIO()
-    
-    # Utiliza csv.writer para escribir datos en el objeto StringIO
-    csv_writer = csv.writer(csv_buffer)
-    csv_writer.writerows(csv_data)
-
     # Devuelve los datos CSV como texto plano en la respuesta Flask
-    return Response(csv_buffer.getvalue(), content_type='text/plain;charset=utf-8')
+    return jsonify(csv_data)
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=8081, debug=True)
