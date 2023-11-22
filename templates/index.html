@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Último Dato</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        
+        h1 {
+            color: #333;
+        }
+        
+        p {
+            color: #666;
+        }
+        
+        p#actualizado {
+            font-style: italic;
+        }
+        
+        #botonPausa {
+            background-color: #4CAF50;
+            /* Color de fondo */
+            border: none;
+            /* Sin bordes */
+            color: white;
+            /* Color del texto */
+            padding: 15px 32px;
+            /* Espaciado interno */
+            text-align: center;
+            /* Alineación del texto */
+            text-decoration: none;
+            /* Sin decoración de texto */
+            display: inline-block;
+            font-size: 16px;
+            /* Tamaño de la fuente */
+            margin: 4px 2px;
+            /* Margen */
+            cursor: pointer;
+            /* Cambia el cursor al pasar el ratón */
+            transition-duration: 0.4s;
+            /* Duración de la transición */
+            border-radius: 10px;
+        }
+        
+        #botonPausa:hover {
+            background-color: #45a049;
+            /* Color de fondo al pasar el ratón */
+        }
+    </style>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/data.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+</head>
+
+<body>
+    <h1>Último Dato</h1>
+    <p id="timestamp">Timestamp: </p>
+    <p id="medicion">Medición: </p>
+    <p id="actualizado">Última actualización: </p>
+    <button id="botonPausa" onclick="pausar()">Pausar</button>
+
+    <figure class="highcharts-figure">
+        <div id="container"></div>
+        <p class="highcharts-description">
+            Datasets formatted in CSV or JSON can be fetched remotely using the
+            <code>data</code> module. This chart shows how a chart can also be configured to poll against the remote source.
+        </p>
+    </figure>
+
+    <div class="ld-form">
+        <div class="ld-row">
+            <label class="ld-label">
+                Enable Polling
+            </label>
+            <input type="checkbox" checked="checked" id="enablePolling" />
+        </div>
+        <div class="ld-row">
+            <label class="ld-label">
+                Polling Time (Seconds)
+            </label>
+            <input class="ld-time-input" type="number" value="2" id="pollingTime" />
+        </div>
+        <div class="ld-row">
+            <label class="ld-label">
+                CSV URL
+            </label>
+            <input class="ld-url-input" type="text" id="fetchURL" />
+        </div>
+    </div>
+    <!-- Script para actualizar automáticamente la página -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+        let updateInterval;
+
+        function updateData() {
+            $.get('/api/get_last_data', function(data) {
+                $('#timestamp').text('Timestamp: ' + data.time);
+                $('#medicion').text('Medición: ' + data.Medicion);
+
+                let ahora = new Date();
+                let horas = ahora.getHours();
+                let minutos = ahora.getMinutes();
+                let segundos = ahora.getSeconds();
+                console.log("Hora actual: " + horas + ":" + minutos + ":" + segundos);
+                $('#actualizado').text('Última actualización: ' + horas + ":" + minutos + ":" + segundos);
+            });
+        }
+
+        function pausar() {
+            let boton = document.getElementById("botonPausa");
+
+            if (boton.innerHTML === "Pausar") {
+                boton.innerHTML = "Continuar";
+                clearInterval(updateInterval);
+            } else {
+                boton.innerHTML = "Pausar";
+                updateData(); // Llama a la función updateData inmediatamente
+                updateInterval = setInterval(updateData, 1000);
+            }
+        }
+
+        // Llama a la función updateData al cargar la página
+        $(document).ready(function() {
+            updateData();
+            updateInterval = setInterval(updateData, 1000);
+        });
+    </script>
+    <script>
+        const defaultData = 'https://demo-live-data.highcharts.com/time-data.csv';
+        const urlInput = document.getElementById('fetchURL');
+        const pollingCheckbox = document.getElementById('enablePolling');
+        const pollingInput = document.getElementById('pollingTime');
+
+        function createChart() {
+            Highcharts.chart('container', {
+                chart: {
+                    type: 'areaspline'
+                },
+                title: {
+                    text: 'Live Data'
+                },
+                accessibility: {
+                    announceNewData: {
+                        enabled: true,
+                        minAnnounceInterval: 15000,
+                        announcementFormatter: function(
+                            allSeries,
+                            newSeries,
+                            newPoint) {
+                            if (newPoint) {
+                                return 'New point added. Value: ' + newPoint.y;
+                            }
+                            return false;
+                        }
+                    }
+                },
+                plotOptions: {
+                    areaspline: {
+                        color: '#32CD32',
+                        fillColor: {
+                            linearGradient: {
+                                x1: 0,
+                                x2: 0,
+                                y1: 0,
+                                y2: 1
+                            },
+                            stops: [
+                                [0, '#32CD32'],
+                                [1, '#32CD3200']
+                            ]
+                        },
+                        threshold: null,
+                        marker: {
+                            lineWidth: 1,
+                            lineColor: null,
+                            fillColor: 'white'
+                        }
+                    }
+                },
+                data: {
+                    csvURL: urlInput.value,
+                    enablePolling: pollingCheckbox.checked === true,
+                    dataRefreshRate: parseInt(pollingInput.value, 10)
+                }
+            });
+
+            if (pollingInput.value < 1 || !pollingInput.value) {
+                pollingInput.value = 1;
+            }
+        }
+
+        urlInput.value = defaultData;
+
+        // We recreate instead of using chart update to make sure the loaded CSV
+        // and such is completely gone.
+        pollingCheckbox.onchange = urlInput.onchange =
+            pollingInput.onchange = createChart;
+
+        // Create the chart
+        createChart();
+    </script>
+</body>
