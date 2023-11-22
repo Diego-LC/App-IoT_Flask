@@ -52,6 +52,7 @@ def get_last_data():
 @app.route('/api/last_Lux_data', methods=['GET'])
 def last_lux_data():
     data = collection.find_one(sort=[("time", -1)])
+    print("Medición dato: "+ data['medicionLuz'])
     return jsonify(data['medicionLuz'])
 
 @app.route('/api/get_lux_values', methods=['GET'])

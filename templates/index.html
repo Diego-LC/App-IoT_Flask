@@ -163,7 +163,7 @@ var datos= $.get('/api/get_lux_values', function(data) {
                 return JSON.parse(data);
             });
 const data = (function () {
-    const data = datos;
+    const data = datos.responseJSON;
     const time = new Date().getTime();
     var contador = 0;
     for (let i = -19; i <= 0; i += 1) {
