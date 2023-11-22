@@ -136,7 +136,7 @@
     <script>
         // On chart load, start an interval that adds points to the chart and animate
 // the pulsating marker.
-var unDato = fetch('http://34.239.209.214:8081/api/last_Lux_data').then(response => response.json());
+var unDato = $('#medicion').value;
 const onChartLoad = function () {
 
     const chart = this,
@@ -151,7 +151,9 @@ const onChartLoad = function () {
 };
 
 // Create the initial data
-var datos= fetch('http://34.239.209.214:8081/api/get_lux_values').then(response => response.json());
+var datos= JSON.parse($.get('/api/get_lux_values', function(data) {
+                return data.Medicion;
+            }));
 const data = (function () {
     const data = datos;
     const time = new Date().getTime();
