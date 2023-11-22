@@ -117,8 +117,8 @@
                 console.log("Hora actual: " + horas + ":" + minutos + ":" + segundos);
                 $('#actualizado').text('Última actualización: ' + horas + ":" + minutos + ":" + segundos);
             });
-            $.get('/api/get_lux_values', function(data) {
-                $('#datoLux').text(data);
+            $.get('/api/last_Lux_data', function(data) {
+                $('#datoLux').text(data).responseJSON;
             });
         }
 
@@ -160,7 +160,7 @@ const onChartLoad = function () {
 
 // Create the initial data
 var datos= $.get('/api/get_lux_values', function(data) {
-                return JSON.parse(data);
+                return data;
             });
 const data = (function () {
     const data = datos.responseJSON;
