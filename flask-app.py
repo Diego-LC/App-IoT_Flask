@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify, render_template
 from pymongo import MongoClient
 from bson import ObjectId
+from flask import Response
 import json
 import csv
 
@@ -52,7 +53,7 @@ def get_last_10_data_csv():
     # Obtiene los últimos 10 datos de la colección MongoDB
     cursor = collection.find(sort=[("time", -1)], limit=10)
     
-    # Prepara los encabezados del archivo CSV
+
     csv_data = [['Time', 'Value']]
 
     # Agrega cada dato al archivo CSV
@@ -64,6 +65,7 @@ def get_last_10_data_csv():
         csv.dumps(csv_data, delimiter=',', quotechar='"'),
         content_type='text/csv',
     )
+
     
     # Configura el nombre del archivo para la descarga
     csv_response.headers["Content-Disposition"] = "attachment; filename=last_10_data.csv"
