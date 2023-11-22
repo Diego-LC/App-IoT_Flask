@@ -4,6 +4,7 @@ from bson import ObjectId
 from flask import Response
 import json
 import csv
+from io import StringIO
 
 app = Flask(__name__)
 
@@ -52,20 +53,26 @@ def get_last_data():
 def get_last_10_data_csv():
     # Obtiene los últimos 10 datos de la colección MongoDB
     cursor = collection.find(sort=[("time", -1)], limit=10)
-    
 
+    # Prepara los encabezados del archivo CSV
     csv_data = [['Time', 'Value']]
 
     # Agrega cada dato al archivo CSV
     for data in cursor:
         csv_data.append([data['time'], data['medicionLuz']])
 
-    # Crea una respuesta Flask con el archivo CSV
+    # Crea un objeto StringIO para escribir datos CSV en memoria
+    csv_buffer = StringIO()
+    
+    # Utiliza csv.writer para escribir datos en el objeto StringIO
+    csv_writer = csv.writer(csv_buffer)
+    csv_writer.writerows(csv_data)
+
+    # Crea una respuesta Flask con el archivo CSV en memoria
     csv_response = Response(
-        csv.dumps(csv_data, delimiter=',', quotechar='"'),
+        csv_buffer.getvalue(),
         content_type='text/csv',
     )
-
     
     # Configura el nombre del archivo para la descarga
     csv_response.headers["Content-Disposition"] = "attachment; filename=last_10_data.csv"
