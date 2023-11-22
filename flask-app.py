@@ -68,16 +68,8 @@ def get_last_10_data_csv():
     csv_writer = csv.writer(csv_buffer)
     csv_writer.writerows(csv_data)
 
-    # Crea una respuesta Flask con el archivo CSV en memoria
-    csv_response = Response(
-        csv_buffer.getvalue(),
-        content_type='text/csv',
-    )
-    
-    # Configura el nombre del archivo para la descarga
-    csv_response.headers["Content-Disposition"] = "attachment; filename=last_10_data.csv"
-
-    return csv_response
+    # Devuelve los datos CSV como texto plano en la respuesta Flask
+    return Response(csv_buffer.getvalue(), content_type='text/plain;charset=utf-8')
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=8081, debug=True)
