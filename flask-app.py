@@ -49,20 +49,25 @@ def get_last_data():
                                                        ', Temperatura: ' + str(data['medicionTemperatura'])[:5] +
                                                        '°C, Acelerómetro: ' + str(data['medicionAcelerometro'])})
 
-@app.route('/api/get_csv', methods=['GET'])
-def get_last_10_data_csv():
+@app.route('/api/last_Lux_data', methods=['GET'])
+def get_last_data():
+    data = collection.find_one(sort=[("time", -1)])
+    return jsonify(data['medicionLuz'])
+
+@app.route('/api/get_lux_values', methods=['GET'])
+def get_last_10():
     # Obtiene los últimos 10 datos de la colección MongoDB
     cursor = collection.find(sort=[("time", -1)], limit=10)
 
     # Prepara los encabezados del archivo CSV
-    csv_data = [['Time', 'Value']]
+    datos = []
 
     # Agrega cada dato al archivo CSV
     for data in cursor:
-        csv_data.append([data['time'], data['medicionLuz']])
+        datos.append(data['medicionLuz'])
 
     # Devuelve los datos CSV como texto plano en la respuesta Flask
-    return jsonify(csv_data)
+    return jsonify(datos)
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=8081, debug=True)

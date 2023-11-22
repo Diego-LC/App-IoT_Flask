@@ -71,8 +71,7 @@
     <figure class="highcharts-figure">
         <div id="container"></div>
         <p class="highcharts-description">
-            Datasets formatted in CSV or JSON can be fetched remotely using the
-            <code>data</code> module. This chart shows how a chart can also be configured to poll against the remote source.
+            Chart showing data updating every second, with old data being removed.
         </p>
     </figure>
 
@@ -135,77 +134,134 @@
         });
     </script>
     <script>
-        const defaultData = 'http://34.239.209.214:8081/api/get_csv';
-        const urlInput = document.getElementById('fetchURL');
-        const pollingCheckbox = document.getElementById('enablePolling');
-        const pollingInput = document.getElementById('pollingTime');
+        // On chart load, start an interval that adds points to the chart and animate
+// the pulsating marker.
+const onChartLoad = function () {
+    const chart = this,
+        series = chart.series[0];
 
-        function createChart() {
-            Highcharts.chart('container', {
-                chart: {
-                    type: 'areaspline'
-                },
-                title: {
-                    text: 'Live Data'
-                },
-                accessibility: {
-                    announceNewData: {
-                        enabled: true,
-                        minAnnounceInterval: 15000,
-                        announcementFormatter: function(
-                            allSeries,
-                            newSeries,
-                            newPoint) {
-                            if (newPoint) {
-                                return 'New point added. Value: ' + newPoint.y;
-                            }
-                            return false;
-                        }
-                    }
-                },
-                plotOptions: {
-                    areaspline: {
-                        color: '#32CD32',
-                        fillColor: {
-                            linearGradient: {
-                                x1: 0,
-                                x2: 0,
-                                y1: 0,
-                                y2: 1
-                            },
-                            stops: [
-                                [0, '#32CD32'],
-                                [1, '#32CD3200']
-                            ]
-                        },
-                        threshold: null,
-                        marker: {
-                            lineWidth: 1,
-                            lineColor: null,
-                            fillColor: 'white'
-                        }
-                    }
-                },
-                data: {
-                    csvURL: urlInput.value,
-                    enablePolling: pollingCheckbox.checked === true,
-                    dataRefreshRate: parseInt(pollingInput.value, 10)
-                }
+    setInterval(function () {
+        const x = (new Date()).getTime(), // current time
+            y = fetch('http://34.239.209.214:8081/api/last_Lux_data').then(response => response.json());
+
+        series.addPoint([x, y], true, true);
+    }, 1000);
+};
+
+// Create the initial data
+const data = (function () {
+    const data = fetch('http://34.239.209.214:8081/api/get_lux_values').then(response => response.json());
+    const time = new Date().getTime();
+    var contador = 0;
+    for (let i = -19; i <= 0; i += 1) {
+        data.push({
+            x: time + i * 1000,
+            y: data[contador]
+        });
+        contador++;
+    }
+    return data;
+}());
+
+// Plugin to add a pulsating marker on add point
+Highcharts.addEvent(Highcharts.Series, 'addPoint', e => {
+    const point = e.point,
+        series = e.target;
+
+    if (!series.pulse) {
+        series.pulse = series.chart.renderer.circle()
+            .add(series.markerGroup);
+    }
+
+    setTimeout(() => {
+        series.pulse
+            .attr({
+                x: series.xAxis.toPixels(point.x, true),
+                y: series.yAxis.toPixels(point.y, true),
+                r: series.options.marker.radius,
+                opacity: 1,
+                fill: series.color
+            })
+            .animate({
+                r: 20,
+                opacity: 0
+            }, {
+                duration: 1000
             });
+    }, 1);
+});
 
-            if (pollingInput.value < 1 || !pollingInput.value) {
-                pollingInput.value = 1;
+
+Highcharts.chart('container', {
+    chart: {
+        type: 'spline',
+        events: {
+            load: onChartLoad
+        }
+    },
+
+    time: {
+        useUTC: false
+    },
+
+    title: {
+        text: 'Live random data'
+    },
+
+    accessibility: {
+        announceNewData: {
+            enabled: true,
+            minAnnounceInterval: 15000,
+            announcementFormatter: function (allSeries, newSeries, newPoint) {
+                if (newPoint) {
+                    return 'New point added. Value: ' + newPoint.y;
+                }
+                return false;
             }
         }
+    },
 
-        urlInput.value = defaultData;
+    xAxis: {
+        type: 'datetime',
+        tickPixelInterval: 150,
+        maxPadding: 0.1
+    },
 
-        // We recreate instead of using chart update to make sure the loaded CSV
-        // and such is completely gone.
-        pollingCheckbox.onchange = urlInput.onchange =
-            pollingInput.onchange = createChart;
+    yAxis: {
+        title: {
+            text: 'Value'
+        },
+        plotLines: [
+            {
+                value: 0,
+                width: 1,
+                color: '#808080'
+            }
+        ]
+    },
 
-        // Create the chart
-        createChart();
+    tooltip: {
+        headerFormat: '<b>{series.name}</b><br/>',
+        pointFormat: '{point.x:%Y-%m-%d %H:%M:%S}<br/>{point.y:.2f}'
+    },
+
+    legend: {
+        enabled: false
+    },
+
+    exporting: {
+        enabled: false
+    },
+
+    series: [
+        {
+            name: 'Random data',
+            lineWidth: 2,
+            color: Highcharts.getOptions().colors[2],
+            data
+        }
+    ]
+});
+
     </script>
 </body>
