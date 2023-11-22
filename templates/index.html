@@ -53,6 +53,9 @@
             background-color: #45a049;
             /* Color de fondo al pasar el ratón */
         }
+        #datoLux {
+            visibility: hidden;
+        }
     </style>
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/modules/data.js"></script>
@@ -74,6 +77,8 @@
             Chart showing data updating every second, with old data being removed.
         </p>
     </figure>
+
+    <div id="datoLux"></div>
 
     <div class="ld-form">
         <div class="ld-row">
@@ -112,6 +117,9 @@
                 console.log("Hora actual: " + horas + ":" + minutos + ":" + segundos);
                 $('#actualizado').text('Última actualización: ' + horas + ":" + minutos + ":" + segundos);
             });
+            $.get('/api/get_lux_values', function(data) {
+                $('#datoLux').text(data);
+            });
         }
 
         function pausar() {
@@ -136,7 +144,7 @@
     <script>
         // On chart load, start an interval that adds points to the chart and animate
 // the pulsating marker.
-var unDato = $('#medicion').value;
+var unDato = parseInt($('#datoLux').value);
 const onChartLoad = function () {
 
     const chart = this,
@@ -151,9 +159,9 @@ const onChartLoad = function () {
 };
 
 // Create the initial data
-var datos= JSON.parse($.get('/api/get_lux_values', function(data) {
-                return data.Medicion;
-            }));
+var datos= $.get('/api/get_lux_values', function(data) {
+                return JSON.parse(data);
+            });
 const data = (function () {
     const data = datos;
     const time = new Date().getTime();
