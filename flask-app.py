@@ -50,12 +50,12 @@ def get_last_data():
                                                        '°C, Acelerómetro: ' + str(data['medicionAcelerometro'])})
 
 @app.route('/api/last_Lux_data', methods=['GET'])
-def get_last_data():
+def last_lux_data():
     data = collection.find_one(sort=[("time", -1)])
     return jsonify(data['medicionLuz'])
 
 @app.route('/api/get_lux_values', methods=['GET'])
-def get_last_10():
+def get_last_10_lux_data():
     # Obtiene los últimos 10 datos de la colección MongoDB
     cursor = collection.find(sort=[("time", -1)], limit=10)
 
