@@ -50,8 +50,8 @@ def get_last_data():
     # Convierte el objeto BSON a JSON
     json_data = json_util.dumps(data)
 
-    print("json get data: \t", json_data)
-    print("Medición dato: "+ str(data['medicionLuz']))
+    print("GET time : \t", json_data["time"])
+    print("GET Medición dato: "+ str(data['medicionLuz']))
     print()
 
     # Devuelve los datos en formato JSON
