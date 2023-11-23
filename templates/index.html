@@ -136,7 +136,7 @@ const onChartLoad = function () {
             y = datoTemperatura;
 
         series.addPoint([x, y], true, true);
-    }, 2000);
+    }, 1000);
 };
 
 // Create the initial data
@@ -232,7 +232,7 @@ Highcharts.chart('container', {
 
     tooltip: {
         headerFormat: '<b>{series.name}</b><br/>',
-        pointFormat: '{point.x:%d-%m-%Y %H:%M:%S}<br/>{point.y:.2f}'
+        pointFormat: '{point.x:%d-%m-%Y %H:%M:%S}<br/>{point.y:.2f} °C'
     },
 
     legend: {
