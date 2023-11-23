@@ -3,9 +3,34 @@ from pymongo import MongoClient
 from bson import ObjectId
 from flask import Response
 from flask_socketio import SocketIO
+import socket
 import json
 
 app = Flask(__name__)
+socketio = SocketIO(app)
+
+# Configuración para el servidor UDP
+udp_host = '0.0.0.0'
+udp_port = 5005
+udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+udp_socket.bind((udp_host, udp_port))
+
+def udp_listener():
+    while True:
+        data, addr = udp_socket.recvfrom(1024)  # Ajusta el tamaño del buffer según tus necesidades
+        try:
+            # Intenta cargar los datos como JSON
+            json_data = json.loads(data.decode('utf-8'))
+            socketio.emit('sensor_data', json_data)
+            print("Datos UDP recibidos y emitidos:", json_data)
+            datos = {"time": json_data["time"], "medicionLuz": json_data["medicionLuz"],
+            "medicionAcelerometro": json_data["medicionAcelerometro"],
+            "medicionTemperatura": json_data["medicionTemperatura"],
+            "nombrenodo": json_data["nombrenodo"]}
+            inserted_data = collection.insert_one(datos)
+        except json.JSONDecodeError as e:
+            print("Error al decodificar datos JSON:", e)
+
 
 # Configura la conexión a la base de datos MongoDB
 client = MongoClient('mongodb://localhost:27017/')
@@ -34,19 +59,22 @@ def receive_data():
         return jsonify({'message': 'Datos incorrectos o faltantes'}), 400
 
 @app.route('/data', methods=['GET'])
-def get_data():
-    # Renderiza un html con datos genéricos
-    datos = {'time': 'Fecha', 'Medicion': 'Datos luz, temperatura, acelerómetro'}
+def index():
+    return render_template('index.html')
 
-    return render_template('index.html', ultimo_dato=datos)
 
 # Nueva ruta para obtener el último dato en formato JSON
 @app.route('/api/get_last_data', methods=['GET'])
 def get_last_data():
     data = collection.find_one(sort=[("time", -1)])
-    return jsonify({'time': data['time'], 'Medicion': 'Luz: ' + str(data['medicionLuz']) +
-                        ', Temperatura: ' + str(data['medicionTemperatura'])[:5] +
-                        '°C, Acelerómetro: ' + str(data['medicionAcelerometro'])})
+    print("Datos: ", data)
+    # Convierte el objeto BSON a JSON
+    json_data = json_util.dumps(data)
+
+    print("json data: ", json_data)
+
+    # Devuelve los datos en formato JSON
+    return jsonify(json_data)
 
 @app.route('/api/last_Lux_data', methods=['GET'])
 def last_lux_data():
@@ -67,5 +95,17 @@ def get_last_10_lux_data():
     # Devuelve los datos CSV como texto plano en la respuesta Flask
     return jsonify(datos)
 
+@socketio.on('connect')
+def handle_connect():
+    print('Cliente conectado')
+    socketio.emit('message', {'data': 'Conexión exitosa'})
+
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=8081, debug=True)
+    # Inicia el hilo para escuchar datos UDP en segundo plano
+    import threading
+    udp_thread = threading.Thread(target=udp_listener)
+    udp_thread.daemon = True
+    udp_thread.start()
+
+    # Inicia la aplicación Flask con SocketIO
+    socketio.run(app, host="0.0.0.0", port=8082, debug=True)
