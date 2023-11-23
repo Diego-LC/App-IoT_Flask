@@ -46,12 +46,12 @@ def index():
 @app.route('/api/get_last_data', methods=['GET'])
 def get_last_data():
     data = collection.find_one(sort=[("time", -1)])
-    print("Datos: ", data)
+    #print("Datos: ", data)
     # Convierte el objeto BSON a JSON
     json_data = json_util.dumps(data)
 
-    print("json get data luz: \t", json_data["medicionLuz"])
-    print("json get data T°: \t", json_data["medicionTemperatura"])
+    print("json get data luz: \t", json_data[1])
+    print("json get data T°: \t", json_data[2])
 
     # Devuelve los datos en formato JSON
     return jsonify(json_data)
