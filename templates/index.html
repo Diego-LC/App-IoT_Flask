@@ -47,6 +47,8 @@
     </div>
     <script>
         // Tu código JavaScript para manejar la visualización en tiempo real irá aquí
+    var datoLuz = 0;
+    var datoTemperatura = 0;
         document.addEventListener('DOMContentLoaded', function () {
     // Configura el gráfico en el canvas
     var ctx = document.getElementById('real-time-chart').getContext('2d');
@@ -77,8 +79,7 @@
     });
 
     // Función para realizar solicitudes HTTP periódicas y actualizar el gráfico
-    var datoLuz = 0;
-    var datoTemperatura = 0;
+
     function fetchDataAndUpdateChart() {
         const apiUrl = '/api/get_last_data';
 
