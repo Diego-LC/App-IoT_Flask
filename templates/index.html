@@ -132,7 +132,7 @@ const onChartLoad = function () {
 
     setInterval(function () {
         const x = (new Date()).getTime(), // current time
-            y = Math.random();
+            y = datoTemperatura;
 
         series.addPoint([x, y], true, true);
     }, 1000);
@@ -194,7 +194,7 @@ Highcharts.chart('container', {
     },
 
     title: {
-        text: 'Live random data'
+        text: 'Grado de Temperatura en Tiempo Real'
     },
 
     accessibility: {
@@ -218,7 +218,7 @@ Highcharts.chart('container', {
 
     yAxis: {
         title: {
-            text: 'Value'
+            text: 'Grado de Temperatura (°C)'
         },
         plotLines: [
             {
@@ -231,7 +231,7 @@ Highcharts.chart('container', {
 
     tooltip: {
         headerFormat: '<b>{series.name}</b><br/>',
-        pointFormat: '{point.x:%Y-%m-%d %H:%M:%S}<br/>{point.y:.2f}'
+        pointFormat: '{point.x:%d-%m-%Y %H:%M:%S}<br/>{point.y:.2f}'
     },
 
     legend: {
@@ -244,7 +244,7 @@ Highcharts.chart('container', {
 
     series: [
         {
-            name: 'Random data',
+            name: 'Temperatura',
             lineWidth: 2,
             color: Highcharts.getOptions().colors[2],
             data
