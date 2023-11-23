@@ -18,28 +18,28 @@ collection = db['data']  # Nombre de la colección
 @app.route('/api/data', methods=['POST'])
 def receive_data():
     data = request.get_json()
-    datos = {"time": data["time"], "medicionLuz": data["medicionLuz"],
+
+    if all(key in data for key in ["time", "medicionLuz", "medicionAcelerometro", "medicionTemperatura", "nombrenodo"]):
+        datos = {
+            "time": data["time"],
+            "medicionLuz": data["medicionLuz"],
             "medicionAcelerometro": data["medicionAcelerometro"],
             "medicionTemperatura": data["medicionTemperatura"],
-            "nombrenodo": data["nombrenodo"]}
+            "nombrenodo": data["nombrenodo"]
+        }
 
-    if data:
         # Inserta los datos en la colección MongoDB
         inserted_data = collection.insert_one(datos)
-
-        # Convierte el ObjectId en una cadena antes de devolverlo
         inserted_id_str = str(inserted_data.inserted_id)
-        print("Datos POST: "+ str(datos['time']))
-        print("Datos POST: "+ str(datos['medicionLuz']))
-        print("Datos POST: "+ str(datos['medicionTemperatura']))
+
+        print("Datos POST time: "+ str(datos['time']))
+        print("Datos POST luz: "+ str(datos['medicionLuz']))
+        print("Datos POST temperatura: "+ str(datos['medicionTemperatura']))
 
         return jsonify({'message': 'Datos almacenados correctamente', 'inserted_id': inserted_id_str}), 200
     else:
         return jsonify({'message': 'Datos incorrectos o faltantes'}), 400
 
-@app.route('/data', methods=['GET'])
-def index():
-    return render_template('index.html')
 
 
 # Nueva ruta para obtener el último dato en formato JSON
@@ -50,8 +50,9 @@ def get_last_data():
     # Convierte el objeto BSON a JSON
     json_data = json_util.dumps(data)
 
-    print("json get data luz: \t", json_data)
-    print("json get data T°: \t", json_data[2])
+    print("json get data: \t", json_data)
+    print("Medición dato: "+ str(data['medicionLuz']))
+    print()
 
     # Devuelve los datos en formato JSON
     return jsonify(json_data)
@@ -61,7 +62,7 @@ def last_lux_data():
     data = collection.find_one(sort=[("time", -1)])
     print("Medición dato: "+ str(data['medicionLuz']))
     return jsonify(data['medicionLuz'])
-
+ 
 @app.route('/api/get_lux_values', methods=['GET'])
 def get_last_10_lux_data():
     # Obtiene los últimos 10 datos de la colección MongoDB
