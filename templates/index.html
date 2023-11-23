@@ -99,7 +99,7 @@
     function updateChart(data) {
         const { time, medicionLuz, medicionTemperatura } = JSON.parse(data);
         datoLuz = medicionLuz;
-        datoTemperatura = medicionTemperatura;
+        datoTemperatura = Object.assign(medicionTemperatura);
 
         // Actualiza el gráfico con los nuevos datos
         realTimeChart.data.labels.push(time);
@@ -135,7 +135,7 @@ const onChartLoad = function () {
             y = datoTemperatura;
 
         series.addPoint([x, y], true, true);
-    }, 1000);
+    }, 2000);
 };
 
 // Create the initial data
