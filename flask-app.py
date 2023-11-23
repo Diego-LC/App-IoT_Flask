@@ -45,12 +45,12 @@ def receive_data():
 # Nueva ruta para obtener el último dato en formato JSON
 @app.route('/api/get_last_data', methods=['GET'])
 def get_last_data():
-    data = collection.find_one(sort=[("time", -1)])
+    data = collection.find_one(sort=[('_id', client.DESCENDING)])
     #print("Datos: ", data)
     # Convierte el objeto BSON a JSON
     json_data = json_util.dumps(data)
 
-    print("GET time : \t", json_data["time"])
+    print("GET time : \t", str(json_data['time']))
     print("GET Medición dato: "+ str(data['medicionLuz']))
     print()
 
