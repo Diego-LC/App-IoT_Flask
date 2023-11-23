@@ -29,7 +29,9 @@ def receive_data():
 
         # Convierte el ObjectId en una cadena antes de devolverlo
         inserted_id_str = str(inserted_data.inserted_id)
-        print(datos['time'])
+        print("Datos POST: "+ str(datos['time']))
+        print("Datos POST: "+ str(datos['medicionLuz']))
+        print("Datos POST: "+ str(datos['medicionTemperatura']))
 
         return jsonify({'message': 'Datos almacenados correctamente', 'inserted_id': inserted_id_str}), 200
     else:
@@ -48,7 +50,8 @@ def get_last_data():
     # Convierte el objeto BSON a JSON
     json_data = json_util.dumps(data)
 
-    print("json data: ", json_data)
+    print("json get data luz: \t", json_data["medicionLuz"])
+    print("json get data T°: \t", json_data["medicionTemperatura"])
 
     # Devuelve los datos en formato JSON
     return jsonify(json_data)
