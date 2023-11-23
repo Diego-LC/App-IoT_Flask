@@ -147,7 +147,7 @@ const data = (function () {
     for (let i = -19; i <= 0; i += 1) {
         data.push({
             x: time + i * 1000,
-            y: Math.random()
+            y: 0
         });
     }
     return data;
@@ -248,7 +248,7 @@ Highcharts.chart('container', {
             name: 'Temperatura',
             lineWidth: 2,
             color: Highcharts.getOptions().colors[2],
-            data
+            '{data:.2f}'
         }
     ]
 });
