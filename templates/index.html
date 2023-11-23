@@ -100,7 +100,7 @@
     function updateChart(data) {
         const { time, medicionLuz, medicionTemperatura } = JSON.parse(data);
         datoLuz = medicionLuz;
-        datoTemperatura = medicionTemperatura;
+        datoTemperatura = +medicionTemperatura.toFixed(2);
 
         // Actualiza el gráfico con los nuevos datos
         realTimeChart.data.labels.push(time);
@@ -248,7 +248,7 @@ Highcharts.chart('container', {
             name: 'Temperatura',
             lineWidth: 2,
             color: Highcharts.getOptions().colors[2],
-            data:.2
+            data
         }
     ]
 });
