@@ -109,4 +109,4 @@ if __name__ == '__main__':
     udp_thread.start()
 
     # Inicia la aplicación Flask con SocketIO
-    socketio.run(app, host="0.0.0.0", port=8082, debug=True)
+    socketio.run(app, host="0.0.0.0", port=8081, debug=True)
