@@ -2,9 +2,8 @@ from flask import Flask, request, jsonify, render_template
 from pymongo import MongoClient
 from bson import ObjectId
 from flask import Response
+from flask_socketio import SocketIO
 import json
-import csv
-from io import StringIO
 
 app = Flask(__name__)
 
@@ -18,9 +17,9 @@ collection = db['data']  # Nombre de la colección
 def receive_data():
     data = request.get_json()
     datos = {"time": data["time"], "medicionLuz": data["medicionLuz"],
-              "medicionAcelerometro": data["medicionAcelerometro"],
-               "medicionTemperatura": data["medicionTemperatura"],
-               "nombrenodo": data["nombrenodo"]}
+            "medicionAcelerometro": data["medicionAcelerometro"],
+            "medicionTemperatura": data["medicionTemperatura"],
+            "nombrenodo": data["nombrenodo"]}
     print(datos)
     if data:
         # Inserta los datos en la colección MongoDB
@@ -46,8 +45,8 @@ def get_data():
 def get_last_data():
     data = collection.find_one(sort=[("time", -1)])
     return jsonify({'time': data['time'], 'Medicion': 'Luz: ' + str(data['medicionLuz']) +
-                                                       ', Temperatura: ' + str(data['medicionTemperatura'])[:5] +
-                                                       '°C, Acelerómetro: ' + str(data['medicionAcelerometro'])})
+                        ', Temperatura: ' + str(data['medicionTemperatura'])[:5] +
+                        '°C, Acelerómetro: ' + str(data['medicionAcelerometro'])})
 
 @app.route('/api/last_Lux_data', methods=['GET'])
 def last_lux_data():
@@ -60,10 +59,8 @@ def get_last_10_lux_data():
     # Obtiene los últimos 10 datos de la colección MongoDB
     cursor = collection.find(sort=[("time", -1)], limit=10)
 
-    # Prepara los encabezados del archivo CSV
     datos = []
 
-    # Agrega cada dato al archivo CSV
     for data in cursor:
         datos.append(data['medicionLuz'])
 
