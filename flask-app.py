@@ -1,9 +1,7 @@
 from flask import Flask, request, jsonify, render_template
 from pymongo import MongoClient
-from bson import ObjectId
-from flask import Response
-from flask_socketio import SocketIO
 from bson import json_util
+from flask_socketio import SocketIO
 import socket
 import json
 
