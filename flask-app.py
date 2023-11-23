@@ -12,7 +12,7 @@ socketio = SocketIO(app)
 
 # Configuración para el servidor UDP
 udp_host = '0.0.0.0'
-udp_port = 5000
+udp_port = 5001
 udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 udp_socket.bind((udp_host, udp_port))
 
