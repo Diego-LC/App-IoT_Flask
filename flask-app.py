@@ -8,28 +8,6 @@ import json
 app = Flask(__name__)
 socketio = SocketIO(app)
 
-# Configuración para el servidor UDP
-udp_host = '0.0.0.0'
-udp_port = 5002
-udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-udp_socket.bind((udp_host, udp_port))
-
-def udp_listener():
-    while True:
-        data, addr = udp_socket.recvfrom(1024)  # Ajusta el tamaño del buffer según tus necesidades
-        try:
-            # Intenta cargar los datos como JSON
-            json_data = json.loads(data.decode('utf-8'))
-            socketio.emit('sensor_data', json_data)
-            print("Datos UDP recibidos y emitidos:", json_data)
-            datos = {"time": json_data["time"], "medicionLuz": json_data["medicionLuz"],
-            "medicionAcelerometro": json_data["medicionAcelerometro"],
-            "medicionTemperatura": json_data["medicionTemperatura"],
-            "nombrenodo": json_data["nombrenodo"]}
-            inserted_data = collection.insert_one(datos)
-        except json.JSONDecodeError as e:
-            print("Error al decodificar datos JSON:", e)
-
 
 # Configura la conexión a la base de datos MongoDB
 client = MongoClient('mongodb://localhost:27017/')
@@ -100,11 +78,5 @@ def handle_connect():
     socketio.emit('message', {'data': 'Conexión exitosa'})
 
 if __name__ == '__main__':
-    # Inicia el hilo para escuchar datos UDP en segundo plano
-    import threading
-    udp_thread = threading.Thread(target=udp_listener)
-    udp_thread.daemon = True
-    udp_thread.start()
-
     # Inicia la aplicación Flask con SocketIO
     socketio.run(app, host="0.0.0.0", port=8085, debug=True)
