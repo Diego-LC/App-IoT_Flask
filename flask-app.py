@@ -12,7 +12,7 @@ socketio = SocketIO(app)
 
 # Configuración para el servidor UDP
 udp_host = '0.0.0.0'
-udp_port = 5001
+udp_port = 5002
 udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 udp_socket.bind((udp_host, udp_port))
 
@@ -109,4 +109,4 @@ if __name__ == '__main__':
     udp_thread.start()
 
     # Inicia la aplicación Flask con SocketIO
-    socketio.run(app, host="0.0.0.0", port=8081, debug=True)
+    socketio.run(app, host="0.0.0.0", port=8080, debug=True)
