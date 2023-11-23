@@ -22,7 +22,7 @@ def receive_data():
             "medicionAcelerometro": data["medicionAcelerometro"],
             "medicionTemperatura": data["medicionTemperatura"],
             "nombrenodo": data["nombrenodo"]}
-    print(datos)
+
     if data:
         # Inserta los datos en la colección MongoDB
         inserted_data = collection.insert_one(datos)
@@ -50,7 +50,7 @@ def get_last_data():
     # Convierte el objeto BSON a JSON
     json_data = json_util.dumps(data)
 
-    print("json get data luz: \t", json_data[1])
+    print("json get data luz: \t", json_data)
     print("json get data T°: \t", json_data[2])
 
     # Devuelve los datos en formato JSON
