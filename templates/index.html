@@ -44,21 +44,44 @@
 
     // Función para realizar solicitudes HTTP periódicas y actualizar el gráfico
     function fetchDataAndUpdateChart() {
-        fetch('/api/get_last_data')  // Ruta en tu servidor Flask para obtener los datos
-            .then(response => response.json())
-            .then(data => {
-                // Actualiza el gráfico con los nuevos datos
-                realTimeChart.data.labels.push(data.time);
-                realTimeChart.data.datasets[0].data.push(data.medicionLuz);
-                realTimeChart.update();
-                console.log(data);
-            })
-            .catch(error => console.error('Error al obtener datos:', error))
-            .finally(() => setTimeout(fetchDataAndUpdateChart, 1000));  // Realiza la siguiente solicitud después de un segundo
+        const apiUrl = '/api/get_last_data';
+
+        fetch(apiUrl)
+            .then(handleResponse)
+            .then(updateChart)
+            .catch(handleError)
+                .finally(scheduleNextRequest);
     }
 
-    // Inicia la función para realizar solicitudes HTTP periódicas
+    function handleResponse(response) {
+        if (!response.ok) {
+            throw new Error(`Error de red: ${response.status}`);
+        }
+        return response.json();
+    }
+
+    function updateChart(data) {
+        const { time, medicionLuz } = data;
+
+        // Actualiza el gráfico con los nuevos datos
+        realTimeChart.data.labels.push(time);
+        realTimeChart.data.datasets[0].data.push(medicionLuz);
+        realTimeChart.update();
+
+        console.log(data);
+    }
+
+    function handleError(error) {
+        console.error('Error al obtener datos:', error);
+    }
+
+    function scheduleNextRequest() {
+        setTimeout(fetchDataAndUpdateChart, 1000); // Realiza la siguiente solicitud después de un segundo
+    }
+
+// Inicia la función para realizar solicitudes HTTP periódicas
     fetchDataAndUpdateChart();
+
 });
     </script>
 </body>
