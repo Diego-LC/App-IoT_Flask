@@ -41,6 +41,10 @@ def receive_data():
         return jsonify({'message': 'Datos incorrectos o faltantes'}), 400
 
 
+@app.route('/data', methods=['GET'])
+def index():
+    return render_template('index.html')
+
 
 # Nueva ruta para obtener el último dato en formato JSON
 @app.route('/api/get_last_data', methods=['GET'])
