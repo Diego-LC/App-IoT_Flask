@@ -72,12 +72,12 @@
 
             function handleEnablePollingChange() {
                 if (enablePollingCheckbox.checked) {
-                    clearInterval(updateChartInterval);
                     fetchDataAndUpdateChart();
-                    updateChartInterval = setInterval(fetchDataAndUpdateChart, 2000);
                     startHighchartsInterval();
+                    updateChartInterval = setInterval(fetchDataAndUpdateChart, pollingTimeInput.value * 1000);
                 } else {
                     clearInterval(updateChartInterval);
+                    clearInterval(highchartsChart.interval);
                     stopHighchartsInterval();
                 }
             }
@@ -85,9 +85,9 @@
             function handlePollingTimeChange() {
                 const newInterval = parseInt(pollingTimeInput.value) * 1000;
                 clearInterval(updateChartInterval);
-                updateChartInterval = setInterval(fetchDataAndUpdateChart, newInterval);
                 if (enablePollingCheckbox.checked) {
                     fetchDataAndUpdateChart();
+                    updateChartInterval = setInterval(fetchDataAndUpdateChart, newInterval);
                 }
             }
 
