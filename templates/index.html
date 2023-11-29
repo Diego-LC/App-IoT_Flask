@@ -32,11 +32,38 @@
         <div id="real-time-chart"></div>
         <br>
         <hr>
+        <div class="ld-form">
+            <div class="ld-row">
+                <label class="ld-label">
+                    Habilitar Actualización Automática
+                </label>
+                <input type="checkbox" checked="checked" id="enablePolling" />
+            </div>
+            <div class="ld-row">
+                <label class="ld-label">
+                    Frecuencia de Actualización (segundos)
+                </label>
+                <input class="ld-time-input" type="number" value="2" id="pollingTime" />
+            </div>
+        </div>
     </div>
 
     <script>
         var datoLuz = 0;
         var datoTemperatura = 0;
+
+        // Definir la función onChartLoad
+        const onChartLoad = function () {
+            const chart = this,
+                series = chart.series[0];
+
+            setInterval(function () {
+                const x = (new Date()).getTime(),
+                    y = datoTemperatura;
+
+                series.addPoint([x, y], true, true);
+            }, 1000);
+        };
 
         // Configuración del gráfico de Highcharts
         Highcharts.chart('real-time-chart', {
@@ -98,7 +125,7 @@
         // Función para realizar solicitudes HTTP periódicas y actualizar el gráfico
         function fetchDataAndUpdateChart() {
             // Coloca la URL correcta de la API para obtener los datos
-            const apiUrl = 'http://34.239.209.214:8085/api/get_last_data';
+            const apiUrl = '/api/get_last_data';
 
             fetch(apiUrl)
                 .then(handleResponse)
