@@ -152,11 +152,13 @@
             const yLuz = datoLuz;
             const yTemp = datoTemperatura;
 
-            chart.series[0].addPoint([x, yLuz], true, true);
-            chart.series[1].addPoint([x, yTemp], true, true);
+            // Agrega el nuevo punto a las series
+            chart.series[0].addPoint({ x, y: yLuz }, true, true);
+            chart.series[1].addPoint({ x, y: yTemp }, true, true);
 
             console.log(JSON.parse(data));
         }
+
 
         function handleError(error) {
             console.error('Error al obtener datos:', error);
