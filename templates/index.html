@@ -32,7 +32,20 @@
         <div id="real-time-chart"></div>
         <br>
         <hr>
-
+        <div class="ld-form">
+            <div class="ld-row">
+                <label class="ld-label">
+                    Habilitar Actualización Automática
+                </label>
+                <input type="checkbox" checked="checked" id="enablePolling" />
+            </div>
+            <div class="ld-row">
+                <label class="ld-label">
+                    Frecuencia de Actualización (segundos)
+                </label>
+                <input class="ld-time-input" type="number" value="2" id="pollingTime" />
+            </div>
+        </div>
     </div>
 
     <script>
@@ -45,14 +58,18 @@
                 seriesLuz = chart.series[0],
                 seriesTemp = chart.series[1];
 
-            setInterval(function () {
+            function updateChart() {
                 const x = (new Date()).getTime();
                 const yLuz = datoLuz;
                 const yTemp = datoTemperatura;
 
                 seriesLuz.addPoint([x, yLuz], true, true);
                 seriesTemp.addPoint([x, yTemp], true, true);
-            }, 1000);
+
+                requestAnimationFrame(updateChart);
+            }
+
+            updateChart();
         };
 
         // Configuración del gráfico de Highcharts
@@ -115,7 +132,7 @@
         // Función para realizar solicitudes HTTP periódicas y actualizar el gráfico
         function fetchDataAndUpdateChart() {
             // Coloca la URL correcta de la API para obtener los datos
-            const apiUrl = 'http://34.239.209.214:8085/api/get_last_data';
+            const apiUrl = '/api/get_last_data';
 
             fetch(apiUrl)
                 .then(handleResponse)
@@ -132,7 +149,7 @@
         }
 
         function updateChart(data) {
-            const { time, medicionLuz, medicionTemperatura } = JSON.parse(data);
+            const { medicionLuz, medicionTemperatura } = JSON.parse(data);
             datoLuz = medicionLuz;
             datoTemperatura = +medicionTemperatura.toFixed(2);
 
