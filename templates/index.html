@@ -10,7 +10,17 @@
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script src="https://code.highcharts.com/modules/export-data.js"></script>
     <script src="https://code.highcharts.com/modules/accessibility.js"></script>
-    
+    <style>
+        body {
+            font-family: Arial;
+            margin: 80px 100px 10px 100px;
+            padding: 0;
+            max-width: 500px;
+            color: #555;
+            align-items: center;
+        }
+    </style>
+   
 </head>
 <body>
     <h1>Visualización en Tiempo Real Sensor de luz</h1>
@@ -18,13 +28,11 @@
     <br>
     <hr>
 
+
     <figure class="highcharts-figure">
         <div id="container"></div>
-        <p class="highcharts-description">
-            gráfico de Highcharts
-        </p>
     </figure>
-    
+   <hr>
     <div class="ld-form">
         <div class="ld-row">
             <label class="ld-label">
@@ -37,12 +45,6 @@
                 Frecuencia de Actualización (segundos)
             </label>
             <input class="ld-time-input" type="number" value="2" id="pollingTime"/>
-        </div>
-        <div class="ld-row">
-            <label class="ld-label">
-                URL de los Datos
-            </label>
-            <input class="ld-url-input" type="text" id="fetchURL"/>
         </div>
     </div>
     <script>
@@ -83,7 +85,7 @@
 
 
     function fetchDataAndUpdateChart() {
-        const apiUrl = '/api/get_last_data';
+        const apiUrl = 'http://34.239.209.214:8085/api/get_last_data';
 
 
         fetch(apiUrl)
@@ -284,7 +286,6 @@ Highcharts.chart('container', {
             color: Highcharts.getOptions().colors[2],
             data
         }
-        
     ]
 });
     </script>
