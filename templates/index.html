@@ -73,14 +73,15 @@
 
         // Función para manejar cambios en la casilla de verificación de habilitar actualización automática
         function handleEnablePollingChange() {
-            if (enablePollingCheckbox.checked) {
-                // Habilitar la actualización automática
-                fetchDataAndUpdateChart();
-            } else {
-                // Deshabilitar la actualización automática
-                clearTimeout(updateChartTimeout);
+                if (enablePollingCheckbox.checked) {
+                    // Habilitar la actualización automática
+                    fetchDataAndUpdateChart();
+                    updateChartInterval = setInterval(fetchDataAndUpdateChart, updateInterval);
+                } else {
+                    // Deshabilitar la actualización automática
+                    clearInterval(updateChartInterval);
+                }
             }
-        }
 
         // Función para manejar cambios en la frecuencia de actualización
         function handlePollingTimeChange() {
