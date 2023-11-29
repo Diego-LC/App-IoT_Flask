@@ -10,6 +10,16 @@
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script src="https://code.highcharts.com/modules/export-data.js"></script>
     <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    <style>
+        body {
+            font-family: Arial;
+            margin: 80px 100px 10px 100px;
+            padding: 0;
+            max-width: 500px;
+            color: #555;
+            align-items: center;
+        }
+    </style>
    
 </head>
 <body>
@@ -21,120 +31,141 @@
 
     <figure class="highcharts-figure">
         <div id="container"></div>
-        <p class="highcharts-description">
-            gráfico de Highcharts
-        </p>
     </figure>
-   
-    <div class="ld-form">
-        <div class="ld-row">
-            <label class="ld-label">
-                Habilitar Actualización Automática
-            </label>
-            <input type="checkbox" checked="checked" id="enablePolling"/>
-        </div>
-        <div class="ld-row">
-            <label class="ld-label">
-                Frecuencia de Actualización (segundos)
-            </label>
-            <input class="ld-time-input" type="number" value="2" id="pollingTime"/>
-        </div>
-        <div class="ld-row">
-            <label class="ld-label">
-                URL de los Datos
-            </label>
-            <input class="ld-url-input" type="text" id="fetchURL"/>
-        </div>
+   <hr>
+   <div class="ld-form">
+    <div class="ld-row">
+        <label class="ld-label">
+            Habilitar Actualización Automática
+        </label>
+        <input type="checkbox" checked="checked" id="enablePolling" />
     </div>
+    <div class="ld-row">
+        <label class="ld-label">
+            Frecuencia de Actualización (segundos)
+        </label>
+        <input class="ld-time-input" type="number" value="2" id="pollingTime" />
+    </div>
+</div>
+
     <script>
         // ---------------------
     var datoLuz = 0;
     var datoTemperatura = 0;
-        document.addEventListener('DOMContentLoaded', function () {
-    // Configura el gráfico en el canvas
-    var ctx = document.getElementById('real-time-chart').getContext('2d');
-    var realTimeChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: [],  // Etiquetas de tiempo
-            datasets: [{
-                label: 'Datos del Sensor',
-                data: [],   // Datos del sensor
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 1,
-                fill: false
-            }]
-        },
-        options: {
-            scales: {
-                x: [{
-                    type: 'realtime',
-                    realtime: {
-                        duration: 20000,  // Duración de la ventana de visualización en milisegundos
-                        refresh: 1000,   // Frecuencia de actualización en milisegundos
-                        delay: 1000       // Retraso inicial en milisegundos
-                    }
-                }]
+    document.addEventListener('DOMContentLoaded', function () {
+
+        // Obtener elementos del formulario
+        const enablePollingCheckbox = document.getElementById('enablePolling');
+        const pollingTimeInput = document.getElementById('pollingTime');
+
+        // Agregar eventos para manejar cambios en el formulario
+        enablePollingCheckbox.addEventListener('change', handleEnablePollingChange);
+        pollingTimeInput.addEventListener('change', handlePollingTimeChange);
+
+        // Función para manejar cambios en la casilla de verificación de habilitar actualización automática
+        function handleEnablePollingChange() {
+            if (enablePollingCheckbox.checked) {
+                // Habilitar la actualización automática
+                fetchDataAndUpdateChart();
+            } else {
+                // Deshabilitar la actualización automática
+                clearTimeout(updateChartTimeout);
             }
         }
-    });
 
-
-    // Función para realizar solicitudes HTTP periódicas y actualizar el gráfico
-
-
-    function fetchDataAndUpdateChart() {
-        const apiUrl = '/api/get_last_data';
-
-
-        fetch(apiUrl)
-            .then(handleResponse)
-            .then(updateChart)
-            .catch(handleError)
-            .finally(scheduleNextRequest);
-    }
-
-
-    function handleResponse(response) {
-        if (!response.ok) {
-            throw new Error(`Error de red: ${response.status}`);
+        // Función para manejar cambios en la frecuencia de actualización
+        function handlePollingTimeChange() {
+            const newInterval = parseInt(pollingTimeInput.value) * 1000; // Convertir a milisegundos
+            updateInterval = newInterval;
+            if (enablePollingCheckbox.checked) {
+                // Reiniciar la actualización automática con la nueva frecuencia
+                fetchDataAndUpdateChart();
+            }
         }
-        else{
-            return response.json();
+        // Configura el gráfico en el canvas
+        var ctx = document.getElementById('real-time-chart').getContext('2d');
+        var realTimeChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [],  // Etiquetas de tiempo
+                datasets: [{
+                    label: 'Datos del Sensor',
+                    data: [],   // Datos del sensor
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1,
+                    fill: false
+                }]
+            },
+            options: {
+                scales: {
+                    x: [{
+                        type: 'realtime',
+                        realtime: {
+                            duration: 20000,  // Duración de la ventana de visualización en milisegundos
+                            refresh: 1000,   // Frecuencia de actualización en milisegundos
+                            delay: 1000       // Retraso inicial en milisegundos
+                        }
+                    }]
+                }
+            }
+        });
+
+
+        // Función para realizar solicitudes HTTP periódicas y actualizar el gráfico
+
+
+        function fetchDataAndUpdateChart() {
+            const apiUrl = 'http://34.239.209.214:8085/api/get_last_data';
+
+
+            fetch(apiUrl)
+                .then(handleResponse)
+                .then(updateChart)
+                .catch(handleError)
+                .finally(scheduleNextRequest);
         }
-    }
 
 
-    function updateChart(data) {
-        const { time, medicionLuz, medicionTemperatura } = JSON.parse(data);
-        datoLuz = medicionLuz;
-        datoTemperatura = +medicionTemperatura.toFixed(2);
+        function handleResponse(response) {
+            if (!response.ok) {
+                throw new Error(`Error de red: ${response.status}`);
+            }
+            else{
+                return response.json();
+            }
+        }
 
 
-        // Actualiza el gráfico con los nuevos datos
-        realTimeChart.data.labels.push(time);
-        realTimeChart.data.datasets[0].data.push(medicionLuz);
-        realTimeChart.update();
+        function updateChart(data) {
+            const { time, medicionLuz, medicionTemperatura } = JSON.parse(data);
+            datoLuz = medicionLuz;
+            datoTemperatura = +medicionTemperatura.toFixed(2);
 
 
-        console.log(JSON.parse(data));
-    }
+            // Actualiza el gráfico con los nuevos datos
+            realTimeChart.data.labels.push(time);
+            realTimeChart.data.datasets[0].data.push(medicionLuz);
+            realTimeChart.update();
 
 
-    function handleError(error) {
-        console.error('Error al obtener datos:', error);
-        datoLuz = null;
-        datoTemperatura = null;
-    }
+            console.log(JSON.parse(data));
+        }
 
 
-    function scheduleNextRequest() {
-        setTimeout(fetchDataAndUpdateChart, 1000); // Realiza la siguiente solicitud después de un segundo
-    }
+        function handleError(error) {
+            console.error('Error al obtener datos:', error);
+            datoLuz = null;
+            datoTemperatura = null;
+        }
 
 
-// Inicia la función para realizar solicitudes HTTP periódicas
-    fetchDataAndUpdateChart();
+        function scheduleNextRequest() {
+            setTimeout(fetchDataAndUpdateChart, 1000); // Realiza la siguiente solicitud después de un segundo
+        }
+
+
+    // Inicia la función para realizar solicitudes HTTP periódicas
+        fetchDataAndUpdateChart();
 
 
 });
