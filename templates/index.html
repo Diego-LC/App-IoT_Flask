@@ -58,12 +58,13 @@
     </div>
 
     <script>
-        // ---------------------
         var datoLuz = 0;
         var datoTemperatura = 0;
         var updateChartInterval;
         var updateInterval = 2000;
-        
+        var realTimeChart;
+        var highchartsChart;
+
         document.addEventListener('DOMContentLoaded', function () {
             const enablePollingCheckbox = document.getElementById('enablePolling');
             const pollingTimeInput = document.getElementById('pollingTime');
@@ -92,8 +93,9 @@
                 }
             }
 
+            // Configurar el gráfico en el canvas
             var ctx = document.getElementById('real-time-chart').getContext('2d');
-            var realTimeChart = new Chart(ctx, {
+            realTimeChart = new Chart(ctx, {
                 type: 'line',
                 data: {
                     labels: [],
@@ -161,8 +163,8 @@
 
             fetchDataAndUpdateChart();
 
-            // ---------------------
-            const chart = Highcharts.chart('container', {
+            // Configuración del gráfico de Highcharts
+            highchartsChart = Highcharts.chart('container', {
                 chart: {
                     type: 'spline',
                     events: {
@@ -224,8 +226,8 @@
                 ]
             });
 
-            const onChartLoad = function () {
-                const series = chart.series[0];
+            function onChartLoad() {
+                const series = highchartsChart.series[0];
 
                 setInterval(function () {
                     const x = (new Date()).getTime();
@@ -233,10 +235,10 @@
 
                     series.addPoint([x, y], true, true);
                 }, 1000);
-            };
+            }
 
             function startHighchartsInterval() {
-                chart.update({
+                highchartsChart.update({
                     plotOptions: {
                         series: {
                             animation: {
@@ -248,7 +250,7 @@
             }
 
             function stopHighchartsInterval() {
-                chart.update({
+                highchartsChart.update({
                     plotOptions: {
                         series: {
                             animation: false
@@ -257,7 +259,6 @@
                 });
             }
         });
-        // ---------------------
     </script>
 </body>
 </html>
