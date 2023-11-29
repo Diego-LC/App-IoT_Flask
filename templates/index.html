@@ -61,8 +61,6 @@
         var datoLuz = 0;
         var datoTemperatura = 0;
         var updateChartInterval;
-        var updateInterval = 2000;
-        var realTimeChart;
         var highchartsChart;
 
         document.addEventListener('DOMContentLoaded', function () {
@@ -74,8 +72,9 @@
 
             function handleEnablePollingChange() {
                 if (enablePollingCheckbox.checked) {
+                    clearInterval(updateChartInterval);
                     fetchDataAndUpdateChart();
-                    updateChartInterval = setInterval(fetchDataAndUpdateChart, updateInterval);
+                    updateChartInterval = setInterval(fetchDataAndUpdateChart, 2000);
                     startHighchartsInterval();
                 } else {
                     clearInterval(updateChartInterval);
@@ -85,17 +84,16 @@
 
             function handlePollingTimeChange() {
                 const newInterval = parseInt(pollingTimeInput.value) * 1000;
-                updateInterval = newInterval;
+                clearInterval(updateChartInterval);
+                updateChartInterval = setInterval(fetchDataAndUpdateChart, newInterval);
                 if (enablePollingCheckbox.checked) {
                     fetchDataAndUpdateChart();
-                    clearInterval(updateChartInterval);
-                    updateChartInterval = setInterval(fetchDataAndUpdateChart, updateInterval);
                 }
             }
 
             // Configurar el gráfico en el canvas
             var ctx = document.getElementById('real-time-chart').getContext('2d');
-            realTimeChart = new Chart(ctx, {
+            var realTimeChart = new Chart(ctx, {
                 type: 'line',
                 data: {
                     labels: [],
@@ -208,7 +206,6 @@
                     {
                         name: 'Temperatura',
                         data: (function () {
-                            // Generate an array of data for the initial plot
                             const time = (new Date()).getTime();
                             const data = [];
                             for (let i = -19; i <= 0; i += 1) {
@@ -225,11 +222,9 @@
 
             function startHighchartsInterval() {
                 highchartsChart.series[0].addPoint([new Date().getTime(), datoTemperatura], true, true);
-                highchartsChart.series[0].addPoint([new Date().getTime(), datoTemperatura], true, true);
-                setInterval(function () {
+                highchartsChart.interval = setInterval(function () {
                     const x = (new Date()).getTime();
                     const y = datoTemperatura;
-
                     highchartsChart.series[0].addPoint([x, y], true, true);
                 }, 1000);
             }
