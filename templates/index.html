@@ -29,7 +29,8 @@
 <body>
     <div class="contenedor">
         <h1>Visualización en Tiempo Real Sensor de luz y temperatura</h1>
-        <div id="real-time-chart"></div>
+        <div id="chartLuz"></div>
+        <div id="chartTemperatura"></div>
         <br>
         <hr>
         <div class="ld-form">
@@ -52,39 +53,13 @@
         var datoLuz = 0;
         var datoTemperatura = 0;
 
-        // Definir la función onChartLoad
-        const onChartLoad = function () {
-            const chart = this,
-                seriesLuz = chart.series[0],
-                seriesTemp = chart.series[1];
-
-            function updateChart() {
-                const x = (new Date()).getTime();
-                const yLuz = datoLuz;
-                const yTemp = datoTemperatura;
-
-                seriesLuz.addPoint([x, yLuz], true, true);
-                seriesTemp.addPoint([x, yTemp], true, true);
-
-                requestAnimationFrame(updateChart);
-            }
-
-            updateChart();
-        };
-
-        // Configuración del gráfico de Highcharts
-        Highcharts.chart('real-time-chart', {
+        // Configuración del gráfico de Highcharts para Luz
+        const chartLuz = Highcharts.chart('chartLuz', {
             chart: {
                 type: 'spline',
-                events: {
-                    load: onChartLoad
-                }
-            },
-            time: {
-                useUTC: false
             },
             title: {
-                text: 'Datos en Tiempo Real'
+                text: 'Datos en Tiempo Real - Luz'
             },
             xAxis: {
                 type: 'datetime',
@@ -93,7 +68,7 @@
             },
             yAxis: {
                 title: {
-                    text: 'Valor'
+                    text: 'Valor de Luz'
                 },
                 plotLines: [
                     {
@@ -103,40 +78,53 @@
                     }
                 ]
             },
-            tooltip: {
-                headerFormat: '<b>{series.name}</b><br/>',
-                pointFormat: '{point.x:%d-%m-%Y %H:%M:%S}<br/>{point.y:.2f}'
-            },
-            legend: {
-                enabled: true
-            },
-            exporting: {
-                enabled: false
-            },
-            series: [
-                {
-                    name: 'Luz',
-                    lineWidth: 2,
-                    color: Highcharts.getOptions().colors[0],
-                    data: []
-                },
-                {
-                    name: 'Temperatura',
-                    lineWidth: 2,
-                    color: Highcharts.getOptions().colors[2],
-                    data: []
-                }
-            ]
+            series: [{
+                name: 'Luz',
+                lineWidth: 2,
+                data: []
+            }]
         });
 
-        // Función para realizar solicitudes HTTP periódicas y actualizar el gráfico
-        function fetchDataAndUpdateChart() {
+        // Configuración del gráfico de Highcharts para Temperatura
+        const chartTemperatura = Highcharts.chart('chartTemperatura', {
+            chart: {
+                type: 'spline',
+            },
+            title: {
+                text: 'Datos en Tiempo Real - Temperatura'
+            },
+            xAxis: {
+                type: 'datetime',
+                tickPixelInterval: 150,
+                maxPadding: 0.1
+            },
+            yAxis: {
+                title: {
+                    text: 'Valor de Temperatura'
+                },
+                plotLines: [
+                    {
+                        value: 0,
+                        width: 1,
+                        color: '#808080'
+                    }
+                ]
+            },
+            series: [{
+                name: 'Temperatura',
+                lineWidth: 2,
+                data: []
+            }]
+        });
+
+        // Función para realizar solicitudes HTTP periódicas y actualizar los gráficos
+        function fetchDataAndUpdateCharts() {
             // Coloca la URL correcta de la API para obtener los datos
             const apiUrl = '/api/get_last_data';
 
             fetch(apiUrl)
                 .then(handleResponse)
-                .then(updateChart)
+                .then(updateCharts)
                 .catch(handleError)
                 .finally(scheduleNextRequest);
         }
@@ -148,10 +136,18 @@
             return response.json();
         }
 
-        function updateChart(data) {
-            const { medicionLuz, medicionTemperatura } = JSON.parse(data);
+        function updateCharts(data) {
+            const { time, medicionLuz, medicionTemperatura } = JSON.parse(data);
             datoLuz = medicionLuz;
             datoTemperatura = +medicionTemperatura.toFixed(2);
+
+            const x = (new Date()).getTime();
+
+            // Actualiza el gráfico de Luz
+            chartLuz.series[0].addPoint([x, datoLuz], true, true);
+
+            // Actualiza el gráfico de Temperatura
+            chartTemperatura.series[0].addPoint([x, datoTemperatura], true, true);
 
             console.log(JSON.parse(data));
         }
@@ -163,11 +159,11 @@
         }
 
         function scheduleNextRequest() {
-            setTimeout(fetchDataAndUpdateChart, 1000); // Realiza la siguiente solicitud después de un segundo
+            setTimeout(fetchDataAndUpdateCharts, 1000); // Realiza la siguiente solicitud después de un segundo
         }
 
         // Inicia la función para realizar solicitudes HTTP periódicas
-        fetchDataAndUpdateChart();
+        fetchDataAndUpdateCharts();
     </script>
 </body>
 </html>
