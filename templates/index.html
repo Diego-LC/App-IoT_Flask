@@ -32,20 +32,7 @@
         <div id="real-time-chart"></div>
         <br>
         <hr>
-        <div class="ld-form">
-            <div class="ld-row">
-                <label class="ld-label">
-                    Habilitar Actualización Automática
-                </label>
-                <input type="checkbox" checked="checked" id="enablePolling" />
-            </div>
-            <div class="ld-row">
-                <label class="ld-label">
-                    Frecuencia de Actualización (segundos)
-                </label>
-                <input class="ld-time-input" type="number" value="2" id="pollingTime" />
-            </div>
-        </div>
+
     </div>
 
     <script>
@@ -55,13 +42,16 @@
         // Definir la función onChartLoad
         const onChartLoad = function () {
             const chart = this,
-                series = chart.series[0];
+                seriesLuz = chart.series[0],
+                seriesTemp = chart.series[1];
 
             setInterval(function () {
-                const x = (new Date()).getTime(),
-                    y = datoTemperatura;
+                const x = (new Date()).getTime();
+                const yLuz = datoLuz;
+                const yTemp = datoTemperatura;
 
-                series.addPoint([x, y], true, true);
+                seriesLuz.addPoint([x, yLuz], true, true);
+                seriesTemp.addPoint([x, yTemp], true, true);
             }, 1000);
         };
 
@@ -111,13 +101,13 @@
                     name: 'Luz',
                     lineWidth: 2,
                     color: Highcharts.getOptions().colors[0],
-                    data: [] // Debes definir dataLuz con los datos correspondientes
+                    data: []
                 },
                 {
                     name: 'Temperatura',
                     lineWidth: 2,
                     color: Highcharts.getOptions().colors[2],
-                    data: [] // Debes definir dataTemperatura con los datos correspondientes
+                    data: []
                 }
             ]
         });
@@ -125,7 +115,7 @@
         // Función para realizar solicitudes HTTP periódicas y actualizar el gráfico
         function fetchDataAndUpdateChart() {
             // Coloca la URL correcta de la API para obtener los datos
-            const apiUrl = '/api/get_last_data';
+            const apiUrl = 'http://34.239.209.214:8085/api/get_last_data';
 
             fetch(apiUrl)
                 .then(handleResponse)
@@ -146,19 +136,8 @@
             datoLuz = medicionLuz;
             datoTemperatura = +medicionTemperatura.toFixed(2);
 
-            // Actualiza el gráfico con los nuevos datos
-            const chart = Highcharts.charts[0];
-            const x = (new Date()).getTime();
-            const yLuz = datoLuz;
-            const yTemp = datoTemperatura;
-
-            // Agrega el nuevo punto a las series
-            chart.series[0].addPoint({ x, y: yLuz }, true, true);
-            chart.series[1].addPoint({ x, y: yTemp }, true, true);
-
             console.log(JSON.parse(data));
         }
-
 
         function handleError(error) {
             console.error('Error al obtener datos:', error);
