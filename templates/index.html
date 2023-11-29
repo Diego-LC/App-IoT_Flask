@@ -5,7 +5,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Visualización en Tiempo Real</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script src="https://code.highcharts.com/modules/export-data.js"></script>
@@ -26,278 +25,124 @@
             align-items: center;
         }
     </style>
-   
 </head>
 <body>
     <div class="contenedor">
-
-        <h1>Visualización en Tiempo Real Sensor de luz</h1>
-        <canvas id="real-time-chart"></canvas>
+        <h1>Visualización en Tiempo Real Sensor de luz y temperatura</h1>
+        <div id="real-time-chart"></div>
         <br>
         <hr>
-    
-        <figure class="highcharts-figure">
-            <div id="container"></div>
-        </figure>
-        <hr>
-        <div class="ld-form">
-            <div class="ld-row">
-                <label class="ld-label">
-                    Habilitar Actualización Automática
-                </label>
-                <input type="checkbox" checked="checked" id="enablePolling" />
-            </div>
-            <div class="ld-row">
-                <label class="ld-label">
-                    Frecuencia de Actualización (segundos)
-                </label>
-                <input class="ld-time-input" type="number" value="2" id="pollingTime" />
-            </div>
-        </div>
-
     </div>
 
     <script>
-        // ---------------------
-    var datoLuz = 0;
-    var datoTemperatura = 0;
-        document.addEventListener('DOMContentLoaded', function () {
-    // Configura el gráfico en el canvas
-    var ctx = document.getElementById('real-time-chart').getContext('2d');
-    var realTimeChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: [],  // Etiquetas de tiempo
-            datasets: [{
-                label: 'Datos del Sensor',
-                data: [],   // Datos del sensor
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 1,
-                fill: false
-            }]
-        },
-        options: {
-            scales: {
-                x: [{
-                    type: 'realtime',
-                    realtime: {
-                        duration: 20000,  // Duración de la ventana de visualización en milisegundos
-                        refresh: 1000,   // Frecuencia de actualización en milisegundos
-                        delay: 1000       // Retraso inicial en milisegundos
+        var datoLuz = 0;
+        var datoTemperatura = 0;
+
+        // Configuración del gráfico de Highcharts
+        Highcharts.chart('real-time-chart', {
+            chart: {
+                type: 'spline',
+                events: {
+                    load: onChartLoad
+                }
+            },
+            time: {
+                useUTC: false
+            },
+            title: {
+                text: 'Datos en Tiempo Real'
+            },
+            xAxis: {
+                type: 'datetime',
+                tickPixelInterval: 150,
+                maxPadding: 0.1
+            },
+            yAxis: {
+                title: {
+                    text: 'Valor'
+                },
+                plotLines: [
+                    {
+                        value: 0,
+                        width: 1,
+                        color: '#808080'
                     }
-                }]
+                ]
+            },
+            tooltip: {
+                headerFormat: '<b>{series.name}</b><br/>',
+                pointFormat: '{point.x:%d-%m-%Y %H:%M:%S}<br/>{point.y:.2f}'
+            },
+            legend: {
+                enabled: true
+            },
+            exporting: {
+                enabled: false
+            },
+            series: [
+                {
+                    name: 'Luz',
+                    lineWidth: 2,
+                    color: Highcharts.getOptions().colors[0],
+                    data: [] // Debes definir dataLuz con los datos correspondientes
+                },
+                {
+                    name: 'Temperatura',
+                    lineWidth: 2,
+                    color: Highcharts.getOptions().colors[2],
+                    data: [] // Debes definir dataTemperatura con los datos correspondientes
+                }
+            ]
+        });
+
+        // Función para realizar solicitudes HTTP periódicas y actualizar el gráfico
+        function fetchDataAndUpdateChart() {
+            // Coloca la URL correcta de la API para obtener los datos
+            const apiUrl = 'http://34.239.209.214:8085/api/get_last_data';
+
+            fetch(apiUrl)
+                .then(handleResponse)
+                .then(updateChart)
+                .catch(handleError)
+                .finally(scheduleNextRequest);
+        }
+
+        function handleResponse(response) {
+            if (!response.ok) {
+                throw new Error(`Error de red: ${response.status}`);
             }
-        }
-    });
-
-
-    // Función para realizar solicitudes HTTP periódicas y actualizar el gráfico
-
-
-    function fetchDataAndUpdateChart() {
-        const apiUrl = '/api/get_last_data';
-
-
-        fetch(apiUrl)
-            .then(handleResponse)
-            .then(updateChart)
-            .catch(handleError)
-            .finally(scheduleNextRequest);
-    }
-
-
-    function handleResponse(response) {
-        if (!response.ok) {
-            throw new Error(`Error de red: ${response.status}`);
-        }
-        else{
             return response.json();
         }
-    }
 
+        function updateChart(data) {
+            const { time, medicionLuz, medicionTemperatura } = JSON.parse(data);
+            datoLuz = medicionLuz;
+            datoTemperatura = +medicionTemperatura.toFixed(2);
 
-    function updateChart(data) {
-        const { time, medicionLuz, medicionTemperatura } = JSON.parse(data);
-        datoLuz = medicionLuz;
-        datoTemperatura = +medicionTemperatura.toFixed(2);
+            // Actualiza el gráfico con los nuevos datos
+            const chart = Highcharts.charts[0];
+            const x = (new Date()).getTime();
+            const yLuz = datoLuz;
+            const yTemp = datoTemperatura;
 
+            chart.series[0].addPoint([x, yLuz], true, true);
+            chart.series[1].addPoint([x, yTemp], true, true);
 
-        // Actualiza el gráfico con los nuevos datos
-        realTimeChart.data.labels.push(time);
-        realTimeChart.data.datasets[0].data.push(medicionLuz);
-        realTimeChart.update();
-
-
-        console.log(JSON.parse(data));
-    }
-
-
-    function handleError(error) {
-        console.error('Error al obtener datos:', error);
-        datoLuz = null;
-        datoTemperatura = null;
-    }
-
-
-    function scheduleNextRequest() {
-        setTimeout(fetchDataAndUpdateChart, 1000); // Realiza la siguiente solicitud después de un segundo
-    }
-
-
-// Inicia la función para realizar solicitudes HTTP periódicas
-    fetchDataAndUpdateChart();
-
-
-});
-// ---------------------
-// Configuración del gráfico de Highcharts
-
-
-// On chart load, start an interval that adds points to the chart and animate
-// the pulsating marker.
-const onChartLoad = function () {
-    const chart = this,
-        series = chart.series[0];
-
-
-    setInterval(function () {
-        const x = (new Date()).getTime(), // current time
-            y = datoTemperatura;
-
-
-        series.addPoint([x, y], true, true);
-    }, 1000);
-};
-
-
-// Create the initial data
-const data = (function () {
-    const data = [];
-    const time = new Date().getTime();
-
-
-    for (let i = -19; i <= 0; i += 1) {
-        data.push({
-            x: time + i * 1000,
-            y: 0
-        });
-    }
-    return data;
-}());
-
-
-// Plugin to add a pulsating marker on add point
-Highcharts.addEvent(Highcharts.Series, 'addPoint', e => {
-    const point = e.point,
-        series = e.target;
-
-
-    if (!series.pulse) {
-        series.pulse = series.chart.renderer.circle()
-            .add(series.markerGroup);
-    }
-
-
-    setTimeout(() => {
-        series.pulse
-            .attr({
-                x: series.xAxis.toPixels(point.x, true),
-                y: series.yAxis.toPixels(point.y, true),
-                r: series.options.marker.radius,
-                opacity: 1,
-                fill: series.color
-            })
-            .animate({
-                r: 20,
-                opacity: 0
-            }, {
-                duration: 1000
-            });
-    }, 1);
-});
-
-
-
-
-Highcharts.chart('container', {
-    chart: {
-        type: 'spline',
-        events: {
-            load: onChartLoad
+            console.log(JSON.parse(data));
         }
-    },
 
-
-    time: {
-        useUTC: false
-    },
-
-
-    title: {
-        text: 'Grado de Temperatura en Tiempo Real'
-    },
-
-
-    accessibility: {
-        announceNewData: {
-            enabled: true,
-            minAnnounceInterval: 15000,
-            announcementFormatter: function (allSeries, newSeries, newPoint) {
-                if (newPoint) {
-                    return 'New point added. Value: ' + newPoint.y;
-                }
-                return false;
-            }
+        function handleError(error) {
+            console.error('Error al obtener datos:', error);
+            datoLuz = null;
+            datoTemperatura = null;
         }
-    },
 
-
-    xAxis: {
-        type: 'datetime',
-        tickPixelInterval: 150,
-        maxPadding: 0.1
-    },
-
-
-    yAxis: {
-        title: {
-            text: 'Grado de Temperatura (°C)'
-        },
-        plotLines: [
-            {
-                value: 0,
-                width: 1,
-                color: '#808080'
-            }
-        ]
-    },
-
-
-    tooltip: {
-        headerFormat: '<b>{series.name}</b><br/>',
-        pointFormat: '{point.x:%d-%m-%Y %H:%M:%S}<br/>{point.y:.2f} °C'
-    },
-
-
-    legend: {
-        enabled: false
-    },
-
-
-    exporting: {
-        enabled: false
-    },
-
-
-    series: [
-        {
-            name: 'Temperatura',
-            lineWidth: 2,
-            color: Highcharts.getOptions().colors[2],
-            data
+        function scheduleNextRequest() {
+            setTimeout(fetchDataAndUpdateChart, 1000); // Realiza la siguiente solicitud después de un segundo
         }
-    ]
-});
+
+        // Inicia la función para realizar solicitudes HTTP periódicas
+        fetchDataAndUpdateChart();
     </script>
 </body>
 </html>
