@@ -216,7 +216,6 @@ Highcharts.chart('container', {
         maxPadding: 0.1
     },
 
-
     yAxis: {
         title: {
             text: 'Grado de Temperatura (°C) y Luz (Lux)'
@@ -230,12 +229,10 @@ Highcharts.chart('container', {
         ]
     },
 
-
     tooltip: {
         headerFormat: '<b>{series.name}</b><br/>',
         pointFormat: '{point.x:%d-%m-%Y %H:%M:%S}<br/>{point.y:.2f} °C'
     },
-
 
     legend: {
         enabled: true, // Habilita la leyenda
@@ -244,12 +241,27 @@ Highcharts.chart('container', {
         layout: 'horizontal' // Dispone los elementos de la leyenda horizontalmente
     },
 
-
     exporting: {
         enabled: false
     },
-
-
+    responsive: {
+        rules: [{
+            condition: {
+                maxWidth: 250
+            },
+            chartOptions: {
+                chart: {
+                    height: 320
+                },
+                subtitle: {
+                    text: null
+                },
+                navigator: {
+                    enabled: false
+                }
+            }
+        }]
+    },
     series: [
         {
             name: 'Temperatura',
