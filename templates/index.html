@@ -73,13 +73,6 @@
         datoLuz = medicionLuz;
         datoTemperatura = +medicionTemperatura.toFixed(2);
 
-
-        // Actualiza el gráfico con los nuevos datos
-        realTimeChart.data.labels.push(time);
-        realTimeChart.data.datasets[0].data.push(medicionLuz);
-        realTimeChart.update();
-
-
         console.log(JSON.parse(data));
     }
 
