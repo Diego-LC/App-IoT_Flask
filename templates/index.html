@@ -30,12 +30,7 @@
 </head>
 <body>
     <div class="contenedor">
-
-        <h1>Visualización en Tiempo Real Sensor de luz</h1>
-        <canvas id="real-time-chart"></canvas>
-        <br>
-        <hr>
-    
+        <h2>Visualización en Tiempo Real</h2>
         <figure class="highcharts-figure">
             <div id="container"></div>
         </figure>
@@ -47,34 +42,6 @@
     var datoLuz = 0;
     var datoTemperatura = 0;
         document.addEventListener('DOMContentLoaded', function () {
-    // Configura el gráfico en el canvas
-    var ctx = document.getElementById('real-time-chart').getContext('2d');
-    var realTimeChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: [],  // Etiquetas de tiempo
-            datasets: [{
-                label: 'Datos del Sensor',
-                data: [],   // Datos del sensor
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 1,
-                fill: false
-            }]
-        },
-        options: {
-            scales: {
-                x: [{
-                    type: 'realtime',
-                    realtime: {
-                        duration: 20000,  // Duración de la ventana de visualización en milisegundos
-                        refresh: 1000,   // Frecuencia de actualización en milisegundos
-                        delay: 1000       // Retraso inicial en milisegundos
-                    }
-                }]
-            }
-        }
-    });
-
 
     // Función para realizar solicitudes HTTP periódicas y actualizar el gráfico
 
@@ -141,16 +108,17 @@
 // On chart load, start an interval that adds points to the chart and animate
 // the pulsating marker.
 const onChartLoad = function () {
-    const chart = this,
-        series = chart.series[0];
-
+const chart = this,
+        series1 = chart.series[0],
+        series2 = chart.series[1];
 
     setInterval(function () {
         const x = (new Date()).getTime(), // current time
-            y = datoTemperatura;
+            y1 = datoTemperatura;
+            y2 = datoLuz; // Asegúrate de tener este dato
 
-
-        series.addPoint([x, y], true, true);
+        series1.addPoint([x, y1], true, true);
+        series2.addPoint([x, y2], true, true); // Añade esta línea
     }, 1000);
 };
 
@@ -169,6 +137,19 @@ const data = (function () {
     }
     return data;
 }());
+const data2 = (function () {
+    const data = [];
+    const time = new Date().getTime();
+
+
+    for (let i = -19; i <= 0; i += 1) {
+        data.push({
+            x: time + i * 1000,
+            y: Math.random() * 10
+        });
+    }
+    return data;
+}());
 
 
 // Plugin to add a pulsating marker on add point
@@ -181,7 +162,6 @@ Highcharts.addEvent(Highcharts.Series, 'addPoint', e => {
         series.pulse = series.chart.renderer.circle()
             .add(series.markerGroup);
     }
-
 
     setTimeout(() => {
         series.pulse
@@ -280,6 +260,12 @@ Highcharts.chart('container', {
             lineWidth: 2,
             color: Highcharts.getOptions().colors[2],
             data
+        },
+        {
+            name: 'Otra Dato',
+            lineWidth: 2,
+            color: Highcharts.getOptions().colors[1], // Cambia el color para diferenciar las líneas
+            data: data2 // Asegúrate de tener los datos para esta serie
         }
     ]
 });

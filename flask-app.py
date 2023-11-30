@@ -2,12 +2,11 @@ from flask import Flask, request, jsonify, render_template
 from pymongo import MongoClient
 from bson import json_util
 from flask_socketio import SocketIO
-import socket
-import json
+from flask_cors import CORS
 
 app = Flask(__name__)
 socketio = SocketIO(app)
-
+CORS(app)
 
 # Configura la conexión a la base de datos MongoDB
 client = MongoClient('mongodb://localhost:27017/')
