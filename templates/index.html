@@ -5,26 +5,28 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Visualización en Tiempo Real</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script src="https://code.highcharts.com/modules/export-data.js"></script>
     <script src="https://code.highcharts.com/modules/accessibility.js"></script>
     <style>
-        body {
-            font-family: Arial;
-            margin: 80px 100px 10px 100px;
-            padding: 0;
-            color: #555;
-            align-items: center;
-        }
-        .contenedor{
-            height: 100%;
-            max-width: 500px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+    body {
+        font-family: Arial;
+        margin: 0;
+        padding: 0;
+        color: #555;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+    .contenedor{
+        height: 100%;
+        max-width: 500px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
     </style>
    
 </head>
@@ -191,9 +193,7 @@ Highcharts.chart('container', {
     },
 
 
-    title: {
-        text: 'Grado de Temperatura en Tiempo Real'
-    },
+
 
 
     accessibility: {
@@ -219,7 +219,7 @@ Highcharts.chart('container', {
 
     yAxis: {
         title: {
-            text: 'Grado de Temperatura (°C)'
+            text: 'Grado de Temperatura (°C) y Luz (Lux)'
         },
         plotLines: [
             {
@@ -238,7 +238,10 @@ Highcharts.chart('container', {
 
 
     legend: {
-        enabled: false
+        enabled: true, // Habilita la leyenda
+        align: 'center', // Centra la leyenda
+        verticalAlign: 'bottom', // Coloca la leyenda en la parte inferior
+        layout: 'horizontal' // Dispone los elementos de la leyenda horizontalmente
     },
 
 
@@ -255,7 +258,7 @@ Highcharts.chart('container', {
             data
         },
         {
-            name: 'Otra Dato',
+            name: 'Luz',
             lineWidth: 2,
             color: Highcharts.getOptions().colors[1], // Cambia el color para diferenciar las líneas
             data: data2 // Asegúrate de tener los datos para esta serie
