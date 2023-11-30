@@ -34,12 +34,15 @@
         min-height: 200px;
         max-height: 600px;
     }
+    h2 {
+        text-align: center;
+    }
     </style>
    
 </head>
 <body>
     <div class="contenedor">
-        <h2>Visualización en Tiempo Real</h2>
+        <h2>Datos de luz y temperatura en Tiempo Real</h2>
         <figure class="highcharts-figure">
             <div id="container"></div>
         </figure>
@@ -268,6 +271,13 @@ Highcharts.chart('container', {
                 }
             }
         }]
+    },
+    title: {
+        text: '',
+        enabled: false
+    },
+    credits: {
+        enabled: false
     },
     series: [
         {
