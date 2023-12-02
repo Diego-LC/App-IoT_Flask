@@ -89,7 +89,7 @@ def alertar():
     data = request.get_json()
     datos = {"alertar": data}
     print("Alertar: ", datos)
-    return 200
+    return '1',200
 
 @socketio.on('connect')
 def handle_connect():
