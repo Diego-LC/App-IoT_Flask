@@ -79,6 +79,18 @@ def get_last_10_lux_data():
     # Devuelve los datos CSV como texto plano en la respuesta Flask
     return jsonify(datos)
 
+@app.route('/api/luces', methods=['GET'])
+def encendidoAparatos():
+    datos = {"apagarLuces": "0", "encenderCalefaccion": "0"}
+    return jsonify(datos)
+
+@app.route('/api/alertarPuertaAbierta', methods=['POST'])
+def alertar():
+    data = request.get_json()
+    datos = {"alertar": data}
+    print("Alertar: ", datos)
+    return 200
+
 @socketio.on('connect')
 def handle_connect():
     print('Cliente conectado')
