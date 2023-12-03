@@ -37,7 +37,7 @@
         // Código JavaScript para mostrar mensajes de error
         const form = document.getElementById('loginForm');
         const errorMessage = document.getElementById('error-message');
-
+    
         form.addEventListener('submit', async (event) => {
             event.preventDefault();
             const formData = new FormData(form);
@@ -45,12 +45,12 @@
                 method: 'POST',
                 body: formData,
             });
-
+    
             const data = await response.json();
-
+    
             if (response.ok) {
-                window.location.href = '/data';
-                console.log(data);
+                // Redirige solo si la respuesta es exitosa (código 200)
+                window.location.href = '/api/data';
             } else {
                 errorMessage.textContent = data.message;
             }
