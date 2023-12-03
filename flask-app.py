@@ -14,6 +14,43 @@ db = client['arduino_data']  # Nombre de la base de datos
 collection = db['data']  # Nombre de la colección
 #collection.delete_many({})  # Limpia todos los datos anteriormente almacenados
 
+from flask import redirect, url_for, session
+
+# ...
+
+# Ruta para el registro
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        # Aquí procesarás los datos del formulario de registro
+        username = request.form.get('username')
+        password = request.form.get('password')
+
+        # Puedes almacenar los datos en una base de datos o en alguna estructura de datos en memoria
+
+        # Redirige al usuario a la página principal después del registro (por ahora)
+        return redirect(url_for('index'))
+
+    return render_template('register.html')
+
+# Ruta para el inicio de sesión
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        # Aquí procesarás los datos del formulario de inicio de sesión
+        username = request.form.get('username')
+        password = request.form.get('password')
+
+        # Puedes verificar la autenticación aquí (lo implementaremos más adelante)
+
+        # Simplemente establece una variable de sesión para indicar que el usuario está autenticado (por ahora)
+        session['user'] = username
+
+        # Redirige al usuario a la página principal después del inicio de sesión
+        return redirect(url_for('index'))
+
+    return render_template('login.html')
+
 @app.route('/api/data', methods=['POST'])
 def receive_data():
     data = request.get_json()
