@@ -3,8 +3,14 @@ from pymongo import MongoClient
 from bson import json_util
 from flask_socketio import SocketIO
 from flask_cors import CORS
+from datetime import timedelta
 
+# ...
+
+# Configuración de la sesión
 app = Flask(__name__)
+app.config['SESSION_PERMANENT'] = True
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=1)
 app.secret_key = 'mysecretkey'
 socketio = SocketIO(app)
 CORS(app)
@@ -106,7 +112,7 @@ def index():
 def logout():
     # Elimina el usuario de la sesión
     session.pop('user', None)
-    return redirect(url_for('index'))
+    return redirect('/index')
 
 
 # Nueva ruta para obtener el último dato en formato JSON
