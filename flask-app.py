@@ -179,3 +179,4 @@ def handle_connect():
 if __name__ == '__main__':
     # Inicia la aplicación Flask con SocketIO
     socketio.run(app, host="0.0.0.0", port=8085, debug=True)
+    app.run(debug=True)
