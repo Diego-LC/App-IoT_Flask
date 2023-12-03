@@ -154,7 +154,9 @@ def get_last_10_lux_data():
     datos = []
 
     for data in cursor:
-        datos.append([data["time"], data['medicionLuz']])
+        #cambiar fecha string a ms
+        ms = datetime.strptime(data["time"], "%Y-%m-%d %H:%M:%S.%f").timestamp() * 1000
+        datos.append([ms, data['medicionLuz']])
 
     with open('static/datos.json', 'w', newline='') as archivo:
         json.dump(datos, archivo)
