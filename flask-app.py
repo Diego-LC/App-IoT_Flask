@@ -4,8 +4,7 @@ from bson import json_util
 from flask_socketio import SocketIO
 from flask_cors import CORS
 from datetime import timedelta
-
-# ...
+from flask import redirect, url_for, session
 
 # Configuración de la sesión
 app = Flask(__name__)
@@ -21,9 +20,8 @@ db = client['arduino_data']  # Nombre de la base de datos
 collection = db['data']  # Nombre de la colección
 #collection.delete_many({})  # Limpia todos los datos anteriormente almacenados
 
-from flask import redirect, url_for, session
-
-# ...
+# Lista de usuarios registrados (solo para demostración, en producción, usa una base de datos)
+registered_users = []
 
 # Ruta para el registro
 @app.route('/register', methods=['GET', 'POST'])
@@ -34,14 +32,20 @@ def register():
         return redirect('/index')
 
     if request.method == 'POST':
-        # Aquí procesarás los datos del formulario de registro
         username = request.form.get('username')
         password = request.form.get('password')
 
-        return render_template('register.html')
+        # Verifica si el usuario ya está registrado
+        if any(user['username'] == username for user in registered_users):
+            return jsonify({'message': 'El usuario ya está registrado'}), 400
 
+        # Almacena el nuevo usuario (en producción, usa una base de datos)
+        registered_users.append({'username': username, 'password': password})
 
-        # Redirige al usuario a la página principal después del registro (por ahora)
+        # Redirige al usuario a la página principal después del registro
+        session['user'] = username
+        return redirect('/data')
+
 
     return render_template('register.html')
 
