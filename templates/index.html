@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Visualización en Tiempo Real</title>
+    <title>Página Principal</title>
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script src="https://code.highcharts.com/modules/export-data.js"></script>
@@ -41,6 +41,9 @@
    
 </head>
 <body>
+    <h1>Bienvenido, {{ username }}!</h1>
+    <p>Esta es la página principal.</p>
+    <a href="/logout">Cerrar sesión</a>
     <div class="contenedor">
         <h2>Datos de luz y temperatura en Tiempo Real</h2>
         <figure class="highcharts-figure">
