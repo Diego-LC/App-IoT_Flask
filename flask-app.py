@@ -116,7 +116,7 @@ def index():
 def logout():
     # Elimina el usuario de la sesión
     session.pop('user', None)
-    return redirect('/index')
+    return redirect('/login')
 
 
 # Nueva ruta para obtener el último dato en formato JSON
