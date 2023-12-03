@@ -9,49 +9,137 @@
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script src="https://code.highcharts.com/modules/export-data.js"></script>
     <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+WyUsQYO6X/6YIpxpxlXyYR+jdQQcev6Em" crossorigin="anonymous">
     <style>
-    body {
-        font-family: Arial;
-        margin: 0;
-        padding: 5px;
-        color: #555;
-        /* display: flex; */
-        /* justify-content: center; */
-        /* align-items: center; */
-        height: 100vh;
-    }
-    .highcharts-figure, .highcharts-data-table table {
-        min-width: 320px;
-        max-width: 800px;
-        margin: 1em auto;
-        min-height: 200px;
-        max-height: 600px;
-    }
-    .highcharts-container {
-        min-width: 320px;
-        max-width: 800px;
-        margin: 1em auto;
-        min-height: 200px;
-        max-height: 600px;
-    }
-    h2 {
-        text-align: center;
-    }
+        body {
+            font-family: Arial;
+            margin: 0;
+            padding: 5px;
+            color: #555;
+            height: 100vh;
+        }
+        .highcharts-figure, .highcharts-data-table table {
+            min-width: 320px;
+            max-width: 800px;
+            margin: 1em auto;
+            min-height: 200px;
+            max-height: 600px;
+        }
+        .highcharts-container {
+            min-width: 320px;
+            max-width: 800px;
+            margin: 1em auto;
+            min-height: 200px;
+            max-height: 600px;
+        }
+        h2 {
+            text-align: center;
+        }
+        /* Añadido: Estilos para el navbar */
+        nav {
+            margin-bottom: 20px;
+        }
+        .contenedor {
+            margin: 20px;
+        }
     </style>
-   
 </head>
 <body>
+    <!-- Añadido: Navbar de Bootstrap -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Tu App</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Inicio</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Otra Página</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout">Cerrar Sesión</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
     <div class="contenedor">
         <h1>Bienvenido, {{ username }}!</h1>
         <p>Esta es la página principal.</p>
-        <a href="/logout">Cerrar sesión</a>
+        
+        <!-- Añadido: Botón para abrir el modal -->
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#alertModal">
+            Notificar Alerta
+        </button>
+
+        <!-- Añadido: Botones para enviar datos al servidor -->
+        <button type="button" class="btn btn-success" onclick="enviarDatos('apagarLuces')">Apagar Luces</button>
+        <button type="button" class="btn btn-danger" onclick="enviarDatos('encenderCalefaccion')">Encender Calefacción</button>
+
+        <!-- Añadido: Modal para notificar alertas -->
+        <div class="modal fade" id="alertModal" tabindex="-1" role="dialog" aria-labelledby="alertModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="alertModalLabel">Alerta Importante</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Añadido: Contenido del modal -->
+                        <p>¡Importante! Tu mensaje de alerta aquí.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <h2>Datos de luz y temperatura en Tiempo Real</h2>
         <figure class="highcharts-figure">
             <div id="container"></div>
         </figure>
         <hr>
-
     </div>
+
+    <!-- Añadido: Script para enviar datos al servidor -->
+    <script>
+        function enviarDatos(dato) {
+            // Puedes enviar el dato al servidor aquí, por ejemplo, usando fetch
+            fetch('/api/enviar_dato', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({dato}),
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error al enviar el dato al servidor');
+                }
+                // Maneja la respuesta del servidor si es necesario
+                return response.json();
+            })
+            .then(data => {
+                console.log('Dato enviado correctamente:', data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+
     <script src="/static/graficos.js"></script>
+
+    <!-- Añadido: Scripts de Bootstrap -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+WyUsQYO6X/6YIpxpxlXyYR+jdQQcev6Em" crossorigin="anonymous"></script>
+
 </body>
 </html>
