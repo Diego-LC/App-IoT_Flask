@@ -46,13 +46,13 @@
                 body: formData,
             });
     
-            const data = await response.json();
+            const data = await response;
     
             if (response.ok) {
                 // Redirige solo si la respuesta es exitosa (código 200)
                 window.location.href = '/api/data';
             } else {
-                errorMessage.textContent = data.message;
+                errorMessage.textContent = data.json().message;
             }
         });
     </script>
