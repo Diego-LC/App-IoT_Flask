@@ -50,6 +50,7 @@
 
             if (response.ok) {
                 window.location.href = '/data';
+                console.log(data);
             } else {
                 errorMessage.textContent = data.message;
             }
