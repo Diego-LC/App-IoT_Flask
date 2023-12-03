@@ -25,6 +25,9 @@
 
                 <button type="submit" class="btn btn-primary">Registrarse</button>
             </form>
+            <div class="mt-3">
+                <p>Ya tienes una cuenta? <a href="/login">Inicia sesión aquí</a></p>
+            </div>
             <div id="error-message" class="mt-3 text-danger"></div>
         </div>
     </div>
@@ -48,13 +51,13 @@
                 body: formData,
             });
     
-            const data = await response.json();
+            const data = await response;
     
             if (response.ok) {
                 // Redirige solo si la respuesta es exitosa (código 200)
                 window.location.href = '/data';  // Puedes cambiar '/data' por la página que prefieras
             } else {
-                errorMessage.textContent = data.message;
+                errorMessage.textContent = data.json().message;
             }
         });
     </script>
