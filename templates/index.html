@@ -72,7 +72,7 @@
         <p>Esta es la página principal.</p>
         
         <!-- Añadido: Botón para abrir el modal -->
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#alertModal" onclick="activarModal()">
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#alertModal">
             Notificar Alerta
         </button>
 
@@ -111,6 +111,7 @@
     <!-- Añadido: Script para enviar datos al servidor -->
     <script>
         function enviarDatos(dato) {
+            mostrarModal();
             // Puedes enviar el dato al servidor aquí, por ejemplo, usando fetch
             fetch('/api/enviar_dato', {
                 method: 'POST',
@@ -133,9 +134,9 @@
                 console.error('Error:', error);
             });
         }
-        function activarModal() {
-            // Activa el modal
-            $('#alertModal').modal('show');
+        var myModal = new bootstrap.Modal(document.getElementById('myModal'), {keyboard: false});
+        function mostrarModal() {
+            myModal.show();
         }
     </script>
 
