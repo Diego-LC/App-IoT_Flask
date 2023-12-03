@@ -18,6 +18,7 @@ CORS(app)
 client = MongoClient('mongodb://localhost:27017/')
 db = client['arduino_data']  # Nombre de la base de datos
 collection = db['data']  # Nombre de la colección
+collectionUsers = db['users'] # Nombre de la colección de usuarios
 #collection.delete_many({})  # Limpia todos los datos anteriormente almacenados
 
 # Lista de usuarios registrados (solo para demostración, en producción, usa una base de datos)
@@ -36,11 +37,13 @@ def register():
         password = request.form.get('password')
 
         # Verifica si el usuario ya está registrado
-        if any(user['username'] == username for user in registered_users):
+        if collectionUsers.find_one({'username': username}):
+            print("El usuario ya está registrado")
             return jsonify({'message': 'El usuario ya está registrado'}), 400
 
-        # Almacena el nuevo usuario (en producción, usa una base de datos)
-        registered_users.append({'username': username, 'password': password})
+        user_data = {'username': username, 'password': password}
+        inserted_data = collectionUsers.insert_one(user_data)
+        inserted_id_str = str(inserted_data.inserted_id)
 
         # Redirige al usuario a la página principal después del registro
         session['user'] = username
@@ -61,13 +64,16 @@ def login():
         username = request.form.get('username')
         password = request.form.get('password')
 
-        # Puedes verificar la autenticación aquí (lo implementaremos más adelante)
+        # Verifica si el usuario y la contraseña coinciden en MongoDB
+        user_data = collectionUsers.find_one({'username': username, 'password': password})
 
-        # Simplemente establece una variable de sesión para indicar que el usuario está autenticado (por ahora)
-        session['user'] = username
-
-        # Redirige al usuario a la página principal después del inicio de sesión
-        return redirect('/data')
+        if user_data:
+            # Usuario autenticado, establece la sesión y redirige a la página principal
+            session['user'] = username
+            print("Usuario autenticado: " + username)
+            return redirect('/data')
+        else:
+            return jsonify({'message': 'Credenciales incorrectas'}), 401
 
     return render_template('login.html')
 
