@@ -72,7 +72,7 @@
         <p>Esta es la página principal.</p>
         
         <!-- Añadido: Botón para abrir el modal -->
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#alertModal">
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#alertModal" onclick="activarModal()">
             Notificar Alerta
         </button>
 
@@ -132,6 +132,10 @@
             .catch(error => {
                 console.error('Error:', error);
             });
+        }
+        function activarModal() {
+            // Activa el modal
+            $('#alertModal').modal('show');
         }
     </script>
 
