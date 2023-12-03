@@ -21,16 +21,13 @@ collection = db['data']  # Nombre de la colección
 collectionUsers = db['users'] # Nombre de la colección de usuarios
 #collection.delete_many({})  # Limpia todos los datos anteriormente almacenados
 
-# Lista de usuarios registrados (solo para demostración, en producción, usa una base de datos)
-registered_users = []
-
 # Ruta para el registro
 @app.route('/register', methods=['GET', 'POST'])
 def register():
 
     if 'user' in session:
         # El usuario ya está autenticado, redirige a la página principal
-        return redirect('/index')
+        return redirect('/data2')
 
     if request.method == 'POST':
         username = request.form.get('username')
@@ -47,7 +44,7 @@ def register():
 
         # Redirige al usuario a la página principal después del registro
         session['user'] = username
-        return redirect('/data')
+        return redirect('/data2')
 
 
     return render_template('register.html')
@@ -57,7 +54,7 @@ def register():
 def login():
     if 'user' in session:
         # El usuario ya está autenticado, redirige a la página principal
-        return redirect('/data')
+        return redirect('/data2')
 
     if request.method == 'POST':
         # Aquí procesarás los datos del formulario de inicio de sesión
@@ -71,7 +68,7 @@ def login():
             # Usuario autenticado, establece la sesión y redirige a la página principal
             session['user'] = username
             print("Usuario autenticado: " + username)
-            return redirect('/data')
+            return redirect('/data2')
         else:
             return jsonify({'message': 'Credenciales incorrectas'}), 401
 
@@ -103,7 +100,7 @@ def receive_data():
         return jsonify({'message': 'Datos incorrectos o faltantes'}), 400
 
 # Ruta principal protegida
-@app.route('/data', methods=['GET'])
+@app.route('/data2', methods=['GET'])
 def protected_data():
     if 'user' not in session:
         # El usuario no está autenticado, redirige a la página de inicio de sesión
@@ -111,7 +108,7 @@ def protected_data():
     
     username = session['user']
     
-    return render_template('index.html')
+    return render_template('index2.html')
 
 @app.route('/data', methods=['GET'])
 def index():
