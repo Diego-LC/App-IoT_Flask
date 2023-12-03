@@ -50,7 +50,7 @@
     
             if (response.ok) {
                 // Redirige solo si la respuesta es exitosa (código 200)
-                window.location.href = '/api/data';
+                window.location.href = '/data';
             } else {
                 errorMessage.textContent = data.json().message;
             }
