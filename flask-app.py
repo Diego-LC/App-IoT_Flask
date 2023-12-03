@@ -5,6 +5,7 @@ from flask_socketio import SocketIO
 from flask_cors import CORS
 
 app = Flask(__name__)
+app.secret_key = 'mysecretkey'
 socketio = SocketIO(app)
 CORS(app)
 
@@ -21,21 +22,30 @@ from flask import redirect, url_for, session
 # Ruta para el registro
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+
+    if 'user' in session:
+        # El usuario ya está autenticado, redirige a la página principal
+        return redirect('/index')
+
     if request.method == 'POST':
         # Aquí procesarás los datos del formulario de registro
         username = request.form.get('username')
         password = request.form.get('password')
 
-        # Puedes almacenar los datos en una base de datos o en alguna estructura de datos en memoria
+        return render_template('register.html')
+
 
         # Redirige al usuario a la página principal después del registro (por ahora)
-        return redirect(url_for('index'))
 
     return render_template('register.html')
 
 # Ruta para el inicio de sesión
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    if 'user' in session:
+        # El usuario ya está autenticado, redirige a la página principal
+        return redirect('/data')
+
     if request.method == 'POST':
         # Aquí procesarás los datos del formulario de inicio de sesión
         username = request.form.get('username')
@@ -47,7 +57,7 @@ def login():
         session['user'] = username
 
         # Redirige al usuario a la página principal después del inicio de sesión
-        return redirect(url_for('index'))
+        return redirect('/data')
 
     return render_template('login.html')
 
@@ -76,10 +86,27 @@ def receive_data():
     else:
         return jsonify({'message': 'Datos incorrectos o faltantes'}), 400
 
+# Ruta principal protegida
+@app.route('/data', methods=['GET'])
+def protected_data():
+    if 'user' not in session:
+        # El usuario no está autenticado, redirige a la página de inicio de sesión
+        return redirect('/login')
+    
+    username = session['user']
+    
+    return render_template('index.html')
 
 @app.route('/data', methods=['GET'])
 def index():
     return render_template('index.html')
+
+# Ruta para cerrar sesión
+@app.route('/logout')
+def logout():
+    # Elimina el usuario de la sesión
+    session.pop('user', None)
+    return redirect(url_for('index'))
 
 
 # Nueva ruta para obtener el último dato en formato JSON
