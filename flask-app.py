@@ -1,9 +1,11 @@
+import csv
+import json
 from flask import Flask, request, jsonify, render_template
 from pymongo import MongoClient
 from bson import json_util
 from flask_socketio import SocketIO
 from flask_cors import CORS
-from datetime import timedelta
+from datetime import timedelta, datetime
 from flask import redirect, url_for, session
 
 # Configuración de la sesión
@@ -84,7 +86,8 @@ def receive_data():
             "medicionLuz": data["medicionLuz"],
             "medicionAcelerometro": data["medicionAcelerometro"],
             "medicionTemperatura": data["medicionTemperatura"],
-            "nombrenodo": data["nombrenodo"]
+            "nombrenodo": data["nombrenodo"],
+            "alertar": "0"
         }
 
         # Inserta los datos en la colección MongoDB
@@ -143,18 +146,25 @@ def last_lux_data():
     print("Medición dato: "+ str(data['medicionLuz']))
     return jsonify(data['medicionLuz'])
  
-@app.route('/api/get_lux_values', methods=['GET'])
+@app.route('/api/generar', methods=['GET'])
 def get_last_10_lux_data():
-    # Obtiene los últimos 10 datos de la colección MongoDB
-    cursor = collection.find(sort=[("time", -1)], limit=10)
+    # Obtiene los últimos 1000 datos de la colección MongoDB
+    cursor = collection.find(sort=[('_id', -1)], limit=1000)
 
     datos = []
 
     for data in cursor:
-        datos.append(data['medicionLuz'])
+        datos.append([data["time"], data['medicionLuz']])
 
-    # Devuelve los datos CSV como texto plano en la respuesta Flask
-    return jsonify(datos)
+    with open('static/datos.json', 'w', newline='') as archivo:
+        json.dump(datos, archivo)
+        archivo.close()
+
+    return "Datos guardados exitosamente en datos.json", 200
+
+@app.route('/graficoHistorico', methods=['GET'])
+def graficoHistorico():
+    return render_template('historico1.html')
 
 @app.route('/api/luces', methods=['GET'])
 def encendidoAparatos():
@@ -163,9 +173,9 @@ def encendidoAparatos():
 
 @app.route('/api/alertarPuertaAbierta', methods=['POST'])
 def alertar():
-    data = request.get_json()
-    datos = {"alertar": data}
-    print("Alertar: ", datos)
+    datos = {"alertar": "1"}
+    collection.insert_one(datos)
+    print(datos)
     return 'F',200
 
 @socketio.on('connect')
