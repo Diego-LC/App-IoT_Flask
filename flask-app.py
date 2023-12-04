@@ -133,7 +133,7 @@ def enviar_datos():
         dato = {"apagarLuces": "0", "encenderCalefaccion": "0", "encendidoAutomaticoLuces": "0", "encendidoAutomaticoCalefaccion": "0"}
         colManejoAparatos.insert_one(dato)
     print("Dato recibido: ", datoRecibido)
-    
+
     if (datoRecibido['dato'] == 'apagarLuces'):
         dato = {"apagarLuces": "0"}
         colManejoAparatos.update_one({"nombrenodo": "Nodo1"}, {"$set": dato})
@@ -220,7 +220,7 @@ def encendidoAparatos():
     print("Datos: ", data)
     # Cantidad de datos en la colección
     print("Cantidad de datos: ", len(list(data)))
-    for dato in data:
+    for dato in list(data):
         print("Dato: ", dato)
         datos["apagarLuces"] = dato['apagarLuces']
         print("Dato apagarLuces: ", dato['apagarLuces'])
