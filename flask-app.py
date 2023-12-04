@@ -80,7 +80,6 @@ def login():
 @app.route('/api/data', methods=['POST'])
 def receive_data():
     data = request.get_json()
-    print("Datos recibidos: \n", data)
 
     if all(key in data for key in 
         ["time", "medicionLuz", "medicionTemperatura", 
@@ -105,6 +104,7 @@ def receive_data():
         print("Datos POST time: "+ str(datos['time']))
         print("Datos POST luz: "+ str(datos['medicionLuz']))
         print("Datos POST temperatura: "+ str(datos['medicionTemperatura']))
+        print("Datos POST puerta: "+ str(datos['estaPuertaAbierta']))
 
         return jsonify({'message': 'Datos almacenados correctamente', 'inserted_id': inserted_id_str}), 200
     else:

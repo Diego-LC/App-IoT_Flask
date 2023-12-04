@@ -22,6 +22,7 @@ document.addEventListener('DOMContentLoaded', function () {
             throw new Error(`Error de red: ${response.status}`);
         }
         else{
+            console.log(response.json());
             return response.json();
         }
     }
