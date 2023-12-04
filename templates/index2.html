@@ -9,9 +9,9 @@
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script src="https://code.highcharts.com/modules/export-data.js"></script>
     <script src="https://code.highcharts.com/modules/accessibility.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-    <style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://getbootstrap.com/docs/5.2/assets/css/docs.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>    <style>
         body {
             font-family: Arial;
             margin: 0;
@@ -70,8 +70,39 @@
     <div class="contenedor">
         <h1>Bienvenido, {{ username }}!</h1>
         <p>Esta es la página principal.</p>
-        
-        <!-- Añadido: Botón para abrir el modal -->
+
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">Control Luces</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">Control calefacción</button>
+            </li>
+        </ul>
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active p-3" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="switchLucesAutom" unchecked>
+                    <label class="form-check-label" for="flexSwitchCheckChecked">Habilitar encendido/apagado de luces automáticamente</label>
+                </div>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="onOffLucesSwitch" disabled checked>
+                    <label class="form-check-label" for="flexSwitchCheckDisabled">Encendido/apagado de luces</label>
+                </div>
+            </div>
+            <div class="tab-pane fade p-3" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="switchCalefaccionAutom" unchecked>
+                    <label class="form-check-label" for="flexSwitchCheckChecked">Habilitar encendido/apagado de la calefacción</label>
+                </div>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="onOffcalefaccionSwitch" disabled checked>
+                    <label class="form-check-label" for="flexSwitchCheckDisabled">Encendido/apagado de la calefacción</label>
+                </div>
+            </div><!-- 
+            <div class="tab-pane fade" id="disabled-tab-pane" role="tabpanel" aria-labelledby="disabled-tab" tabindex="0">...</div> -->
+        </div>
+                                <!-- Añadido: Botón para abrir el modal -->
         <button type="button" class="btn btn-primary" onclick="mostrarModal()">
             Notificar Alerta
         </button>
@@ -79,7 +110,23 @@
         <!-- Añadido: Botones para enviar datos al servidor -->
         <button type="button" class="btn btn-success" onclick="enviarDatos('apagarLuces')">Apagar Luces</button>
         <button type="button" class="btn btn-danger" onclick="enviarDatos('encenderCalefaccion')">Encender Calefacción</button>
-
+        <button type="button" class="btn btn-primary" id="liveToastBtn">Show live toast</button>
+        
+        <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+            <div id="liveToast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header bg-danger text-light">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16" role="img" aria-label="Warning:">
+                        <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                    </svg>
+                <strong class="me-auto">Notificación</strong>
+                <small>ahora mismo</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body">
+                    La puerta ha sido abierta.
+                </div>
+            </div>
+        </div>
         <!-- Añadido: Modal para notificar alertas -->
         <div class="modal" id="alertModal" tabindex="-1" role="dialog" aria-labelledby="alertModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -108,6 +155,48 @@
 
     <!-- Añadido: Script para enviar datos al servidor -->
     <script>
+        const switchLucesAutom = document.getElementById('switchLucesAutom');
+        const switchCalefaccionAutom = document.getElementById('switchCalefaccionAutom');
+        const triggerTabList = document.querySelectorAll('#myTab button')
+        triggerTabList.forEach(triggerEl => {
+        const tabTrigger = new bootstrap.Tab(triggerEl)
+
+        triggerEl.addEventListener('click', event => {
+            event.preventDefault()
+            tabTrigger.show()
+        })
+        })
+
+        const toastTrigger = document.getElementById('liveToastBtn')
+        const toastLiveExample = document.getElementById('liveToast')
+        if (toastTrigger) {
+            toastTrigger.addEventListener('click', () => {
+                const toast = new bootstrap.Toast(toastLiveExample)
+
+                toast.show()
+            })
+        }
+        if (switchLucesAutom) {
+            switchLucesAutom.addEventListener('change', () => {
+                const onOffLucesSwitch = document.getElementById('onOffLucesSwitch');
+                if (switchLucesAutom.checked) {
+                    onOffLucesSwitch.disabled = false;
+                } else {
+                    onOffLucesSwitch.disabled = true;
+                }
+            });
+        }
+        if (switchCalefaccionAutom) {
+            switchCalefaccionAutom.addEventListener('change', () => {
+                const onOffcalefaccionSwitch = document.getElementById('onOffcalefaccionSwitch');
+                if (switchCalefaccionAutom.checked) {
+                    onOffcalefaccionSwitch.disabled = false;
+                } else {
+                    onOffcalefaccionSwitch.disabled = true;
+                }
+            });
+        }
+
         function enviarDatos(dato) {
             mostrarModal();
             console.log('Enviando dato:', dato);
