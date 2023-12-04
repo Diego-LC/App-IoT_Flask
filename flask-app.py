@@ -80,6 +80,7 @@ def login():
 @app.route('/api/data', methods=['POST'])
 def receive_data():
     data = request.get_json()
+    print("Datos recibidos: \n", data)
 
     if all(key in data for key in ["time", "medicionLuz", "medicionAcelerometro", "medicionTemperatura", "nombrenodo"]):
         datos = {
@@ -112,7 +113,7 @@ def protected_data():
     
     username = session['user']
     
-    return render_template('index2.html')
+    return render_template('index2.html', username=username)
 
 @app.route('/data', methods=['GET'])
 def index():
@@ -131,40 +132,28 @@ def enviar_datos():
     data  = colManejoAparatos.find()
     colManejoAparatos.delete_many({})
     if (len(list(data)) == 0):
-        dato = {"apagarLuces": "0", "encenderCalefaccion": "0", "encendidoAutomaticoLuces": "0", "encendidoAutomaticoCalefaccion": "0", "nombrenodo": "Nodo1"}
+        dato = {"encenderLuces": "0", "encenderCalefaccion": "0", "encendidoAutomaticoLuces": "0", "encendidoAutomaticoCalefaccion": "0", "nombrenodo": "Nodo1"}
         colManejoAparatos.insert_one(dato)
     print("Dato recibido: ", datoRecibido)
 
-    if (datoRecibido['dato'] == 'apagarLuces'):
-        dato = {"apagarLuces": "0"}
-        colManejoAparatos.update_one({"nombrenodo": "Nodo1"}, {"$set": dato})
-    elif (datoRecibido['dato'] == 'encenderLuces'):
-        dato = {"apagarLuces": "1"}
+    if (datoRecibido['dato'] == 'encenderLuces'):
+        dato = {"encenderLuces": datoRecibido['valor']}
         colManejoAparatos.update_one({"nombrenodo": "Nodo1"}, {"$set": dato})
 
     elif (datoRecibido['dato'] == 'encenderCalefaccion'):
-        dato = {"encenderCalefaccion": "1"}
-        colManejoAparatos.update_one({"nombrenodo": "Nodo1"}, {"$set": dato})
-    elif (datoRecibido['dato'] == 'apagarCalefaccion'):
-        dato = {"encenderCalefaccion": "0"}
+        dato = {"encenderCalefaccion": datoRecibido['valor']}
         colManejoAparatos.update_one({"nombrenodo": "Nodo1"}, {"$set": dato})
 
     elif (datoRecibido['dato'] == 'encendidoAutomaticoLuces'):
-        dato = {"encendidoAutomaticoLuces": "1"}
-        colManejoAparatos.update_one({"nombrenodo": "Nodo1"}, {"$set": dato})
-    elif (datoRecibido['dato'] == 'apagadoAutomaticoLuces'):
-        dato = {"encendidoAutomaticoLuces": "0"}
+        dato = {"encendidoAutomaticoLuces": datoRecibido['valor']}
         colManejoAparatos.update_one({"nombrenodo": "Nodo1"}, {"$set": dato})
 
     elif (datoRecibido['dato'] == 'encendidoAutomaticoCalefaccion'):
-        dato = {"encendidoAutomaticoCalefaccion": "1"}
-        colManejoAparatos.update_one({"nombrenodo": "Nodo1"}, {"$set": dato})
-    elif (datoRecibido['dato'] == 'apagadoAutomaticoCalefaccion'):
-        dato = {"encendidoAutomaticoCalefaccion": "0"}
+        dato = {"encendidoAutomaticoCalefaccion": datoRecibido['valor']}
         colManejoAparatos.update_one({"nombrenodo": "Nodo1"}, {"$set": dato})
 
     else:
-        dato = {"apagarLuces": "0", "encenderCalefaccion": "0", "encendidoAutomaticoLuces": "0", "encendidoAutomaticoCalefaccion": "0"}
+        dato = {"encenderLuces": "0", "encenderCalefaccion": "0", "encendidoAutomaticoLuces": "0", "encendidoAutomaticoCalefaccion": "0"}
         colManejoAparatos.update_one({"nombrenodo": "Nodo1"}, {"$set": dato})
 
 
@@ -178,7 +167,7 @@ def get_last_data():
         datoRecibido = request.get_json()
         print("Dato siid wifi recibido: ", datoRecibido)
         if (datoRecibido != 'Android-S21U' and colManejoAparatos.find_one({"nombrenodo": "Nodo1"})['encendidoAutomaticoLuces'] == '1'):
-            dato = {"apagarLuces": "0"}
+            dato = {"encenderLuces": "0"}
             colManejoAparatos.find_one_and_update({"nombrenodo": "Nodo1"}, {"$set": dato})
             print('Apagando luces' + str(dato))
 
