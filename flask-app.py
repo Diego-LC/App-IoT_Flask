@@ -129,7 +129,7 @@ def logout():
 def enviar_datos():
     datoRecibido = request.get_json()
     data  = colManejoAparatos.find()
-    data.delete_many({})
+    colManejoAparatos.delete_many({})
     if (len(list(data)) == 0):
         dato = {"apagarLuces": "0", "encenderCalefaccion": "0", "encendidoAutomaticoLuces": "0", "encendidoAutomaticoCalefaccion": "0", "nombrenodo": "Nodo1"}
         colManejoAparatos.insert_one(dato)
