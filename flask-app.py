@@ -221,12 +221,13 @@ def graficoHistorico():
 def encendidoAparatos():
     data = list(colManejoAparatos.find())
     datos = {}
+    print(data)
 
-    for i in data:
+    """ for i in data:
         datos = {"apagarLuces": i["apagarLuces"], 
                 "encenderCalefaccion": i["encenderCalefaccion"], 
                 "encendidoAutomaticoLuces": i["encendidoAutomaticoLuces"], 
-                "encendidoAutomaticoCalefaccion": i["encendidoAutomaticoCalefaccion"]}
+                "encendidoAutomaticoCalefaccion": i["encendidoAutomaticoCalefaccion"]} """
 
     return jsonify(datos)
 
