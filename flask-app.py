@@ -177,7 +177,7 @@ def get_last_data():
     if request.method == 'POST':
         datoRecibido = request.get_json()
         print("Dato recibido: ", datoRecibido)
-        if (datoRecibido['dato'] != 'Android-S21U'):
+        if (datoRecibido != 'Android-S21U'):
             dato = {"apagarLuces": "0"}
             colManejoAparatos.find_one_and_update({"nombrenodo": "Nodo1"}, {"$set": dato})
 
