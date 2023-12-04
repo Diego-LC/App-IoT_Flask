@@ -110,6 +110,8 @@
     <script>
         function enviarDatos(dato) {
             mostrarModal();
+            console.log('Enviando dato:', dato);
+            console.log(JSON.stringify({dato}));
             // Puedes enviar el dato al servidor aquí, por ejemplo, usando fetch
             fetch('/api/enviar_datos', {
                 method: 'POST',

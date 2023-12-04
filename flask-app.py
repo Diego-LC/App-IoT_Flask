@@ -128,6 +128,7 @@ def logout():
 def enviar_datos():
     datoRecibido = request.get_json()
     print("Dato recibido: ", datoRecibido)
+    return jsonify({'message': 'Datos almacenados correctamente'}), 200
 
 # Nueva ruta para obtener el último dato en formato JSON
 @app.route('/api/get_last_data', methods=['GET'])
