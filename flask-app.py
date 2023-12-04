@@ -128,7 +128,12 @@ def logout():
 @app.route('/api/enviar_datos', methods=['POST'])
 def enviar_datos():
     datoRecibido = request.get_json()
+    data  = colManejoAparatos.find()
+    if (len(list(data)) == 0):
+        dato = {"apagarLuces": "0", "encenderCalefaccion": "0", "encendidoAutomaticoLuces": "0", "encendidoAutomaticoCalefaccion": "0"}
+        colManejoAparatos.insert_one(dato)
     print("Dato recibido: ", datoRecibido)
+    
     if (datoRecibido['dato'] == 'apagarLuces'):
         dato = {"apagarLuces": "0"}
         colManejoAparatos.update_one({"nombrenodo": "Nodo1"}, {"$set": dato})
