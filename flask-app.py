@@ -215,12 +215,13 @@ def graficoHistorico():
 
 @app.route('/api/manejoLucesYtemp', methods=['GET']) # Ruta de consulta del SP32 que maneja los aparatos
 def encendidoAparatos():
-    data = colManejoAparatos.find()
+    data = list(colManejoAparatos.find())
     datos = {}
     print("Datos: ", data)
     # Cantidad de datos en la colección
-    print("Cantidad de datos: ", len(list(data)))
-    #imprimir datos de la colección
+    print("Cantidad de datos: ", len(data))
+    #La cantidad de datos en la colección es 1 pero en el debuguer no imprime nada
+
     for i in data:
         print(i)
 
