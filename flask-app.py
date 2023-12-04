@@ -189,7 +189,7 @@ def last_lux_data():
 @app.route('/api/generar', methods=['GET'])
 def get_last_10_lux_data():
     # Obtiene los últimos 1000 datos de la colección MongoDB
-    cursor = collection.find(sort=[('_id', -1)], limit=1000)
+    cursor = collection.find(sort=[('time', -1)], limit=1000)
 
     datos = []
 
@@ -212,9 +212,9 @@ def graficoHistorico():
 def encendidoAparatos():
     data = colManejoAparatos.find_one(sort=[('_id', -1)])
     print("Datos: ", data)
-    datos = {"apagarLuces": data['apagarLuces'], "encenderCalefaccion": data['encenderCalefaccion']}
+    #datos = {"apagarLuces": data['apagarLuces'], "encenderCalefaccion": data['encenderCalefaccion']}
 
-    return jsonify(datos)
+    return jsonify(data)
 
 @app.route('/api/alertarPuertaAbierta', methods=['POST'])
 def alertar():
