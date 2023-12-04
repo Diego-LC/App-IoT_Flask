@@ -129,8 +129,9 @@ def logout():
 def enviar_datos():
     datoRecibido = request.get_json()
     data  = colManejoAparatos.find()
+    data.delete_many({})
     if (len(list(data)) == 0):
-        dato = {"apagarLuces": "0", "encenderCalefaccion": "0", "encendidoAutomaticoLuces": "0", "encendidoAutomaticoCalefaccion": "0"}
+        dato = {"apagarLuces": "0", "encenderCalefaccion": "0", "encendidoAutomaticoLuces": "0", "encendidoAutomaticoCalefaccion": "0", "nombrenodo": "Nodo1"}
         colManejoAparatos.insert_one(dato)
     print("Dato recibido: ", datoRecibido)
 
@@ -171,8 +172,15 @@ def enviar_datos():
     return jsonify({'message': 'Datos almacenados correctamente'}), 200
 
 # Nueva ruta para obtener el último dato en formato JSON
-@app.route('/api/get_last_data', methods=['GET'])
+@app.route('/api/get_last_data', methods=['GET', 'POST'])
 def get_last_data():
+    if request.method == 'POST':
+        datoRecibido = request.get_json()
+        print("Dato recibido: ", datoRecibido)
+        if (datoRecibido['dato'] != 'Android-S21U'):
+            dato = {"apagarLuces": "0"}
+            colManejoAparatos.find_one_and_update({"nombrenodo": "Nodo1"}, {"$set": dato})
+
     data = collection.find_one(sort=[('_id', -1)])
     #print("Datos: ", data)
     # Convierte el objeto BSON a JSON
@@ -217,13 +225,12 @@ def graficoHistorico():
 def encendidoAparatos():
     data = list(colManejoAparatos.find())
     datos = {}
-    print("Datos: ", data)
-    # Cantidad de datos en la colección
-    print("Cantidad de datos: ", len(data))
-    #La cantidad de datos en la colección es 1 pero en el debuguer no imprime nada
 
     for i in data:
-        print(i)
+        datos = {"apagarLuces": i["apagarLuces"], 
+                "encenderCalefaccion": i["encenderCalefaccion"], 
+                "encendidoAutomaticoLuces": i["encendidoAutomaticoLuces"], 
+                "encendidoAutomaticoCalefaccion": i["encendidoAutomaticoCalefaccion"]}
 
     return jsonify(datos)
 
