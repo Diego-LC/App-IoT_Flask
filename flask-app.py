@@ -83,20 +83,19 @@ def receive_data():
     print("Datos recibidos: \n", data)
 
     if all(key in data for key in 
-        ["time", "medicionLuz", "medicionAcelerometro", 
-        "medicionTemperatura", "nombrenodo", "estaPuertaAbierta", 
-        "estaLucesAutom", "estaCalefaccionAutom", 
-        "encenderLuces", "encenderCalefaccion"]):
+        ["time", "medicionLuz", "medicionTemperatura", 
+        "estaPuertaAbierta", "estaLucesAutom", "estaCalefaccionAutom", 
+        "encenderLuces", "encenderCalefaccion", "nombrenodo"]):
         datos = {
             "time": data["time"],
             "medicionLuz": data["medicionLuz"],
             "medicionTemperatura": data["medicionTemperatura"],
-            "nombrenodo": data["nombrenodo"],
             "estaPuertaAbierta": data["estaPuertaAbierta"],
             "estaLucesAutom" : str(data["estaLucesAutom"]),
             "estaCalefaccionAutom" : str(data["estaCalefaccionAutom"]),
             "encenderLuces" : str(data["encenderLuces"]),
             "encenderCalefaccion" : str(data["encenderCalefaccion"]),
+            "nombrenodo": data["nombrenodo"]
         }
 
         # Inserta los datos en la colección MongoDB
