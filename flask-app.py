@@ -124,6 +124,10 @@ def logout():
     session.pop('user', None)
     return redirect('/login')
 
+@app.route('/api/enviar_datos', methods=['POST'])
+def enviar_datos():
+    datoRecibido = request.get_json()
+    print("Dato recibido: ", datoRecibido)
 
 # Nueva ruta para obtener el último dato en formato JSON
 @app.route('/api/get_last_data', methods=['GET'])
