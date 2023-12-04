@@ -167,15 +167,8 @@ def enviar_datos():
     return jsonify({'message': 'Datos almacenados correctamente'}), 200
 
 # Nueva ruta para obtener el último dato en formato JSON
-@app.route('/api/get_last_data', methods=['GET', 'POST'])
+@app.route('/api/get_last_data', methods=['GET'])
 def get_last_data():
-    if request.method == 'POST':
-        datoRecibido = request.get_json()
-        print("Dato siid wifi recibido: ", datoRecibido)
-        if (datoRecibido != 'Android-S21U' and colManejoAparatos.find_one({"nombrenodo": "Nodo1"})['encendidoAutomaticoLuces'] == '1'):
-            dato = {"encenderLuces": "0"}
-            colManejoAparatos.find_one_and_update({"nombrenodo": "Nodo1"}, {"$set": dato})
-            print('Apagando luces' + str(dato))
 
     data = collection.find_one(sort=[('_id', -1)])
     #print("Datos: ", data)
@@ -188,6 +181,18 @@ def get_last_data():
 
     # Devuelve los datos en formato JSON
     return jsonify(json_data)
+
+@app.route('/api/redWifi', methods=['POST'])
+def redWifi():
+    if request.method == 'POST':
+        datoRecibido = request.get_json()
+        print("Dato siid wifi recibido: ", datoRecibido)
+        if (datoRecibido != 'Android-S21U' and colManejoAparatos.find_one({"nombrenodo": "Nodo1"})['encendidoAutomaticoLuces'] == '1'):
+            dato = {"encenderLuces": "0"}
+            colManejoAparatos.find_one_and_update({"nombrenodo": "Nodo1"}, {"$set": dato})
+            print('Apagando luces ya que el movil está fuera de casa' + str(dato))
+        return jsonify({'message': 'Datos almacenados correctamente'}), 200
+    return jsonify({'message': 'Datos incorrectos o faltantes'}), 400
 
 @app.route('/api/last_Lux_data', methods=['GET'])
 def last_lux_data():
@@ -221,13 +226,12 @@ def graficoHistorico():
 def encendidoAparatos():
     data = list(colManejoAparatos.find())
     datos = {}
-    print(data)
 
-    """ for i in data:
-        datos = {"apagarLuces": i["apagarLuces"], 
+    for i in data:
+        datos = {"encenderLuces": i["encenderLuces"], 
                 "encenderCalefaccion": i["encenderCalefaccion"], 
                 "encendidoAutomaticoLuces": i["encendidoAutomaticoLuces"], 
-                "encendidoAutomaticoCalefaccion": i["encendidoAutomaticoCalefaccion"]} """
+                "encendidoAutomaticoCalefaccion": i["encendidoAutomaticoCalefaccion"]}
 
     return jsonify(datos)
 

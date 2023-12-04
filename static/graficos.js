@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const apiUrl = 'http://34.239.209.214:8085/api/get_last_data';
 
 
-        fetch(apiUrl, {method: 'POST', body: JSON.stringify('Android-S21U'), headers:{'Content-Type': 'application/json'}})
+        fetch(apiUrl)
             .then(handleResponse)
             .then(updateChart)
             .catch(handleError)
