@@ -21,6 +21,7 @@ client = MongoClient('mongodb://localhost:27017/')
 db = client['arduino_data']  # Nombre de la base de datos
 collection = db['data']  # Nombre de la colección
 collectionUsers = db['users'] # Nombre de la colección de usuarios
+colManejoAparatos = db['manejoAparatos'] # Nombre de la colección de manejo de aparatos
 #collection.delete_many({})  # Limpia todos los datos anteriormente almacenados
 
 # Ruta para el registro
@@ -130,35 +131,35 @@ def enviar_datos():
     print("Dato recibido: ", datoRecibido)
     if (datoRecibido['dato'] == 'apagarLuces'):
         dato = {"apagarLuces": "0"}
-        collection.update_one({"nombrenodo": "Nodo1"}, {"$set": dato})
+        colManejoAparatos.update_one({"nombrenodo": "Nodo1"}, {"$set": dato})
     elif (datoRecibido['dato'] == 'encenderLuces'):
         dato = {"apagarLuces": "1"}
-        collection.update_one({"nombrenodo": "Nodo1"}, {"$set": dato})
+        colManejoAparatos.update_one({"nombrenodo": "Nodo1"}, {"$set": dato})
 
     elif (datoRecibido['dato'] == 'encenderCalefaccion'):
         dato = {"encenderCalefaccion": "1"}
-        collection.update_one({"nombrenodo": "Nodo1"}, {"$set": dato})
+        colManejoAparatos.update_one({"nombrenodo": "Nodo1"}, {"$set": dato})
     elif (datoRecibido['dato'] == 'apagarCalefaccion'):
         dato = {"encenderCalefaccion": "0"}
-        collection.update_one({"nombrenodo": "Nodo1"}, {"$set": dato})
+        colManejoAparatos.update_one({"nombrenodo": "Nodo1"}, {"$set": dato})
 
     elif (datoRecibido['dato'] == 'encendidoAutomaticoLuces'):
         dato = {"encendidoAutomaticoLuces": "1"}
-        collection.update_one({"nombrenodo": "Nodo1"}, {"$set": dato})
+        colManejoAparatos.update_one({"nombrenodo": "Nodo1"}, {"$set": dato})
     elif (datoRecibido['dato'] == 'apagadoAutomaticoLuces'):
         dato = {"encendidoAutomaticoLuces": "0"}
-        collection.update_one({"nombrenodo": "Nodo1"}, {"$set": dato})
+        colManejoAparatos.update_one({"nombrenodo": "Nodo1"}, {"$set": dato})
 
     elif (datoRecibido['dato'] == 'encendidoAutomaticoCalefaccion'):
         dato = {"encendidoAutomaticoCalefaccion": "1"}
-        collection.update_one({"nombrenodo": "Nodo1"}, {"$set": dato})
+        colManejoAparatos.update_one({"nombrenodo": "Nodo1"}, {"$set": dato})
     elif (datoRecibido['dato'] == 'apagadoAutomaticoCalefaccion'):
         dato = {"encendidoAutomaticoCalefaccion": "0"}
-        collection.update_one({"nombrenodo": "Nodo1"}, {"$set": dato})
+        colManejoAparatos.update_one({"nombrenodo": "Nodo1"}, {"$set": dato})
 
     else:
         dato = {"apagarLuces": "0", "encenderCalefaccion": "0", "encendidoAutomaticoLuces": "0", "encendidoAutomaticoCalefaccion": "0"}
-        collection.update_one({"nombrenodo": "Nodo1"}, {"$set": dato})
+        colManejoAparatos.update_one({"nombrenodo": "Nodo1"}, {"$set": dato})
 
 
         print(dato)
@@ -198,7 +199,7 @@ def get_last_10_lux_data():
         datos.append([ms, data['medicionLuz']])
 
     with open('static/datos.json', 'w', newline='') as archivo:
-        json.dump(datos, archivo)
+        json.dump(datos.reverse(), archivo)
         archivo.close()
 
     return "Datos guardados exitosamente en datos.json", 200
@@ -207,9 +208,12 @@ def get_last_10_lux_data():
 def graficoHistorico():
     return render_template('historico1.html')
 
-@app.route('/api/luces', methods=['GET']) # Ruta de consulta del SP32 que maneja los aparatos
+@app.route('/api/manejoLucesYtemp', methods=['GET']) # Ruta de consulta del SP32 que maneja los aparatos
 def encendidoAparatos():
-    datos = {"apagarLuces": "Un campo de prueba", "encenderCalefaccion": "0"}
+    data = colManejoAparatos.find_one(sort=[('_id', -1)])
+    print("Datos: ", data)
+    datos = {"apagarLuces": data['apagarLuces'], "encenderCalefaccion": data['encenderCalefaccion']}
+
     return jsonify(datos)
 
 @app.route('/api/alertarPuertaAbierta', methods=['POST'])
