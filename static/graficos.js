@@ -22,7 +22,6 @@ document.addEventListener('DOMContentLoaded', function () {
             throw new Error(`Error de red: ${response.status}`);
         }
         else{
-            console.log(response.json());
             return response.json();
         }
     }
@@ -33,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function () {
         datoLuz = medicionLuz;
         datoTemperatura = +medicionTemperatura.toFixed(2);
 
-        //console.log(JSON.parse(data));
+        console.log(JSON.parse(data));
     }
 
 
