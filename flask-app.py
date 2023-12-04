@@ -82,7 +82,11 @@ def receive_data():
     data = request.get_json()
     print("Datos recibidos: \n", data)
 
-    if all(key in data for key in ["time", "medicionLuz", "medicionAcelerometro", "medicionTemperatura", "nombrenodo"]):
+    if all(key in data for key in 
+        ["time", "medicionLuz", "medicionAcelerometro", 
+        "medicionTemperatura", "nombrenodo", "estaPuertaAbierta", 
+        "estaLucesAutom", "estaCalefaccionAutom", 
+        "encenderLuces", "encenderCalefaccion"]):
         datos = {
             "time": data["time"],
             "medicionLuz": data["medicionLuz"],
