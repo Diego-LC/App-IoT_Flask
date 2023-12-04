@@ -176,10 +176,11 @@ def enviar_datos():
 def get_last_data():
     if request.method == 'POST':
         datoRecibido = request.get_json()
-        print("Dato recibido: ", datoRecibido)
-        if (datoRecibido != 'Android-S21U'):
+        print("Dato siid wifi recibido: ", datoRecibido)
+        if (datoRecibido != 'Android-S21U' and colManejoAparatos.find_one({"nombrenodo": "Nodo1"})['encendidoAutomaticoLuces'] == '1'):
             dato = {"apagarLuces": "0"}
             colManejoAparatos.find_one_and_update({"nombrenodo": "Nodo1"}, {"$set": dato})
+            print('Apagando luces' + str(dato))
 
     data = collection.find_one(sort=[('_id', -1)])
     #print("Datos: ", data)
