@@ -213,7 +213,8 @@ def encendidoAparatos():
     data = colManejoAparatos.find()
     datos = {}
     print("Datos: ", data)
-    print(data.count()) # Cantidad de datos en la colección
+    # Cantidad de datos en la colección
+    print("Cantidad de datos: ", len(list(data)))
     for dato in data:
         print("Dato: ", dato)
         datos["apagarLuces"] = dato['apagarLuces']
