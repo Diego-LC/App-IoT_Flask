@@ -89,7 +89,11 @@ def receive_data():
             "medicionAcelerometro": data["medicionAcelerometro"],
             "medicionTemperatura": data["medicionTemperatura"],
             "nombrenodo": data["nombrenodo"],
-            "alertar": "0"
+            "estaPuertaAbierta": data["estaPuertaAbierta"],
+            "estaLucesAutom" : str(data["estaLucesAutom"]),
+            "estaCalefaccionAutom" : str(data["estaCalefaccionAutom"]),
+            "encenderLuces" : str(data["encenderLuces"]),
+            "encenderCalefaccion" : str(data["encenderCalefaccion"]),
         }
 
         # Inserta los datos en la colección MongoDB
@@ -227,7 +231,7 @@ def encendidoAparatos():
 @app.route('/api/alertarPuertaAbierta', methods=['POST'])
 def alertar():
     datos = {"alertar": "1"}
-    collection.insert_one(datos)
+    collection.delete_many({"alertar": "1"})
     print(datos)
     return 'F',200
 
