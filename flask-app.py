@@ -220,14 +220,9 @@ def encendidoAparatos():
     print("Datos: ", data)
     # Cantidad de datos en la colección
     print("Cantidad de datos: ", len(list(data)))
-    for dato in list(data):
-        print("Dato: ", dato)
-        datos["apagarLuces"] = dato['apagarLuces']
-        print("Dato apagarLuces: ", dato['apagarLuces'])
-        print("Dato encenderCalefaccion: ", dato['encenderCalefaccion'])
-        print("Dato encendidoAutomaticoLuces: ", dato['encendidoAutomaticoLuces'])
-        print("Dato encendidoAutomaticoCalefaccion: ", dato['encendidoAutomaticoCalefaccion'])
-        print()
+    #imprimir datos de la colección
+    for i in data:
+        print(i)
 
     return jsonify(datos)
 
