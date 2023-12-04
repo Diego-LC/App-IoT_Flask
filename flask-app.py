@@ -209,7 +209,7 @@ def graficoHistorico():
 
 @app.route('/api/luces', methods=['GET']) # Ruta de consulta del SP32 que maneja los aparatos
 def encendidoAparatos():
-    datos = {"apagarLuces": "0", "encenderCalefaccion": "0"}
+    datos = {"apagarLuces": "Un campo de prueba", "encenderCalefaccion": "0"}
     return jsonify(datos)
 
 @app.route('/api/alertarPuertaAbierta', methods=['POST'])
