@@ -90,7 +90,6 @@ def receive_data():
         datos = {
             "time": data["time"],
             "medicionLuz": data["medicionLuz"],
-            "medicionAcelerometro": data["medicionAcelerometro"],
             "medicionTemperatura": data["medicionTemperatura"],
             "nombrenodo": data["nombrenodo"],
             "estaPuertaAbierta": data["estaPuertaAbierta"],
