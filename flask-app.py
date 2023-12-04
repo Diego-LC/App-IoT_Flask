@@ -128,6 +128,40 @@ def logout():
 def enviar_datos():
     datoRecibido = request.get_json()
     print("Dato recibido: ", datoRecibido)
+    if (datoRecibido['dato'] == 'apagarLuces'):
+        dato = {"apagarLuces": "0"}
+        collection.update_one({"nombrenodo": "Nodo1"}, {"$set": dato})
+    elif (datoRecibido['dato'] == 'encenderLuces'):
+        dato = {"apagarLuces": "1"}
+        collection.update_one({"nombrenodo": "Nodo1"}, {"$set": dato})
+
+    elif (datoRecibido['dato'] == 'encenderCalefaccion'):
+        dato = {"encenderCalefaccion": "1"}
+        collection.update_one({"nombrenodo": "Nodo1"}, {"$set": dato})
+    elif (datoRecibido['dato'] == 'apagarCalefaccion'):
+        dato = {"encenderCalefaccion": "0"}
+        collection.update_one({"nombrenodo": "Nodo1"}, {"$set": dato})
+
+    elif (datoRecibido['dato'] == 'encendidoAutomaticoLuces'):
+        dato = {"encendidoAutomaticoLuces": "1"}
+        collection.update_one({"nombrenodo": "Nodo1"}, {"$set": dato})
+    elif (datoRecibido['dato'] == 'apagadoAutomaticoLuces'):
+        dato = {"encendidoAutomaticoLuces": "0"}
+        collection.update_one({"nombrenodo": "Nodo1"}, {"$set": dato})
+
+    elif (datoRecibido['dato'] == 'encendidoAutomaticoCalefaccion'):
+        dato = {"encendidoAutomaticoCalefaccion": "1"}
+        collection.update_one({"nombrenodo": "Nodo1"}, {"$set": dato})
+    elif (datoRecibido['dato'] == 'apagadoAutomaticoCalefaccion'):
+        dato = {"encendidoAutomaticoCalefaccion": "0"}
+        collection.update_one({"nombrenodo": "Nodo1"}, {"$set": dato})
+
+    else:
+        dato = {"apagarLuces": "0", "encenderCalefaccion": "0", "encendidoAutomaticoLuces": "0", "encendidoAutomaticoCalefaccion": "0"}
+        collection.update_one({"nombrenodo": "Nodo1"}, {"$set": dato})
+
+
+        print(dato)
     return jsonify({'message': 'Datos almacenados correctamente'}), 200
 
 # Nueva ruta para obtener el último dato en formato JSON
@@ -173,7 +207,7 @@ def get_last_10_lux_data():
 def graficoHistorico():
     return render_template('historico1.html')
 
-@app.route('/api/luces', methods=['GET'])
+@app.route('/api/luces', methods=['GET']) # Ruta de consulta del SP32 que maneja los aparatos
 def encendidoAparatos():
     datos = {"apagarLuces": "0", "encenderCalefaccion": "0"}
     return jsonify(datos)
