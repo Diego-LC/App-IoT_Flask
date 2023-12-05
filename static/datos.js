@@ -49,7 +49,6 @@ document.addEventListener('DOMContentLoaded', function () {
         datoNombreNodo = nombrenodo;
 
         //console.log(JSON.parse(data));
-        actualizarDatosHtml();
     }
 
 
