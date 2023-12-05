@@ -93,6 +93,7 @@ def receive_data():
         }
 
         # Inserta los datos en la colección MongoDB
+        collection.delete_many({"nombrenodo": "Nodo1"})
         inserted_data = collection.insert_one(datos)
         inserted_id_str = str(inserted_data.inserted_id)
 
@@ -100,7 +101,7 @@ def receive_data():
         print("Datos POST luz: "+ str(datos['medicionLuz']))
         print("Datos POST temperatura: "+ str(datos['medicionTemperatura']))
         print("Datos POST puerta: "+ str(datos['estaPuertaAbierta']))
-        print("#########"*10)
+        print("###############"*3)
 
         return jsonify({'message': 'Datos almacenados correctamente', 'inserted_id': inserted_id_str}), 200
     else:
@@ -210,7 +211,7 @@ def get_last_10_lux_data():
         datos.append([ms, data['medicionLuz']])
 
     with open('static/datos.json', 'w', newline='') as archivo:
-        json.dump(datos.reverse(), archivo)
+        json.dump(datos, archivo)
         archivo.close()
 
     return "Datos guardados exitosamente en datos.json", 200
