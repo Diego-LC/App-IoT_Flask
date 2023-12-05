@@ -93,7 +93,7 @@ def receive_data():
         }
 
         # Inserta los datos en la colección MongoDB
-        #collection.delete_many({"nombrenodo": "Nodo1"})
+        collection.delete_many({})
         inserted_data = collection.insert_one(datos)
         inserted_id_str = str(inserted_data.inserted_id)
 
@@ -199,9 +199,9 @@ def last_lux_data():
     return jsonify(data['medicionLuz'])
  
 @app.route('/api/generar', methods=['GET'])
-def get_last_10_lux_data():
+def get_last_1000_temp_data():
     # Obtiene los últimos 1000 datos de la colección MongoDB
-    cursor = collection.find(sort=[('time', -1)], limit=1000)
+    cursor = collection.find(sort=[('_id', -1)], limit=1000)
 
     datos = []
 
