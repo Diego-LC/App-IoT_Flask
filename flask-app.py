@@ -77,10 +77,10 @@ def login():
 
     return render_template('login.html')
 
-@app.route('/api/data', methods=['POST'])
+@app.route('/api/data', methods=['POST']) #Ruta donde se reciben los datos del SP32
 def receive_data():
     data = request.get_json()
-
+>>>>>>>°!
     if all(key in data for key in 
         ["time", "medicionLuz", "medicionTemperatura", 
         "estaPuertaAbierta", "estaLucesAutom", "estaCalefaccionAutom", 
@@ -90,10 +90,6 @@ def receive_data():
             "medicionLuz": data["medicionLuz"],
             "medicionTemperatura": data["medicionTemperatura"],
             "estaPuertaAbierta": data["estaPuertaAbierta"],
-            "estaLucesAutom" : str(data["estaLucesAutom"]),
-            "estaCalefaccionAutom" : str(data["estaCalefaccionAutom"]),
-            "encenderLuces" : str(data["encenderLuces"]),
-            "encenderCalefaccion" : str(data["encenderCalefaccion"]),
             "nombrenodo": data["nombrenodo"]
         }
 
@@ -135,7 +131,7 @@ def logout():
 @app.route('/api/enviar_datos', methods=['POST']) # Ruta desde el usuario a enviar datos al SP32 que maneja los aparatos
 def enviar_datos():
     datoRecibido = request.get_json()
-    colManejoAparatos.delete_many({})
+    #colManejoAparatos.delete_many({})
     data  = colManejoAparatos.find()
     #datos recibidos son {'lucesAutom': False, 'calefaccionAutom': False, 'onOffLuces': True, 'onOffCalefaccion': False}
     datos = {
@@ -219,14 +215,11 @@ def graficoHistorico():
 
 @app.route('/api/manejoLucesYtemp', methods=['GET']) # Ruta de consulta del SP32 que maneja los aparatos
 def encendidoAparatos():
-    data = list(colManejoAparatos.find())
-    datos = {}
-
-    for i in data:
-        datos = {"encenderLuces": i["encenderLuces"], 
-                "encenderCalefaccion": i["encenderCalefaccion"], 
-                "encendidoAutomaticoLuces": i["encendidoAutomaticoLuces"], 
-                "encendidoAutomaticoCalefaccion": i["encendidoAutomaticoCalefaccion"]}
+    data = colManejoAparatos.find_one({"nombrenodo": "Nodo1"})
+    datos = {"encenderLuces": data["encenderLuces"], 
+    "encenderCalefaccion": data["encenderCalefaccion"], 
+    "encendidoAutomaticoLuces": data["encendidoAutomaticoLuces"], 
+    "encendidoAutomaticoCalefaccion": data["encendidoAutomaticoCalefaccion"]}
 
     return jsonify(datos)
 
