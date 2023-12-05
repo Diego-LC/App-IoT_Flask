@@ -156,7 +156,7 @@ def get_last_data():
     data = collection.find_one(sort=[('_id', -1)])
     datosAparatos = colManejoAparatos.find_one({"nombrenodo": "Nodo1"})
     #print("Datos: ", data)
-    json_data = data.update(datosAparatos).pop('_id').pop('nombrenodo')
+    json_data = data.update(datosAparatos)
     print("JSON: ", json_data)
 
 #    print("GET time : \t", data['time'])
