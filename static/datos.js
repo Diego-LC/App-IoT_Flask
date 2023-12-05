@@ -71,10 +71,10 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function actualizarDatosHtml() {
-    document.getElementById("switchLucesAutom").checked = stringToBoolean(datoLucesAuto);
-    document.getElementById("onOffLucesSwitch").checked = stringToBoolean
-    document.getElementById("switchCalefaccionAutom").checked = stringToBoolean(datoCalefaccionAuto);
-    document.getElementById("onOffcalefaccionSwitch").checked = stringToBoolean(datoCalefaccion);
+    document.getElementById("switchLucesAutom").checked = stringToBoolean(datoLucesAuto.toString());
+    document.getElementById("onOffLucesSwitch").checked = stringToBoolean(datoLuces.toString());
+    document.getElementById("switchCalefaccionAutom").checked = stringToBoolean(datoCalefaccionAuto.toString());
+    document.getElementById("onOffcalefaccionSwitch").checked = stringToBoolean(datoCalefaccion.toString());
 }
 
 function stringToBoolean(string) {
