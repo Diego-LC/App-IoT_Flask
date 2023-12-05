@@ -91,17 +91,17 @@
         const data1 = fetch("/api/generar")
         var data = [];
         function getData(){
-            datos = $.get("http://34.239.209.214:8085/static/datos.json").done(function(data){
-                console.log(data);
-            }).json();
+            datos = $.get("http://34.239.209.214:8085/static/datos.json").done(function(x1){
+                console.log(x1);
+                for (let i = 0; i < x1.length; i++) {
+                    data.push([parseInt(x1[i][0]), x1[i][1]]);
+                }
+            });
 
-            for (let i = 0; i < datos.length; i++) {
-                data.push([parseInt(datos[i][0]), datos[i][1]]);
-            }
             return datos;
             console.log(datos);
         }
-        data = getData();
+        getData();
         console.log(data);
 
         Highcharts.chart('container', {
