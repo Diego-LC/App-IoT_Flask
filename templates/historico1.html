@@ -83,9 +83,6 @@
     </div>
 
     <script>
-        document.getElementById("datos1").textContent = await fetch(
-    'http://34.239.209.214:8085/static/datos.json'
-).then(response => response.json());
     </script>
 
     <script>
@@ -153,5 +150,7 @@ Highcharts.chart('container', {
     }]
 });
 })();
+
+document.getElementById("datos1").innerHTML = data;
     </script> 
 
