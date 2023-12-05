@@ -47,7 +47,6 @@
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script src="https://code.highcharts.com/modules/export-data.js"></script>
     <script src="https://code.highcharts.com/modules/accessibility.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <!-- Añadido: Navbar de Bootstrap -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <a class="navbar-brand" href="#">Plataforma de IntelliGuard-IOT</a>
@@ -87,24 +86,15 @@
     </script>
 
     <script>
+        (async () => {
 
-        var data = [];
+            const data1 = await fetch("/api/generar")
+            .then(response => response.json());
+            console.log(data1);
 
-        function getData(){
-            return $.get("http://34.239.209.214:8085/static/datos.json").done(function(x1){
-                console.log(x1);  // Imprime el JSON recibido
-                var datos = x1.sort(function(a, b) {
-                    return b[0] - a[0];
-                });
-                console.log(datos);
-                for (let i = 0; i < datos.length; i++) {
-                    data.push([parseInt(datos[i][0]), datos[i][1]]);
-                }
-            });
-        }
-
-        getData().then(() => {
-            console.log(data);
+            const data = await fetch(
+                'http://34.239.209.214:8085/static/datos.json'
+            ).then(response => response.json());
 
             Highcharts.chart('container', {
                 chart: {
@@ -163,7 +153,8 @@
                     data: data
                 }]
             });
-        });
+            document.getElementById("datos1").innerHTML = data;
+        })();
 
     </script> 
 

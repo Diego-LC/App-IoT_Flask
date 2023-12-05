@@ -211,7 +211,7 @@ def get_last_1000_temp_data():
         datos.append([data['time'], data['medicionLuz']])
 
     with open('static/datos.json', 'w', newline='') as archivo:
-        json.dump(datos, archivo)
+        json.dump(datos.reve , archivo)
         archivo.close()
 
     return "Datos guardados exitosamente en datos.json", 200
