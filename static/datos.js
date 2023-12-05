@@ -1,10 +1,10 @@
 var datoLuz = 0;
 var datoTemperatura = 0;
 var datoPuerta = 0;
-var datoCalefaccion = false;
-var datoLuces = true;
-var datoCalefaccionAuto = false;
-var datoLucesAuto = false;
+var datoCalefaccion = "false";
+var datoLuces = "true";
+var datoCalefaccionAuto = "false";
+var datoLucesAuto = "false";
 var datoNombreNodo = 0;
 var contador = 0;
 
@@ -81,7 +81,7 @@ function actualizarDatosHtml() {
 }
 
 function stringToBoolean(string) {
-    if(string.toLowerCase().trim() === "true")
+    if(string.toLowerCase().trim() == "true")
         return true;
     else
         return false;
