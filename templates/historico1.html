@@ -58,11 +58,11 @@
     <figure class="highcharts-figure">
         <div id="container"></div>
         <p class="highcharts-description">
-            Highcharts has extensive support for time series, and will adapt
-            intelligently to the input data. Click and drag in the chart to zoom in
-            and inspect the data.
+            Gráfica de temperatura en el tiempo
         </p>
     </figure>
+
+    
     <script>
         (async () => {
 
@@ -75,20 +75,20 @@ Highcharts.chart('container', {
         zoomType: 'x'
     },
     title: {
-        text: 'USD to EUR exchange rate over time',
+        text: 'Datos del sensor de temperatura',
         align: 'left'
     },
     subtitle: {
         text: document.ontouchstart === undefined ?
-            'Click and drag in the plot area to zoom in' : 'Pinch the chart to zoom in',
+            'Haz clic y arrastra en el área de trazado para hacer zoom' : 'Pinch the chart to zoom in',
         align: 'left'
     },
     xAxis: {
-        type: 'datetime'
+        type: 'fecha'
     },
     yAxis: {
         title: {
-            text: 'Exchange rate'
+            text: 'temperatura (°C)'
         }
     },
     legend: {
@@ -123,7 +123,7 @@ Highcharts.chart('container', {
 
     series: [{
         type: 'area',
-        name: 'USD to EUR',
+        name: 'temperatura (°C)',
         data: data
     }]
 });
