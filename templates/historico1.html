@@ -87,9 +87,9 @@
 
     <script>
 
-        const data1 = await fetch("/api/generar")
+        const data1 = fetch("/api/generar")
 
-        const data = await fetch(
+        const data = fetch(
             'http://34.239.209.214:8085/static/datos.json'
         ).then(response => {
             datos1 = response.json();
