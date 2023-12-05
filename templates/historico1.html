@@ -89,7 +89,7 @@
         (async () => {
 
             const data1 = await fetch("/api/generar")
-            .then(response => response.json());
+            .then(response => response);
             console.log(data1);
 
             const data = await fetch(
