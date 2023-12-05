@@ -159,10 +159,10 @@
         var switchLuces = true;
         var switchCalefaccionAuto = false;
         var switchLucesAuto = false;
-        const switchLucesAutom = document.getElementById('switchLucesAutom');
-        const switchCalefaccionAutom = document.getElementById('switchCalefaccionAutom');
-        const onOffLucesSwitch = document.getElementById('onOffLucesSwitch');
-        const onOffcalefaccionSwitch = document.getElementById('onOffcalefaccionSwitch');
+        const switchLucesAutom = document.querySelectorAll('#switchLucesAutom');
+        const switchCalefaccionAutom = document.querySelectorAll('#switchCalefaccionAutom');
+        const onOffLucesSwitch = document.querySelectorAll('#onOffLucesSwitch');
+        const onOffcalefaccionSwitch = document.querySelectorAll('#onOffcalefaccionSwitch');
         const triggerTabList = document.querySelectorAll('#myTab button')
 
         triggerTabList.forEach(triggerEl => {
@@ -186,7 +186,6 @@
         }
         if (switchLucesAutom) {
             switchLucesAutom.addEventListener('change', () => {
-                const onOffLucesSwitch = document.getElementById('onOffLucesSwitch');
                 if (switchLucesAutom.checked) {
                     onOffLucesSwitch.disabled = false;
                     switchLucesAuto = true;
@@ -199,7 +198,6 @@
         }
         if (switchCalefaccionAutom) {
             switchCalefaccionAutom.addEventListener('change', () => {
-                const onOffcalefaccionSwitch = document.getElementById('onOffcalefaccionSwitch');
                 if (switchCalefaccionAutom.checked) {
                     onOffcalefaccionSwitch.disabled = false;
                     switchCalefaccionAuto = true;
@@ -234,11 +232,6 @@
                 enviarDatos();
             });
         }
-
-        var lucesAutom = document.getElementById('switchLucesAutom');
-        var calefaccionAutom = document.getElementById('switchCalefaccionAutom');
-        var onOffLuces = document.getElementById('onOffLucesSwitch');
-        var onOffCalefaccion = document.getElementById('onOffcalefaccionSwitch');
 
         var peticion = true; // Para evitar peticiones simultáneas
         function enviarDatos() {
