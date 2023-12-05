@@ -140,12 +140,12 @@ def enviar_datos():
         "encendidoAutomaticoCalefaccion": datoRecibido["onOffCalefaccion"
     ]}
     print("Dato recibido: ", datos)
-    if (len(list(data)) == 0):
-        dato = {"nombrenodo": "Nodo1"}
+    if (len(list(data)) == 0): # Si no hay datos en la colección, inserta el primer dato
+        dato = {"nombrenodo": "Nodo1", "encenderLuces": False, "encenderCalefaccion": False, "encendidoAutomaticoLuces": False, "encendidoAutomaticoCalefaccion": False}
         colManejoAparatos.insert_one(dato)
 
     if all( key in datoRecibido for key in ["lucesAutom", "onOffCalefaccion", "onOffLuces", "calefaccionAutom"]):
-        colManejoAparatos.update_one({"nombrenodo": "Nodo1"}, {"$set": dato})
+        colManejoAparatos.update_one({"nombrenodo": "Nodo1"}, {"$set": datos})
 
     return jsonify({'message': 'Datos almacenados correctamente'}), 200
 
