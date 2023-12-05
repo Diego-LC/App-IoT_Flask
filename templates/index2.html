@@ -168,27 +168,10 @@
         const highchartsFigure = document.querySelector('.highcharts-figure')
 
         document.getElementById('graficoHistoricoLink').addEventListener('click', () => {
-            fetch('/graficoHistorico', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            }).then(response => {
-                if (!response.ok) {
-                    throw new Error('Error al enviar el dato al servidor');
-                }
-                // Maneja la respuesta del servidor si es necesario
-                return response;
-            }).then(data => {
-                console.log('Dato enviado correctamente:', data);
-            }).catch(error => {
-                console.error('Error:', error);
-            }).finally(() => {
-                console.log('Fetch realizado');
-                console.log(data)
-                $('body').html(data);
+            $.get("/graficoHistorico").done(function(data) {
+                $("body").html(data);
                 atach();
-            })
+            });
         });
 
         triggerTabList.forEach(triggerEl => {
