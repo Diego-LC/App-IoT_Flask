@@ -209,7 +209,7 @@ def get_last_1000_temp_data():
         #cambiar fecha string a ms
         fecha = datetime.strptime(data["time"], "%d/%m/%Y %H:%M:%S")
         ms = time.mktime(fecha.timetuple()) * 1000
-        datos.append([ms, data['medicionLuz']])
+        datos.append([int(ms), data['medicionLuz']])
 
     with open('static/datos.json', 'w', newline='') as archivo:
         json.dump(datos, archivo)
