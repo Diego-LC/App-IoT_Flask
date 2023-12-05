@@ -37,11 +37,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function updateChart(data) {
         console.log(data);
-        console.log(data.medicionLuz);
         const {medicionLuz, medicionTemperatura,  encenderLuces, encenderCalefaccion,
             encendidoAutomaticoCalefaccion, encendidoAutomaticoLuces, estaPuertaAbierta
         } = data;
-        
+        console.log("dato luz auto: " + encendidoAutomaticoLuces);
+        console.log("dato calefaccion auto: " + encendidoAutomaticoCalefaccion);
+        console.log("dato luz: " + encenderLuces);
+        console.log("dato calefaccion: " + encenderCalefaccion);
+        console.log("--------------------");
 
         datoLuz = medicionLuz;
         datoTemperatura = +medicionTemperatura.toFixed(2);
@@ -73,11 +76,19 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function actualizarDatosHtml() {
-    document.getElementById("switchLucesAutom").checked = stringToBoolean(datoLucesAuto.toString());
-    document.getElementById("onOffLucesSwitch").checked = stringToBoolean(datoLuces.toString());
-    document.getElementById("switchCalefaccionAutom").checked = stringToBoolean(datoCalefaccionAuto.toString());
-    document.getElementById("onOffcalefaccionSwitch").checked = stringToBoolean(datoCalefaccion.toString());
-    console.log("actualiazado switeches");
+    datoLucesAuto = stringToBoolean(datoLucesAuto.toString());
+    datoCalefaccionAuto = stringToBoolean(datoCalefaccionAuto.toString());
+    datoLuces = stringToBoolean(datoLuces.toString());
+    datoCalefaccion = stringToBoolean(datoCalefaccion.toString());
+    document.getElementById("switchLucesAutom").checked = datoLucesAuto;
+    document.getElementById("onOffLucesSwitch").checked = datoLuces.toString();
+    document.getElementById("switchCalefaccionAutom").checked = datoCalefaccionAuto.toString();
+    document.getElementById("onOffcalefaccionSwitch").checked = datoCalefaccion.toString();
+    console.log("-----------actualiazado switeches----------");
+    console.log("Switch luces auto: " + datoLucesAuto);
+    console.log("Switch calefaccion auto: " + datoCalefaccionAuto);
+    console.log("Switch luces: " + datoLuces);
+    console.log("Switch calefaccion: " + datoCalefaccion);
 }
 
 function stringToBoolean(string) {
