@@ -1,6 +1,6 @@
 var datoLuz = 0;
 var datoTemperatura = 0;
-var datoPuerta = 0;
+var datoPuerta = "false";
 var datoCalefaccion = "false";
 var datoLuces = "true";
 var datoCalefaccionAuto = "false";
@@ -57,6 +57,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (stringToBoolean(datoPuerta.toString())) {
             const toast = new bootstrap.Toast(toastLiveExample)
+            toast.show()
         }
         else {
             const toast = new bootstrap.Toast(toastLiveExample)
