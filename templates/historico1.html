@@ -88,7 +88,7 @@
 const data = await fetch(
     'http://34.239.209.214:8085/static/datos.json'
 ).then(response => {
-    console.log(response);
+    console.log(response.json());
 });
 
 Highcharts.chart('container', {
