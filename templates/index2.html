@@ -258,7 +258,7 @@
 
         function enviarDatosPeriodicos(){
             clearInterval(enviarDatos);
-            setTimeout(enviarDatos, 2000);
+            setInterval(enviarDatos, 2000);
         }
         enviarDatosPeriodicos();
         
