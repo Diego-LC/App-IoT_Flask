@@ -252,7 +252,9 @@
                 console.error('Error:', error);
             })
             .finally(() => {
-                setTimeout(actualizarDatosHtml(),4000);
+                setTimeout(console.log("4 segundos despues"),4000);
+                actualizarDatosHtml();
+                console.log('Fetch realizado');
             });
         }
 
