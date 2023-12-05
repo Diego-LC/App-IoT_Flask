@@ -6,6 +6,7 @@ var datoLuces = 0;
 var datoCalefaccionAuto = 0;
 var datoLucesAuto = 0;
 var datoNombreNodo = 0;
+var contador = 0;
 
 document.addEventListener('DOMContentLoaded', function () {
 
@@ -61,6 +62,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function scheduleNextRequest() {
         setTimeout(fetchDataAndUpdateChart, 1000); // Realiza la siguiente solicitud después de un segundo
+        contador++;
     }
 
 
@@ -78,9 +80,9 @@ function actualizarDatosHtml() {
 }
 
 function stringToBoolean(string) {
-    switch (string.toLowerCase().trim()) {
-        case "true": return true;
-        case "false": return false;
-        default: return Boolean(string);
-    }
+    if(string.toLowerCase().trim() === "true")
+        return true;
+    else
+        return false;
+        
 }
