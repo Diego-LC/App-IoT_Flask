@@ -277,7 +277,7 @@
         
         function mostrarModal(dato) {
             var myModal = new bootstrap.Modal(document.getElementById('alertModal'), {keyboard: false});
-            document.getElementById('mensajeModal').innerHTML = dato;
+            document.getElementById('mensajeModal').textContent = dato;
             myModal.show();
             setTimeout(function() {
                 myModal.hide();
