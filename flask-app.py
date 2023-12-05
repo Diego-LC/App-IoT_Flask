@@ -135,10 +135,10 @@ def enviar_datos():
     data  = colManejoAparatos.find()
     #datos recibidos son {'lucesAutom': False, 'calefaccionAutom': False, 'onOffLuces': True, 'onOffCalefaccion': False}
     datos = {
-        "encenderLuces": datoRecibido["lucesAutom"], 
-        "encenderCalefaccion": datoRecibido["calefaccionAutom"], 
-        "encendidoAutomaticoLuces": datoRecibido["onOffLuces"], 
-        "encendidoAutomaticoCalefaccion": datoRecibido["onOffCalefaccion"
+        "encenderLuces": datoRecibido["onOffLuces"], 
+        "encenderCalefaccion": datoRecibido["onOffCalefaccion"], 
+        "encendidoAutomaticoLuces": datoRecibido["lucesAutom"], 
+        "encendidoAutomaticoCalefaccion": datoRecibido["calefaccionAutom"
     ]}
     print("Dato recibido: ", datos)
     print("++++++++++++++++++++++++++++++" *2)

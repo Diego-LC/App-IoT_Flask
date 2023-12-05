@@ -244,7 +244,7 @@
                         'Content-Type': 'application/json',
                     },
                     
-                    body: JSON.stringify({"lucesAutom": switchLuces.toString(), "calefaccionAutom": switchCalefaccionAuto.toString(), "onOffLuces": switchLucesAuto.toString(), "onOffCalefaccion": switchCalefaccion.toString()}),
+                    body: JSON.stringify({"lucesAutom": switchLucesAuto.toString(), "calefaccionAutom": switchCalefaccionAuto.toString(), "onOffLuces": switchLuces.toString(), "onOffCalefaccion": switchCalefaccion.toString()}),
                 })
                 .then(response => {
                     if (!response.ok) {
