@@ -157,7 +157,8 @@ def get_last_data():
     datosAparatos = colManejoAparatos.find_one({"nombrenodo": "Nodo1"})
     #print("Datos: ", data)
     json_data = data.update(datosAparatos)
-    print("JSON: ", json_data)
+    print("JSON data: ", data)
+    print("JSON datosAp: ", datosAparatos)
 
 #    print("GET time : \t", data['time'])
  #   print("GET Medición dato luz: "+ str(data['medicionLuz']))
