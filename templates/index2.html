@@ -170,7 +170,6 @@
         document.getElementById('graficoHistoricoLink').addEventListener('click', () => {
             $.get("/graficoHistorico").done(function(data) {
                 $("body").html(data);
-                atach();
             });
         });
 
