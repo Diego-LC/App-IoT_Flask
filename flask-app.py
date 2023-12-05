@@ -163,7 +163,7 @@ def get_last_data():
         'estaPuertaAbierta': data['estaPuertaAbierta'],
         'encenderLuces': datosAparatos['encenderLuces'],
         'encenderCalefaccion': datosAparatos['encenderCalefaccion'],
-        'encendidoAutomaticoLuces': datosAparatos['encendidoAutomaticoLuces']
+        'encendidoAutomaticoLuces': datosAparatos['encendidoAutomaticoLuces'],
         'encendidoAutomaticoCalefaccion': datosAparatos['encendidoAutomaticoCalefaccion'],
     }
     #print("JSON data: ", data) 
