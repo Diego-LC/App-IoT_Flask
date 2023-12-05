@@ -217,7 +217,7 @@ def get_last_10_lux_data():
 
 @app.route('/graficoHistorico', methods=['GET'])
 def graficoHistorico():
-    return render_template('historico1.html')
+    return render_template('historico1.html', username=session['user'])
 
 @app.route('/api/manejoLucesYtemp', methods=['GET']) # Ruta de consulta del SP32 que maneja los aparatos
 def encendidoAparatos():
