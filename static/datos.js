@@ -53,6 +53,11 @@ document.addEventListener('DOMContentLoaded', function () {
         datoLuces = encenderLuces;
         datoCalefaccionAuto = encendidoAutomaticoCalefaccion;
         datoLucesAuto = encendidoAutomaticoLuces;
+        console.log(datoPuerta);
+
+        if (stringToBoolean(datoPuerta.toString())) {
+            const toast = new bootstrap.Toast(toastLiveExample)
+        } 
     }
 
 
@@ -90,11 +95,6 @@ function actualizarDatosHtml() {
     console.log("Switch luces: " + datoLuces);
     console.log("Switch calefaccion: " + datoCalefaccion);
     console.log("--------------------------------------------");
-    console.log(datoPuerta);
-
-    if (stringToBoolean(datoPuerta.toString())) {
-        const toast = new bootstrap.Toast(toastLiveExample)
-    } 
 }
 
 function stringToBoolean(string) {
