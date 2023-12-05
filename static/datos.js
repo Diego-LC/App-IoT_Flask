@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function () {
         datoLucesAuto = estaLucesAutom;
         datoNombreNodo = nombrenodo;
 
-        //console.log(JSON.parse(data));
+        console.log(JSON.parse(data));
     }
 
 
