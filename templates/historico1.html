@@ -89,18 +89,16 @@
 
         const data1 = fetch("/api/generar")
         var data = [];
-        const data2 = fetch(
-            'http://34.239.209.214:8085/static/datos.json'
-        ).then(response => {
-            datos1 = response.json();
-            console.log(datos1);
-            for (let i = 0; i < datos1.length; i++) {
-                data.push([parseInt(datos1[i][0]), datos1[i][1].temperatura]);
-            }
-            console.log(data);
-            return data;
+        async function getData(){
+            datos = await fetch(
+                'http://34.239.209.214:8085/static/datos.json'
+            ).then(response => response.json());
 
-        });
+            for (let i = 0; i < datos.length; i++) {
+                data.push([parseInt(datos1[i][0]), datos1[i][1].temperatura]);}
+            return datos;
+        }
+        data = getData();
 
         Highcharts.chart('container', {
             chart: {
