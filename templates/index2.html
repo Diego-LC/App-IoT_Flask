@@ -252,12 +252,12 @@
                 console.error('Error:', error);
             })
             .finally(() => {
-                enviarDatosPeriodicos();
                 // Puedes hacer algo aquí siempre, por ejemplo, ocultar un spinner
             });
         }
 
         function enviarDatosPeriodicos(){
+            clearInterval(enviarDatos);
             setTimeout(enviarDatos, 2000);
         }
         enviarDatosPeriodicos();
