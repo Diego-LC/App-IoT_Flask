@@ -77,6 +77,7 @@ function actualizarDatosHtml() {
     document.getElementById("onOffLucesSwitch").checked = stringToBoolean(datoLuces.toString());
     document.getElementById("switchCalefaccionAutom").checked = stringToBoolean(datoCalefaccionAuto.toString());
     document.getElementById("onOffcalefaccionSwitch").checked = stringToBoolean(datoCalefaccion.toString());
+    console.log("actualiazado switeches");
 }
 
 function stringToBoolean(string) {
