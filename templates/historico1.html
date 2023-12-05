@@ -86,82 +86,80 @@
     </script>
 
     <script>
-        (async () => {
 
-            const data1 = await fetch("/api/generar")
+        const data1 = await fetch("/api/generar")
 
-            const data = await fetch(
-                'http://34.239.209.214:8085/static/datos.json'
-            ).then(response => {
-                datos1 = response.json();
-                console.log(datos1);
-                datos = [];
-                for (let i = 0; i < datos1.length; i++) {
-                    datos.push([parseInt(datos1[i][0]), datos1[i][1].temperatura]);
-                }
-                console.log(datos);
-                return datos;
+        const data = await fetch(
+            'http://34.239.209.214:8085/static/datos.json'
+        ).then(response => {
+            datos1 = response.json();
+            console.log(datos1);
+            datos = [];
+            for (let i = 0; i < datos1.length; i++) {
+                datos.push([parseInt(datos1[i][0]), datos1[i][1].temperatura]);
+            }
+            console.log(datos);
+            return datos;
 
-            });
+        });
 
-            Highcharts.chart('container', {
-                chart: {
-                    zoomType: 'x'
-                },
+        Highcharts.chart('container', {
+            chart: {
+                zoomType: 'x'
+            },
+            title: {
+                text: 'Datos del sensor de temperatura',
+                align: 'left'
+            },
+            subtitle: {
+                text: document.ontouchstart === undefined ?
+                    'Haz clic y arrastra en el área de trazado para hacer zoom' : 'Pinch the chart to zoom in',
+                align: 'left'
+            },
+            xAxis: {
+                type: 'fecha'
+            },
+            yAxis: {
                 title: {
-                    text: 'Datos del sensor de temperatura',
-                    align: 'left'
-                },
-                subtitle: {
-                    text: document.ontouchstart === undefined ?
-                        'Haz clic y arrastra en el área de trazado para hacer zoom' : 'Pinch the chart to zoom in',
-                    align: 'left'
-                },
-                xAxis: {
-                    type: 'fecha'
-                },
-                yAxis: {
-                    title: {
-                        text: 'temperatura (°C)'
-                    }
-                },
-                legend: {
-                    enabled: false
-                },
-                plotOptions: {
-                    area: {
-                        fillColor: {
-                            linearGradient: {
-                                x1: 0,
-                                y1: 0,
-                                x2: 0,
-                                y2: 1
-                            },
-                            stops: [
-                                [0, Highcharts.getOptions().colors[0]],
-                                [1, Highcharts.color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
-                            ]
+                    text: 'temperatura (°C)'
+                }
+            },
+            legend: {
+                enabled: false
+            },
+            plotOptions: {
+                area: {
+                    fillColor: {
+                        linearGradient: {
+                            x1: 0,
+                            y1: 0,
+                            x2: 0,
+                            y2: 1
                         },
-                        marker: {
-                            radius: 2
-                        },
-                        lineWidth: 1,
-                        states: {
-                            hover: {
-                                lineWidth: 1
-                            }
-                        },
-                        threshold: null
-                    }
-                },
+                        stops: [
+                            [0, Highcharts.getOptions().colors[0]],
+                            [1, Highcharts.color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
+                        ]
+                    },
+                    marker: {
+                        radius: 2
+                    },
+                    lineWidth: 1,
+                    states: {
+                        hover: {
+                            lineWidth: 1
+                        }
+                    },
+                    threshold: null
+                }
+            },
 
-                series: [{
-                    type: 'area',
-                    name: 'temperatura (°C)',
-                    data: data
-                }]
-            });
-        })();
+            series: [{
+                type: 'area',
+                name: 'temperatura (°C)',
+                data: data
+            }]
+        });
 
     </script> 
 
