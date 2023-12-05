@@ -47,15 +47,36 @@
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script src="https://code.highcharts.com/modules/export-data.js"></script>
     <script src="https://code.highcharts.com/modules/accessibility.js"></script>
-</head>
-<body>
-    
+    <!-- Añadido: Navbar de Bootstrap -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Plataforma de IntelliGuard-IOT</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/data2">Inicio</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="graficoHistoricoLink" href="#">Grafico histórico</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout">Cerrar Sesión</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="contenedor">
+            <h1>Bienvenido, {{ username }}!</h1>
     <figure class="highcharts-figure">
         <div id="container"></div>
         <p class="highcharts-description">
             Gráfica de temperatura en el tiempo
         </p>
     </figure>
+    </div>
 
 
     <script>
