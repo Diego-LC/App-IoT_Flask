@@ -156,13 +156,24 @@ def get_last_data():
     data = collection.find_one(sort=[('_id', -1)])
     datosAparatos = colManejoAparatos.find_one({"nombrenodo": "Nodo1"})
     #print("Datos: ", data)
-    json_data = data.update(datosAparatos)
-    print("JSON data: ", data)
-    print("JSON datosAp: ", datosAparatos)
+    json_data = {
+        'time': data['time'],
+        'medicionLuz': data['medicionLuz'],
+        'medicionTemperatura': data['medicionTemperatura'],
+        'estaPuertaAbierta': data['estaPuertaAbierta'],
+        'encenderLuces': datosAparatos['encenderLuces'],
+        'encenderCalefaccion': datosAparatos['encenderCalefaccion'],
+        'encendidoAutomaticoLuces': datosAparatos['encendidoAutomaticoLuces']
+        'encendidoAutomaticoCalefaccion': datosAparatos['encendidoAutomaticoCalefaccion'],
+    }
+    #print("JSON data: ", data) 
+    #JSON data:  {'_id': ObjectId('656e96cb30a09805c6cecd48'), 'time': '05/12/2023 00:01:45', 'medicionLuz': 72, 'medicionTemperatura': 24.09420204, 'estaPuertaAbierta': 'True', 'nombrenodo': 'Nodo1', 'encenderCalefaccion': False, 'encenderLuces': False, 'encendidoAutomaticoCalefaccion': True, 'encendidoAutomaticoLuces': True}
+    #print("JSON datosAp: ", datosAparatos) 
+    # JSON datosAp:  {'_id': ObjectId('656e96cb30a09805c6cecd48'), 'nombrenodo': 'Nodo1', 'encenderCalefaccion': False, 'encenderLuces': False, 'encendidoAutomaticoCalefaccion': True, 'encendidoAutomaticoLuces': True}
 
-#    print("GET time : \t", data['time'])
- #   print("GET Medición dato luz: "+ str(data['medicionLuz']))
-  #  print("GET Medición dato temperatura: "+ str(data['medicionTemperatura']))
+    print("GET time : \t", data['time'])
+    print("GET Medición dato luz: "+ str(data['medicionLuz']))
+    print("GET Medición dato temperatura: "+ str(data['medicionTemperatura']))
     print("----------------------------" *2)
 
     # Devuelve los datos en formato JSON
