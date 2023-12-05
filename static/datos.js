@@ -89,6 +89,12 @@ function actualizarDatosHtml() {
     console.log("Switch calefaccion auto: " + datoCalefaccionAuto);
     console.log("Switch luces: " + datoLuces);
     console.log("Switch calefaccion: " + datoCalefaccion);
+    console.log("--------------------------------------------");
+    console.log(datoPuerta);
+
+    if (datoPuerta == 1) {
+        const toast = new bootstrap.Toast(toastLiveExample)
+    } 
 }
 
 function stringToBoolean(string) {
