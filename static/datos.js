@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', function () {
         datoCalefaccionAuto = encendidoAutomaticoCalefaccion;
         datoLucesAuto = encendidoAutomaticoLuces;
 
-        if (stringToBoolean(datoPuerta.toString())) {
+        if (stringToBoolean(datoPuerta.toString()) && notificacionPuerta) {
             const toast = new bootstrap.Toast(toastLiveExample)
             toast.show()
         }
