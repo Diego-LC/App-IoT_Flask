@@ -135,8 +135,8 @@ def logout():
 @app.route('/api/enviar_datos', methods=['POST'])
 def enviar_datos():
     datoRecibido = request.get_json()
+    print("Dato recibido: ", datoRecibido)
     data  = colManejoAparatos.find()
-    colManejoAparatos.delete_many({})
     if (len(list(data)) == 0):
         dato = {"encenderLuces": "0", "encenderCalefaccion": "0", "encendidoAutomaticoLuces": "0", "encendidoAutomaticoCalefaccion": "0", "nombrenodo": "Nodo1"}
         colManejoAparatos.insert_one(dato)
@@ -176,7 +176,8 @@ def get_last_data():
     json_data = json_util.dumps(data)
 
     print("GET time : \t", data['time'])
-    print("GET Medición dato: "+ str(data['medicionLuz']))
+    print("GET Medición dato luz: "+ str(data['medicionLuz']))
+    print("GET Medición dato temperatura: "+ str(data['medicionTemperatura']))
     print()
 
     # Devuelve los datos en formato JSON

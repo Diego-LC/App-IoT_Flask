@@ -48,7 +48,8 @@ document.addEventListener('DOMContentLoaded', function () {
         datoLucesAuto = estaLucesAutom;
         datoNombreNodo = nombrenodo;
 
-        console.log(JSON.parse(data));
+        //console.log(JSON.parse(data));
+        actualizarDatosHtml();
     }
 
 
@@ -69,3 +70,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 });
+
+function actualizarDatosHtml() {
+    document.getElementById("switchLucesAutom").checked = stringToBoolean(datoLucesAuto);
+    document.getElementById("onOffLucesSwitch").checked = stringToBoolean
+    document.getElementById("switchCalefaccionAutom").checked = stringToBoolean(datoCalefaccionAuto);
+    document.getElementById("onOffcalefaccionSwitch").checked = stringToBoolean(datoCalefaccion);
+}
+
+function stringToBoolean(string) {
+    switch (string.toLowerCase().trim()) {
+        case "true": return true;
+        case "false": return false;
+        default: return Boolean(string);
+    }
+}

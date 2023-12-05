@@ -103,13 +103,13 @@
             <div class="tab-pane fade" id="disabled-tab-pane" role="tabpanel" aria-labelledby="disabled-tab" tabindex="0">...</div> -->
         </div>
                                 <!-- Añadido: Botón para abrir el modal -->
-        <button type="button" class="btn btn-primary" onclick="mostrarModal()">
+        <button type="button" class="btn btn-primary" onclick="mostrarModal('Notificación de prueba')">
             Notificar Alerta
         </button>
 
         <!-- Añadido: Botones para enviar datos al servidor -->
-        <button type="button" class="btn btn-success" onclick="enviarDatos('apagarLuces')">Apagar Luces</button>
-        <button type="button" class="btn btn-danger" onclick="enviarDatos('encenderCalefaccion')">Encender Calefacción</button>
+        <button type="button" class="btn btn-success" onclick="mostrarModal('Apagando Luces')">Apagar Luces</button>
+        <button type="button" class="btn btn-danger" onclick="enviarDatos('Encendiendo Calefacción')">Encender Calefacción</button>
         <button type="button" class="btn btn-primary" id="liveToastBtn">Show live toast</button>
         
         <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
@@ -157,7 +157,10 @@
     <script>
         const switchLucesAutom = document.getElementById('switchLucesAutom');
         const switchCalefaccionAutom = document.getElementById('switchCalefaccionAutom');
+        const onOffLucesSwitch = document.getElementById('onOffLucesSwitch');
+        const onOffcalefaccionSwitch = document.getElementById('onOffcalefaccionSwitch');
         const triggerTabList = document.querySelectorAll('#myTab button')
+
         triggerTabList.forEach(triggerEl => {
         const tabTrigger = new bootstrap.Tab(triggerEl)
 
@@ -169,6 +172,7 @@
 
         const toastTrigger = document.getElementById('liveToastBtn')
         const toastLiveExample = document.getElementById('liveToast')
+
         if (toastTrigger) {
             toastTrigger.addEventListener('click', () => {
                 const toast = new bootstrap.Toast(toastLiveExample)
@@ -184,6 +188,7 @@
                 } else {
                     onOffLucesSwitch.disabled = true;
                 }
+                enviarDatos();
             });
         }
         if (switchCalefaccionAutom) {
@@ -194,20 +199,44 @@
                 } else {
                     onOffcalefaccionSwitch.disabled = true;
                 }
+                enviarDatos();
+            });
+        }
+        if (onOffLucesSwitch) {
+            onOffLucesSwitch.addEventListener('change', () => {
+                if (onOffLucesSwitch.checked) {
+                    mostrarModal('Encendiendo Luces');
+                } else {
+                    mostrarModal('Apagando Luces');
+                }
+                enviarDatos();
+            });
+        }
+        if (onOffcalefaccionSwitch) {
+            onOffcalefaccionSwitch.addEventListener('change', () => {
+                if (onOffcalefaccionSwitch.checked) {
+                    mostrarModal('Encendiendo Calefacción');
+                } else {
+                    mostrarModal('Apagando Calefacción');
+                }
+                enviarDatos();
             });
         }
 
-        function enviarDatos(dato) {
-            mostrarModal();
-            console.log('Enviando dato:', dato);
-            console.log(JSON.stringify({dato}));
+        var lucesAutom = document.getElementById('switchLucesAutom');
+        var calefaccionAutom = document.getElementById('switchCalefaccionAutom');
+        var onOffLuces = document.getElementById('onOffLucesSwitch');
+        var onOffCalefaccion = document.getElementById('onOffcalefaccionSwitch');
+
+        function enviarDatos() {
             // Puedes enviar el dato al servidor aquí, por ejemplo, usando fetch
             fetch('/api/enviar_datos', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({dato}),
+                
+                body: JSON.stringify({"lucesAutom": lucesAutom.checked, "calefaccionAutom": calefaccionAutom.checked, "onOffLuces": onOffLuces.checked, "onOffCalefaccion": onOffCalefaccion.checked}),
             })
             .then(response => {
                 if (!response.ok) {
@@ -221,16 +250,25 @@
             })
             .catch(error => {
                 console.error('Error:', error);
+            })
+            .finally(() => {
+                // Puedes hacer algo aquí siempre, por ejemplo, ocultar un spinner
             });
         }
+
+        function envioDatosPeriodicos(){
+            setInterval(enviarDatos, 2000);
+        }
+        enviarDatosPeriodicos();
         
-        function mostrarModal() {
+        function mostrarModal(dato) {
             var myModal = new bootstrap.Modal(document.getElementById('alertModal'), {keyboard: false});
+            document.getElementById('alertModalLabel').innerHTML = dato;
             myModal.show();
         }
     </script>
 
-    <script src="/static/datos.js"></script>
+    <script src="E:\Taller_computación\App-IntelliGuard-IOT\static\datos.js"></script>
     <script src="/static/graficosHicharts.js"></script>
 </body>
 </html>
