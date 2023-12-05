@@ -144,7 +144,7 @@ def enviar_datos():
         dato = {"nombrenodo": "Nodo1"}
         colManejoAparatos.insert_one(dato)
 
-    if all( key in datoRecibido for key in ["encenderLuces", "encenderCalefaccion", "encendidoAutomaticoLuces", "encendidoAutomaticoCalefaccion"]):
+    if all( key in datoRecibido for key in ["lucesAutom", "onOffCalefaccion", "onOffLuces", "calefaccionAutom"]):
         colManejoAparatos.update_one({"nombrenodo": "Nodo1"}, {"$set": dato})
 
     return jsonify({'message': 'Datos almacenados correctamente'}), 200
