@@ -35,6 +35,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
     function updateChart(data) {
+        console.log(data);
         const { time, medicionLuz, medicionTemperatura,  encenderLuces, encenderCalefaccion,
             estaCalefaccionAutom, estaLucesAutom, estaPuertaAbierta, nombrenodo
         } = data.json();
