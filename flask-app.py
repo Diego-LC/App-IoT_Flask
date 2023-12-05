@@ -96,10 +96,11 @@ def receive_data():
         inserted_data = collection.insert_one(datos)
         inserted_id_str = str(inserted_data.inserted_id)
 
-        print("Datos POST time: "+ str(datos['time']))
+        print("Datos POST del sp32 time: "+ str(datos['time']))
         print("Datos POST luz: "+ str(datos['medicionLuz']))
         print("Datos POST temperatura: "+ str(datos['medicionTemperatura']))
         print("Datos POST puerta: "+ str(datos['estaPuertaAbierta']))
+        print("#########"*10)
 
         return jsonify({'message': 'Datos almacenados correctamente', 'inserted_id': inserted_id_str}), 200
     else:
@@ -140,6 +141,7 @@ def enviar_datos():
         "encendidoAutomaticoCalefaccion": datoRecibido["onOffCalefaccion"
     ]}
     print("Dato recibido: ", datos)
+    print("++++++++++++++++++++++++++++++" *2)
     if (len(list(data)) == 0): # Si no hay datos en la colección, inserta el primer dato
         dato = {"nombrenodo": "Nodo1", "encenderLuces": False, "encenderCalefaccion": False, "encendidoAutomaticoLuces": False, "encendidoAutomaticoCalefaccion": False}
         colManejoAparatos.insert_one(dato)
@@ -171,10 +173,8 @@ def get_last_data():
     #print("JSON datosAp: ", datosAparatos) 
     # JSON datosAp:  {'_id': ObjectId('656e96cb30a09805c6cecd48'), 'nombrenodo': 'Nodo1', 'encenderCalefaccion': False, 'encenderLuces': False, 'encendidoAutomaticoCalefaccion': True, 'encendidoAutomaticoLuces': True}
 
-    print("GET time : \t", data['time'])
-    print("GET Medición dato luz: "+ str(data['medicionLuz']))
-    print("GET Medición dato temperatura: "+ str(data['medicionTemperatura']))
-    print("----------------------------" *2)
+    print("Datos enviados: ", json_data)
+    print("------------------------------" *2)
 
     # Devuelve los datos en formato JSON
     return jsonify(json_data)
