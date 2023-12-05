@@ -92,7 +92,7 @@ function actualizarDatosHtml() {
     console.log("--------------------------------------------");
     console.log(datoPuerta);
 
-    if (datoPuerta == 1) {
+    if (stringToBoolean(datoPuerta.toString())) {
         const toast = new bootstrap.Toast(toastLiveExample)
     } 
 }
