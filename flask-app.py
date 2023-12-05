@@ -93,7 +93,7 @@ def receive_data():
         }
 
         # Inserta los datos en la colección MongoDB
-        collection.delete_many({})
+        #collection.delete_many({})
         inserted_data = collection.insert_one(datos)
         inserted_id_str = str(inserted_data.inserted_id)
 
