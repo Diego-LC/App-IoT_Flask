@@ -270,15 +270,18 @@
             setTimeout(function() {
                 actualizarDatosHtml();
                 console.log("2 segundos despues");
-            }, 2000);
+            }, 500);
             console.log('Fetch realizado');
         }
         enviarDatos();
         
         function mostrarModal(dato) {
             var myModal = new bootstrap.Modal(document.getElementById('alertModal'), {keyboard: false});
-            document.getElementById('alertModalLabel').innerHTML = dato;
+            document.getElementById('alertModalText').innerHTML = dato;
             myModal.show();
+            setTimeout(function() {
+                myModal.hide();
+            }, 1000);
         }
     </script>
 
