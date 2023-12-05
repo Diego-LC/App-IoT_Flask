@@ -81,9 +81,9 @@ function actualizarDatosHtml() {
     datoLuces = stringToBoolean(datoLuces.toString());
     datoCalefaccion = stringToBoolean(datoCalefaccion.toString());
     document.querySelector("#switchLucesAutom").checked = datoLucesAuto;
-    document.querySelector("#onOffLucesSwitch").checked = datoLuces.toString();
-    document.querySelector("#switchCalefaccionAutom").checked = datoCalefaccionAuto.toString();
-    document.querySelector("#onOffcalefaccionSwitch").checked = datoCalefaccion.toString();
+    document.querySelector("#onOffLucesSwitch").checked = datoLuces;
+    document.querySelector("#switchCalefaccionAutom").checked = datoCalefaccionAuto;
+    document.querySelector("#onOffcalefaccionSwitch").checked = datoCalefaccion;
     console.log("-----------actualiazado switeches----------");
     console.log("Switch luces auto: " + datoLucesAuto);
     console.log("Switch calefaccion auto: " + datoCalefaccionAuto);
