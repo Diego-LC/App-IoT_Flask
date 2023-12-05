@@ -143,6 +143,7 @@ def enviar_datos():
         "encendidoAutomaticoLuces": datoRecibido["onOffLuces"], 
         "encendidoAutomaticoCalefaccion": datoRecibido["onOffCalefaccion"
     ]}
+    print("Dato recibido: ", datos)
     if (len(list(data)) == 0):
         dato = {"encenderLuces": "0", "encenderCalefaccion": "0", "encendidoAutomaticoLuces": "0", "encendidoAutomaticoCalefaccion": "0", "nombrenodo": "Nodo1"}
         colManejoAparatos.insert_one(dato)
@@ -157,14 +158,16 @@ def enviar_datos():
 def get_last_data():
 
     data = collection.find_one(sort=[('_id', -1)])
+    datosAparatos = colManejoAparatos.find_one({"nombrenodo": "Nodo1"})
     #print("Datos: ", data)
     # Convierte el objeto BSON a JSON
-    json_data = json_util.dumps(data)
+    json_data = json_util.dumps(data + datosAparatos)
+    print("JSON: ", json_data)
 
-    print("GET time : \t", data['time'])
-    print("GET Medición dato luz: "+ str(data['medicionLuz']))
-    print("GET Medición dato temperatura: "+ str(data['medicionTemperatura']))
-    print()
+#    print("GET time : \t", data['time'])
+ #   print("GET Medición dato luz: "+ str(data['medicionLuz']))
+  #  print("GET Medición dato temperatura: "+ str(data['medicionTemperatura']))
+    print("----------------------------" *2)
 
     # Devuelve los datos en formato JSON
     return jsonify(json_data)
