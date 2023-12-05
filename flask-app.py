@@ -208,7 +208,7 @@ def get_last_1000_temp_data():
     datos = []
 
     for data in cursor:
-        datos.append([data['time'], data['medicionLuz']])
+        datos.append([int(data['time']), data['medicionLuz']])
 
     datos = sorted(datos, key=lambda x: x[0])
 
