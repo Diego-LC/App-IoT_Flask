@@ -80,7 +80,6 @@ def login():
 @app.route('/api/data', methods=['POST']) #Ruta donde se reciben los datos del SP32
 def receive_data():
     data = request.get_json()
->>>>>>>°!
     if all(key in data for key in 
         ["time", "medicionLuz", "medicionTemperatura", 
         "estaPuertaAbierta", "estaLucesAutom", "estaCalefaccionAutom", 
