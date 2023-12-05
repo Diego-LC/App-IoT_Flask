@@ -88,15 +88,14 @@
     <script>
 
         const data1 = fetch("/api/generar")
-
-        const data = fetch(
+        var data = [];
+        const data2 = fetch(
             'http://34.239.209.214:8085/static/datos.json'
         ).then(response => {
             datos1 = response.json();
             console.log(datos1);
-            datos = [];
             for (let i = 0; i < datos1.length; i++) {
-                datos.push([parseInt(datos1[i][0]), datos1[i][1].temperatura]);
+                data.push([parseInt(datos1[i][0]), datos1[i][1].temperatura]);
             }
             console.log(datos);
             return datos;
