@@ -47,6 +47,7 @@
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script src="https://code.highcharts.com/modules/export-data.js"></script>
     <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <!-- Añadido: Navbar de Bootstrap -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <a class="navbar-brand" href="#">Plataforma de IntelliGuard-IOT</a>
@@ -90,14 +91,15 @@
         const data1 = fetch("/api/generar")
         var data = [];
         function getData(){
-            datos = fetch(
-                'http://34.239.209.214:8085/static/datos.json'
-            ).then(response => response.json());
+            datos = $.get("/graficoHistorico").done(function(data){
+                console.log(data);
+            }).responseText;
 
             for (let i = 0; i < datos.length; i++) {
                 data.push([parseInt(datos[i][0]), datos[i][1]]);
             }
             return datos;
+            console.log(datos);
         }
         data = getData();
         console.log(data);
