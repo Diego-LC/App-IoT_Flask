@@ -215,6 +215,8 @@ def graficoHistorico():
 @app.route('/api/manejoLucesYtemp', methods=['GET']) # Ruta de consulta del SP32 que maneja los aparatos
 def encendidoAparatos():
     data = colManejoAparatos.find_one({"nombrenodo": "Nodo1"})
+    print("Datos: ", data)
+    print("###"*10)
     datos = {"encenderLuces": data["encenderLuces"], 
     "encenderCalefaccion": data["encenderCalefaccion"], 
     "encendidoAutomaticoLuces": data["encendidoAutomaticoLuces"], 
