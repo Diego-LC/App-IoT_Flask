@@ -137,16 +137,19 @@ def enviar_datos():
     datoRecibido = request.get_json()
     print("Dato recibido: ", datoRecibido)
     data  = colManejoAparatos.find()
-    #{'lucesAutom': False, 'calefaccionAutom': False, 'onOffLuces': True, 'onOffCalefaccion': False}
-    datos = {"encenderLuces": data["lucesAutom"], "encenderCalefaccion": data["calefaccionAutom"], "encendidoAutomaticoLuces": data["onOffLuces"], "encendidoAutomaticoCalefaccion": data["onOffCalefaccion"]}
+    #datos recibidos son {'lucesAutom': False, 'calefaccionAutom': False, 'onOffLuces': True, 'onOffCalefaccion': False}
+    datos = {
+        "encenderLuces": datoRecibido["lucesAutom"], 
+        "encenderCalefaccion": datoRecibido["calefaccionAutom"], 
+        "encendidoAutomaticoLuces": datoRecibido["onOffLuces"], 
+        "encendidoAutomaticoCalefaccion": datoRecibido["onOffCalefaccion"
+    ]}
     if (len(list(data)) == 0):
         dato = {"encenderLuces": "0", "encenderCalefaccion": "0", "encendidoAutomaticoLuces": "0", "encendidoAutomaticoCalefaccion": "0", "nombrenodo": "Nodo1"}
         colManejoAparatos.insert_one(dato)
-    print("Dato recibido: ", datoRecibido)
 
     if all( key in datoRecibido for key in ["encenderLuces", "encenderCalefaccion", "encendidoAutomaticoLuces", "encendidoAutomaticoCalefaccion"]):
         colManejoAparatos.update_one({"nombrenodo": "Nodo1"}, {"$set": dato})
-
 
     return jsonify({'message': 'Datos almacenados correctamente'}), 200
 
