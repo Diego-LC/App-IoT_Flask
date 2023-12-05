@@ -177,7 +177,7 @@
                     throw new Error('Error al enviar el dato al servidor');
                 }
                 // Maneja la respuesta del servidor si es necesario
-                return response;
+                return response.json();
             }).then(data => {
                 console.log('Dato enviado correctamente:', data);
             }).catch(error => {
