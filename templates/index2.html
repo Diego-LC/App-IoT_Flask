@@ -168,9 +168,7 @@
         const highchartsFigure = document.querySelector('.highcharts-figure')
 
         document.getElementById('graficoHistoricoLink').addEventListener('click', () => {
-            $.get("/graficoHistorico").done(function(data) {
-                $("body").html(data);
-            });
+            window.location.href = "/graficoHistorico";
         });
 
         triggerTabList.forEach(triggerEl => {
