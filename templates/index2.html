@@ -137,7 +137,7 @@
                     </div>
                     <div class="modal-body">
                         <!-- Añadido: Contenido del modal -->
-                        <p>¡Importante! Tu mensaje de alerta aquí.</p>
+                        <p id="MensajeModal">¡Importante! Tu mensaje de alerta aquí.</p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
@@ -277,7 +277,7 @@
         
         function mostrarModal(dato) {
             var myModal = new bootstrap.Modal(document.getElementById('alertModal'), {keyboard: false});
-            document.getElementById('modal-body').innerHTML = dato;
+            document.getElementById('mensajeModal').innerHTML = dato;
             myModal.show();
             setTimeout(function() {
                 myModal.hide();
