@@ -161,7 +161,11 @@ def get_last_data():
     datosAparatos = colManejoAparatos.find_one({"nombrenodo": "Nodo1"})
     #print("Datos: ", data)
     # Convierte el objeto BSON a JSON
-    json_data = json_util.dumps(data.update(datosAparatos)) #une dos diccionarios
+    json_data = json_util.dumps(data)
+    json_data2 = json_util.dumps(datosAparatos)
+    json_data = json.loads(json_data)
+    json_data2 = json.loads(json_data2)
+    json_data.update(json_data2)
     print("JSON: ", json_data)
 
 #    print("GET time : \t", data['time'])
