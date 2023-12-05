@@ -155,6 +155,10 @@
 
     <!-- Añadido: Script para enviar datos al servidor -->
     <script>
+        var switchCalefaccion = false;
+        var switchLuces = true;
+        var switchCalefaccionAuto = false;
+        var switchLucesAuto = false;
         const switchLucesAutom = document.getElementById('switchLucesAutom');
         const switchCalefaccionAutom = document.getElementById('switchCalefaccionAutom');
         const onOffLucesSwitch = document.getElementById('onOffLucesSwitch');
@@ -185,8 +189,10 @@
                 const onOffLucesSwitch = document.getElementById('onOffLucesSwitch');
                 if (switchLucesAutom.checked) {
                     onOffLucesSwitch.disabled = false;
+                    switchLucesAuto = true;
                 } else {
                     onOffLucesSwitch.disabled = true;
+                    switchLucesAuto = false;
                 }
                 enviarDatos();
             });
@@ -196,8 +202,10 @@
                 const onOffcalefaccionSwitch = document.getElementById('onOffcalefaccionSwitch');
                 if (switchCalefaccionAutom.checked) {
                     onOffcalefaccionSwitch.disabled = false;
+                    switchCalefaccionAuto = true;
                 } else {
                     onOffcalefaccionSwitch.disabled = true;
+                    switchCalefaccionAuto = false;
                 }
                 enviarDatos();
             });
@@ -205,9 +213,11 @@
         if (onOffLucesSwitch) {
             onOffLucesSwitch.addEventListener('change', () => {
                 if (onOffLucesSwitch.checked) {
+                    switchLuces = true;
                     mostrarModal('Encendiendo Luces');
                 } else {
                     mostrarModal('Apagando Luces');
+                    switchLuces = false;
                 }
                 enviarDatos();
             });
@@ -216,8 +226,10 @@
             onOffcalefaccionSwitch.addEventListener('change', () => {
                 if (onOffcalefaccionSwitch.checked) {
                     mostrarModal('Encendiendo Calefacción');
+                    switchCalefaccion = true;
                 } else {
                     mostrarModal('Apagando Calefacción');
+                    switchCalefaccion = false;
                 }
                 enviarDatos();
             });
@@ -236,7 +248,7 @@
                     'Content-Type': 'application/json',
                 },
                 
-                body: JSON.stringify({"lucesAutom": lucesAutom.checked, "calefaccionAutom": calefaccionAutom.checked, "onOffLuces": onOffLuces.checked, "onOffCalefaccion": onOffCalefaccion.checked}),
+                body: JSON.stringify({"lucesAutom": switchLucesAuto.toString(), "calefaccionAutom": switchCalefaccionAuto.toString(), "onOffLuces": switchLuces.toString(), "onOffCalefaccion": switchCalefaccion.toString()}),
             })
             .then(response => {
                 if (!response.ok) {

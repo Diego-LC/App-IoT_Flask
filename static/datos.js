@@ -1,10 +1,10 @@
 var datoLuz = 0;
 var datoTemperatura = 0;
 var datoPuerta = 0;
-var datoCalefaccion = 0;
-var datoLuces = 0;
-var datoCalefaccionAuto = 0;
-var datoLucesAuto = 0;
+var datoCalefaccion = false;
+var datoLuces = true;
+var datoCalefaccionAuto = false;
+var datoLucesAuto = false;
 var datoNombreNodo = 0;
 var contador = 0;
 
