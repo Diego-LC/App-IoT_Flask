@@ -135,7 +135,6 @@ def logout():
 @app.route('/api/enviar_datos', methods=['POST']) # Ruta desde el usuario a enviar datos al SP32 que maneja los aparatos
 def enviar_datos():
     datoRecibido = request.get_json()
-    print("Dato recibido: ", datoRecibido)
     data  = colManejoAparatos.find()
     #datos recibidos son {'lucesAutom': False, 'calefaccionAutom': False, 'onOffLuces': True, 'onOffCalefaccion': False}
     datos = {
