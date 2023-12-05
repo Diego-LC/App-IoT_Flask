@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
     function scheduleNextRequest() {
-        setTimeout(fetchDataAndUpdateChart, 3000); // Realiza la siguiente solicitud después de un segundo
+        setTimeout(fetchDataAndUpdateChart, 1000); // Realiza la siguiente solicitud después de un segundo
     }
 
 
