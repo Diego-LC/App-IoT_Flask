@@ -1,5 +1,5 @@
-import csv
 import json
+import time
 from flask import Flask, request, jsonify, render_template
 from pymongo import MongoClient
 from bson import json_util
@@ -93,7 +93,7 @@ def receive_data():
         }
 
         # Inserta los datos en la colección MongoDB
-        #collection.delete_many({})
+        collection.delete_many({})
         inserted_data = collection.insert_one(datos)
         inserted_id_str = str(inserted_data.inserted_id)
 
@@ -207,7 +207,8 @@ def get_last_1000_temp_data():
 
     for data in cursor:
         #cambiar fecha string a ms
-        ms = datetime.strptime(data["time"], "%d/%m/%Y %H:%M:%S").timestamp() * 1000
+        fecha = datetime.strptime(data["time"], "%d/%m/%Y %H:%M:%S")
+        ms = time.mktime(fecha.timetuple()) * 1000
         datos.append([ms, data['medicionLuz']])
 
     with open('static/datos.json', 'w', newline='') as archivo:
