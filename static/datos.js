@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function updateChart(data) {
         const { time, medicionLuz, medicionTemperatura,  encenderLuces, encenderCalefaccion,
             estaCalefaccionAutom, estaLucesAutom, estaPuertaAbierta, nombrenodo
-        } = JSON.parse(data);
+        } = data.json();
 
         datoLuz = medicionLuz;
         datoTemperatura = +medicionTemperatura.toFixed(2);
@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function () {
         datoLucesAuto = estaLucesAutom;
         datoNombreNodo = nombrenodo;
 
-        console.log(JSON.parse(data));
+        console.log(data.json());
     }
 
 
