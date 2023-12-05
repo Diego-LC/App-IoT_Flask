@@ -156,12 +156,7 @@ def get_last_data():
     data = collection.find_one(sort=[('_id', -1)])
     datosAparatos = colManejoAparatos.find_one({"nombrenodo": "Nodo1"})
     #print("Datos: ", data)
-    # Convierte el objeto BSON a JSON
-    json_data = json_util.dumps(data)
-    json_data2 = json_util.dumps(datosAparatos)
-    json_data = json.loads(json_data)
-    json_data2 = json.loads(json_data2)
-    json_data.update(json_data2)
+    json_data = data.update(datosAparatos).pop('_id').pop('nombrenodo')
     print("JSON: ", json_data)
 
 #    print("GET time : \t", data['time'])
@@ -215,8 +210,6 @@ def graficoHistorico():
 @app.route('/api/manejoLucesYtemp', methods=['GET']) # Ruta de consulta del SP32 que maneja los aparatos
 def encendidoAparatos():
     data = colManejoAparatos.find_one({"nombrenodo": "Nodo1"})
-    print("Datos: ", data)
-    print("###"*10)
     datos = {"encenderLuces": data["encenderLuces"], 
     "encenderCalefaccion": data["encenderCalefaccion"], 
     "encendidoAutomaticoLuces": data["encendidoAutomaticoLuces"], 
