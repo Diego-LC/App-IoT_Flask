@@ -252,17 +252,15 @@
                 console.error('Error:', error);
             })
             .finally(() => {
-                setTimeout(console.log("4 segundos despues"),4000);
-                actualizarDatosHtml();
-                console.log('Fetch realizado');
+                enviarDatosPeriodicos();
             });
         }
 
-/*         function enviarDatosPeriodicos(){
-            clearInterval(enviarDatos);
-            setInterval(enviarDatos, 1000);
-
-        } */
+        function enviarDatosPeriodicos(){
+            setTimeout(console.log("4 segundos despues"),4000);
+            actualizarDatosHtml();
+            console.log('Fetch realizado');
+        }
         enviarDatos();
         
         function mostrarModal(dato) {
