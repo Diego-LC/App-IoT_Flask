@@ -132,38 +132,22 @@ def logout():
     session.pop('user', None)
     return redirect('/login')
 
-@app.route('/api/enviar_datos', methods=['POST'])
+@app.route('/api/enviar_datos', methods=['POST']) # Ruta desde el usuario a enviar datos al SP32 que maneja los aparatos
 def enviar_datos():
     datoRecibido = request.get_json()
     print("Dato recibido: ", datoRecibido)
     data  = colManejoAparatos.find()
+    #{'lucesAutom': False, 'calefaccionAutom': False, 'onOffLuces': True, 'onOffCalefaccion': False}
+    datos = {"encenderLuces": data["lucesAutom"], "encenderCalefaccion": data["calefaccionAutom"], "encendidoAutomaticoLuces": data["onOffLuces"], "encendidoAutomaticoCalefaccion": data["onOffCalefaccion"]}
     if (len(list(data)) == 0):
         dato = {"encenderLuces": "0", "encenderCalefaccion": "0", "encendidoAutomaticoLuces": "0", "encendidoAutomaticoCalefaccion": "0", "nombrenodo": "Nodo1"}
         colManejoAparatos.insert_one(dato)
     print("Dato recibido: ", datoRecibido)
 
-    if (datoRecibido['dato'] == 'encenderLuces'):
-        dato = {"encenderLuces": datoRecibido['valor']}
-        colManejoAparatos.update_one({"nombrenodo": "Nodo1"}, {"$set": dato})
-
-    elif (datoRecibido['dato'] == 'encenderCalefaccion'):
-        dato = {"encenderCalefaccion": datoRecibido['valor']}
-        colManejoAparatos.update_one({"nombrenodo": "Nodo1"}, {"$set": dato})
-
-    elif (datoRecibido['dato'] == 'encendidoAutomaticoLuces'):
-        dato = {"encendidoAutomaticoLuces": datoRecibido['valor']}
-        colManejoAparatos.update_one({"nombrenodo": "Nodo1"}, {"$set": dato})
-
-    elif (datoRecibido['dato'] == 'encendidoAutomaticoCalefaccion'):
-        dato = {"encendidoAutomaticoCalefaccion": datoRecibido['valor']}
-        colManejoAparatos.update_one({"nombrenodo": "Nodo1"}, {"$set": dato})
-
-    else:
-        dato = {"encenderLuces": "0", "encenderCalefaccion": "0", "encendidoAutomaticoLuces": "0", "encendidoAutomaticoCalefaccion": "0"}
+    if all( key in datoRecibido for key in ["encenderLuces", "encenderCalefaccion", "encendidoAutomaticoLuces", "encendidoAutomaticoCalefaccion"]):
         colManejoAparatos.update_one({"nombrenodo": "Nodo1"}, {"$set": dato})
 
 
-        print(dato)
     return jsonify({'message': 'Datos almacenados correctamente'}), 200
 
 # Nueva ruta para obtener el último dato en formato JSON
@@ -183,7 +167,7 @@ def get_last_data():
     # Devuelve los datos en formato JSON
     return jsonify(json_data)
 
-@app.route('/api/redWifi', methods=['POST'])
+@app.route('/api/redWifi', methods=['POST']) # Ruta desde el usuario que envía su ssid wifi y verifica si está en casa para apagar las luces
 def redWifi():
     if request.method == 'POST':
         datoRecibido = request.get_json()
