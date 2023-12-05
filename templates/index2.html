@@ -257,8 +257,7 @@
         }
 
         function enviarDatosPeriodicos(){
-            setTimeout(() => console.log("4 segundos despues"), 4000);
-            actualizarDatosHtml();
+            setTimeout(() => actualizarDatosHtml(),console.log("1 segundos despues"), 1000);
             console.log('Fetch realizado');
         }
         enviarDatos();
