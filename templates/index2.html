@@ -240,32 +240,37 @@
         var onOffLuces = document.getElementById('onOffLucesSwitch');
         var onOffCalefaccion = document.getElementById('onOffcalefaccionSwitch');
 
+        var peticion = true; // Para evitar peticiones simultáneas
         function enviarDatos() {
             // Puedes enviar el dato al servidor aquí, por ejemplo, usando fetch
-            fetch('/api/enviar_datos', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                
-                body: JSON.stringify({"lucesAutom": switchLucesAuto.toString(), "calefaccionAutom": switchCalefaccionAuto.toString(), "onOffLuces": switchLuces.toString(), "onOffCalefaccion": switchCalefaccion.toString()}),
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Error al enviar el dato al servidor');
-                }
-                // Maneja la respuesta del servidor si es necesario
-                return response.json();
-            })
-            .then(data => {
-                console.log('Dato enviado correctamente:', data);
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            })
-            .finally(() => {
-                enviarDatosPeriodicos();
-            });
+            if (peticion){
+                peticion = false;
+                fetch('/api/enviar_datos', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    
+                    body: JSON.stringify({"lucesAutom": switchLucesAuto.toString(), "calefaccionAutom": switchCalefaccionAuto.toString(), "onOffLuces": switchLuces.toString(), "onOffCalefaccion": switchCalefaccion.toString()}),
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error al enviar el dato al servidor');
+                    }
+                    // Maneja la respuesta del servidor si es necesario
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Dato enviado correctamente:', data);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                })
+                .finally(() => {
+                    enviarDatosPeriodicos();
+                    peticion = true;
+                });
+            }
         }
 
         function enviarDatosPeriodicos(){
