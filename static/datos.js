@@ -37,18 +37,18 @@ document.addEventListener('DOMContentLoaded', function () {
     function updateChart(data) {
         console.log(data);
         console.log(data.medicionLuz);
-        const { time, medicionLuz, medicionTemperatura,  encenderLuces, encenderCalefaccion,
-            estaCalefaccionAutom, estaLucesAutom, estaPuertaAbierta, nombrenodo
+        const {medicionLuz, medicionTemperatura,  encenderLuces, encenderCalefaccion,
+            encendidoAutomaticoCalefaccion, encendidoAutomaticoLuces, estaPuertaAbierta
         } = data;
+        
 
         datoLuz = medicionLuz;
         datoTemperatura = +medicionTemperatura.toFixed(2);
         datoPuerta = estaPuertaAbierta;
         datoCalefaccion = encenderCalefaccion;
         datoLuces = encenderLuces;
-        datoCalefaccionAuto = estaCalefaccionAutom;
-        datoLucesAuto = estaLucesAutom;
-        datoNombreNodo = nombrenodo;
+        datoCalefaccionAuto = encendidoAutomaticoCalefaccion;
+        datoLucesAuto = encendidoAutomaticoLuces;
     }
 
 
