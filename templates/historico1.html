@@ -92,7 +92,15 @@
 
 const data = await fetch(
     'http://34.239.209.214:8085/static/datos.json'
-).then(response => response.json());
+).then(response => {
+    datos1 = response.json();
+    datos = [];
+    for (let i = 0; i < datos1.length; i++) {
+        datos.push([parseInt(datos1[i][0]), datos1[i][1].temperatura]);
+    }
+    return datos;
+
+});
 
 Highcharts.chart('container', {
     chart: {
