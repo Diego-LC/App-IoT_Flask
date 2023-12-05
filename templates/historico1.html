@@ -88,10 +88,9 @@
 
     <script>
 
-        var data = [];
-
         function getData(){
             return $.get("http://34.239.209.214:8085/static/datos.json").done(function(x1){
+                console.log(x1);  // Imprime el JSON recibido
                 var datos = JSON.parse(x1);
                 console.log(datos);
                 for (let i = 0; i < datos.length; i++) {
@@ -99,10 +98,6 @@
                 }
             });
         }
-
-        getData().then(() => {
-            console.log(data);
-        });
 
         Highcharts.chart('container', {
             chart: {
