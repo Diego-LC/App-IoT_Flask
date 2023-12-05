@@ -93,7 +93,9 @@
         function getData(){
             return $.get("http://34.239.209.214:8085/static/datos.json").done(function(x1){
                 console.log(x1);  // Imprime el JSON recibido
-                var datos = x1;
+                var datos = x1.sort(function(a, b) {
+                    return b[0] - a[0];
+                });
                 console.log(datos);
                 for (let i = 0; i < datos.length; i++) {
                     data.push([parseInt(datos[i][0]), datos[i][1]]);

@@ -80,12 +80,14 @@ def login():
 @app.route('/api/data', methods=['POST']) #Ruta donde se reciben los datos del SP32
 def receive_data():
     data = request.get_json()
+    ahora = datetime.now()
+    ms = time.mktime(ahora.timetuple()) * 1000
     if all(key in data for key in 
         ["time", "medicionLuz", "medicionTemperatura", 
         "estaPuertaAbierta", "estaLucesAutom", "estaCalefaccionAutom", 
         "encenderLuces", "encenderCalefaccion", "nombrenodo"]):
         datos = {
-            "time": data["time"],
+            "time": ms,
             "medicionLuz": data["medicionLuz"],
             "medicionTemperatura": data["medicionTemperatura"],
             "estaPuertaAbierta": data["estaPuertaAbierta"],
@@ -93,7 +95,7 @@ def receive_data():
         }
 
         # Inserta los datos en la colección MongoDB
-        #collection.delete_many({})
+        collection.delete_many({})
         inserted_data = collection.insert_one(datos)
         inserted_id_str = str(inserted_data.inserted_id)
 
