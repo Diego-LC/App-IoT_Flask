@@ -240,7 +240,8 @@ def alertar():
     datos = {"estaPuertaAbierta": "true"}
     colManejoAparatos.find_one_and_update({"nombrenodo": "Nodo1"}, {"$set": datos})
     print(datos)
-    return 'F',200
+    print("Puerta abierta------+++++----+++++++--------++++++++------")
+    return jsonify({'message': 'Datos almacenados correctamente'}), 200
 
 @socketio.on('connect')
 def handle_connect():
