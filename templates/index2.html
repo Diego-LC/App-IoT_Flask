@@ -185,7 +185,7 @@
         const highchartsFigure = document.querySelector('.highcharts-figure')
 
         document.getElementById('graficoHistoricoLuzLink').addEventListener('click', () => {
-            $.get("/graficoHistorico", function(data, status){
+            $.get("/graficoHistorico").done(function(data) {
                 document.getElementById('grafic-luz-tab-pane').innerHTML = data;
             });
         });
