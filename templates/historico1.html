@@ -1,119 +1,131 @@
-
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Documento HTML Vacío</title>
     <style>
-        body {
-            font-family: Arial;
-            margin: 0;
-            padding: 5px;
-            color: #555;
-            height: 100vh;
-        }
-        .highcharts-figure, .highcharts-data-table table {
-            min-width: 320px;
-            max-width: 800px;
-            margin: 1em auto;
-            min-height: 200px;
-            max-height: 600px;
-        }
-        .highcharts-container {
-            min-width: 320px;
-            max-width: 800px;
-            margin: 1em auto;
-            min-height: 200px;
-            max-height: 600px;
-        }
-        h2 {
-            text-align: center;
-        }
-        /* Añadido: Estilos para el navbar */
-        nav {
-            margin-bottom: 20px;
-        }
-        .contenedor {
-            margin: 20px;
-        }
-    </style>
+        .highcharts-figure,
+.highcharts-data-table table {
+    min-width: 360px;
+    max-width: 800px;
+    margin: 1em auto;
+}
 
+.highcharts-data-table table {
+    font-family: Verdana, sans-serif;
+    border-collapse: collapse;
+    border: 1px solid #ebebeb;
+    margin: 10px auto;
+    text-align: center;
+    width: 100%;
+    max-width: 500px;
+}
+
+.highcharts-data-table caption {
+    padding: 1em 0;
+    font-size: 1.2em;
+    color: #555;
+}
+
+.highcharts-data-table th {
+    font-weight: 600;
+    padding: 0.5em;
+}
+
+.highcharts-data-table td,
+.highcharts-data-table th,
+.highcharts-data-table caption {
+    padding: 0.5em;
+}
+
+.highcharts-data-table thead tr,
+.highcharts-data-table tr:nth-child(even) {
+    background: #f8f8f8;
+}
+
+.highcharts-data-table tr:hover {
+    background: #f1f7ff;
+}
+
+    </style>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+</head>
+<body>
+    
     <figure class="highcharts-figure">
-        <div id="container3"></div>
+        <div id="container"></div>
         <p class="highcharts-description">
-            Gráfica de temperatura en el tiempo
+            Gráfico de temperatura en tiempo real
         </p>
     </figure>
-    <hr>
-    <div id="datos1">
-
-    </div>
-    </div>
-
     <script>
-        async function historicoTemp () {
+        (async () => {
 
-            const data1 = await fetch("/api/generar")
-            .then(response => response);
-            console.log(data1);
+const data = await fetch(
+    'http://34.239.209.214:8085/static/datosTemp.json'
+).then(response => response.json());
 
-            const data = await fetch(
-                'http://34.239.209.214:8085/static/datos.json'
-            ).then(response => response.json());
+Highcharts.chart('container', {
+    chart: {
+        zoomType: 'x'
+    },
+    title: {
+        text: 'Datos del sensor de temperatura',
+        align: 'left'
+    },
+    subtitle: {
+        text: document.ontouchstart === undefined ?
+            'Haz clic y arrastra en el área de trazado para hacer zoom' : 'Pinch the chart to zoom in',
+        align: 'left'
+    },
+    xAxis: {
+        type: 'datetime'
+    },
+    yAxis: {
+        title: {
+            text: 'temperatura (°C)'
+        }
+    },
+    legend: {
+        enabled: false
+    },
+    plotOptions: {
+        area: {
+            fillColor: {
+                linearGradient: {
+                    x1: 0,
+                    y1: 0,
+                    x2: 0,
+                    y2: 1
+                },
+                stops: [
+                    [0, Highcharts.getOptions().colors[0]],
+                    [1, Highcharts.color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
+                ]
+            },
+            marker: {
+                radius: 2
+            },
+            lineWidth: 1,
+            states: {
+                hover: {
+                    lineWidth: 1
+                }
+            },
+            threshold: null
+        }
+    },
 
-            Highcharts.chart('container3', {
-                chart: {
-                    zoomType: 'x'
-                },
-                title: {
-                    text: 'Datos del sensor de temperatura',
-                    align: 'left'
-                },
-                subtitle: {
-                    text: document.ontouchstart === undefined ?
-                        'Haz clic y arrastra en el área de trazado para hacer zoom' : 'Pinch the chart to zoom in',
-                    align: 'left'
-                },
-                xAxis: {
-                    type: 'datetime'
-                },
-                yAxis: {
-                    title: {
-                        text: 'temperatura (°C)'
-                    }
-                },
-                legend: {
-                    enabled: false
-                },
-                plotOptions: {
-                    area: {
-                        fillColor: {
-                            linearGradient: {
-                                x1: 0,
-                                y1: 0,
-                                x2: 0,
-                                y2: 1
-                            },
-                            stops: [
-                                [0, Highcharts.getOptions().colors[0]],
-                                [1, Highcharts.color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
-                            ]
-                        },
-                        marker: {
-                            radius: 2
-                        },
-                        lineWidth: 1,
-                        states: {
-                            hover: {
-                                lineWidth: 1
-                            }
-                        },
-                        threshold: null
-                    }
-                },
-
-                series: [{
-                    type: 'area',
-                    name: 'temperatura (°C)',
-                    data: data
-                }]
-            });
-        };
-
-    </script> 
-
+    series: [{
+        type: 'area',
+        name: 'temperatura (°C)',
+        data: data
+    }]
+});
+})();
+    </script>    
+</body>
+</html>

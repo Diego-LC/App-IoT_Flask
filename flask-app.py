@@ -44,6 +44,7 @@ def register():
         user_data = {'username': username, 'password': password}
         inserted_data = collectionUsers.insert_one(user_data)
         inserted_id_str = str(inserted_data.inserted_id)
+        print("Usuario registrado: " + username + " con id: " + inserted_id_str)
 
         # Redirige al usuario a la página principal después del registro
         session['user'] = username
@@ -141,8 +142,8 @@ def enviar_datos():
         "encenderLuces": datoRecibido["onOffLuces"], 
         "encenderCalefaccion": datoRecibido["onOffCalefaccion"], 
         "encendidoAutomaticoLuces": datoRecibido["lucesAutom"], 
-        "encendidoAutomaticoCalefaccion": datoRecibido["calefaccionAutom"
-    ]}
+        "encendidoAutomaticoCalefaccion": datoRecibido["calefaccionAutom"]
+        }
     print("Dato recibido: ", datos)
     print("++++++++++++++++++++++++++++++" *2)
     if (len(list(data)) == 0): # Si no hay datos en la colección, inserta el primer dato
@@ -165,7 +166,7 @@ def get_last_data():
         'time': data['time'],
         'medicionLuz': data['medicionLuz'],
         'medicionTemperatura': data['medicionTemperatura'],
-        'estaPuertaAbierta': data['estaPuertaAbierta'],
+        'estaPuertaAbierta': datosAparatos['estaPuertaAbierta'],
         'encenderLuces': datosAparatos['encenderLuces'],
         'encenderCalefaccion': datosAparatos['encenderCalefaccion'],
         'encendidoAutomaticoLuces': datosAparatos['encendidoAutomaticoLuces'],
