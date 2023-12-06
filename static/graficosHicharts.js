@@ -126,7 +126,7 @@ Highcharts.chart('container2', {
 
     tooltip: {
         headerFormat: '<b>{series.name}</b><br/>',
-        pointFormat: '{point.x:%d-%m-%Y %H:%M:%S}<br/>{point.y:.2f} °C'
+        pointFormat: '{point.x:%d-%m-%Y %H:%M:%S}<br/>{point.y:.2f} °C y {point.y:.2f} Lux'
     },
 
     legend: {

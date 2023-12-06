@@ -204,16 +204,18 @@ def last_lux_data():
 def get_last_1000_temp_data():
     # Obtiene los últimos 1000 datos de la colección MongoDB
     cursor = collection.find(sort=[('_id', -1)], limit=10000)
-
-    datos = []
-
+    datosLuz = []
+    datosTemp = []
     for data in cursor:
-        datos.append([int(data['time']), data['medicionLuz']])
-
-    datos = sorted(datos, key=lambda x: x[0])
-
-    with open('static/datos.json', 'w', newline='') as archivo:
-        json.dump(datos , archivo)
+        datosLuz.append([int(data['time']), data['medicionLuz']])
+        datosTemp.append([int(data['time']), data['medicionTemperatura']])
+    datosLuz = sorted(datosLuz, key=lambda x: x[0])
+    datosTemp = sorted(datosTemp, key=lambda x: x[0])
+    with open('static/datosLuz.json', 'w', newline='') as archivo:
+        json.dump(datosLuz , archivo)
+        archivo.close()
+    with open('static/datosTemp.json', 'w', newline='') as archivo:
+        json.dump(datosTemp , archivo)
         archivo.close()
 
     return "Datos guardados exitosamente en datos.json", 200
@@ -234,8 +236,8 @@ def encendidoAparatos():
 
 @app.route('/api/alertarPuertaAbierta', methods=['POST'])
 def alertar():
-    datos = {"alertar": "1"}
-    collection.delete_many({"alertar": "1"})
+    datos = {"alertar": "true"}
+    colManejoAparatos.find_one_and_update({"nombrenodo": "Nodo1"}, {"$set": datos})
     print(datos)
     return 'F',200
 

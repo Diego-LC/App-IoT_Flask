@@ -100,6 +100,7 @@
                     <label class="form-check-label" for="flexSwitchCheckDisabled">Encendido/apagado de luces</label>
                 </div>
             </div>
+
             <div class="tab-pane fade p-3" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
                 <div class="form-check form-switch">
                     <input class="form-check-input" type="checkbox" role="switch" id="switchCalefaccionAutom" unchecked>
@@ -110,19 +111,26 @@
                     <label class="form-check-label" for="flexSwitchCheckDisabled">Encendido/apagado de la calefacción</label>
                 </div>
             </div>
+
             <div class="tab-pane fade p-3" id="grafic-luz-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
                 <figure class="highcharts-figure">
                     <div id="container1"></div>
+                    <p class="highcharts-description">
+                        Gráfica de Luz en el tiempo
+                    </p>
+                </figure>
+            </div>
+
+            <div class="tab-pane fade p-3" id="grafic-temp-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
+                <figure class="highcharts-figure">
+                    <div id="container3"></div>
                     <p class="highcharts-description">
                         Gráfica de temperatura en el tiempo
                     </p>
                 </figure>
             </div>
-            <div class="tab-pane fade p-3" id="grafic-temp-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
 
-            </div>
-            <!-- 
-            <div class="tab-pane fade" id="disabled-tab-pane" role="tabpanel" aria-labelledby="disabled-tab" tabindex="0">...</div> -->
+            <!-- <div class="tab-pane fade" id="disabled-tab-pane" role="tabpanel" aria-labelledby="disabled-tab" tabindex="0">...</div> -->
         </div>
                                 <!-- Añadido: Botón para abrir el modal -->
         <button type="button" class="btn btn-primary" onclick="mostrarModal('Notificación de prueba')">
@@ -191,7 +199,7 @@
                     zoomType: 'x'
                 },
                 title: {
-                    text: 'Datos del sensor de temperatura',
+                    text: 'Datos del sensor de Luz',
                     align: 'left'
                 },
                 subtitle: {
@@ -204,7 +212,7 @@
                 },
                 yAxis: {
                     title: {
-                        text: 'temperatura (°C)'
+                        text: 'Luz (lux)'
                     }
                 },
                 legend: {
@@ -239,7 +247,7 @@
 
                 series: [{
                     type: 'area',
-                    name: 'temperatura (°C)',
+                    name: 'Luz (lux)',
                     data: data
                 }]
             });
@@ -261,7 +269,6 @@
         const highchartsFigure = document.querySelector('.highcharts-figure')
 
 
-
         triggerTabList.forEach(triggerEl => {
             const tabTrigger = new bootstrap.Tab(triggerEl)
             triggerEl.addEventListener('click', event => {
@@ -269,6 +276,9 @@
                 tabTrigger.show()
                 if (triggerEl.id === 'grafic-luz') {
                     historicoLuz();
+                }
+                if (triggerEl.id === 'grafic-temp') {
+                    historicoTemp();
                 }
             })
         })
@@ -279,7 +289,6 @@
         if (toastTrigger) {
             toastTrigger.addEventListener('click', () => {
                 const toast = new bootstrap.Toast(toastLiveExample)
-
                 toast.show()
             })
         }
@@ -387,6 +396,79 @@
 
     <script src="/static/datos.js"></script>
     <script src="/static/graficosHicharts.js"></script>
+
+    <script>
+        async function historicoTemp () {
+
+            const data1 = await fetch("/api/generar")
+            .then(response => response);
+            console.log(data1);
+
+            const data = await fetch(
+                'http://34.239.209.214:8085/static/datos.json'
+            ).then(response => response.json());
+
+            Highcharts.chart('container3', {
+                chart: {
+                    zoomType: 'x'
+                },
+                title: {
+                    text: 'Datos del sensor de temperatura',
+                    align: 'left'
+                },
+                subtitle: {
+                    text: document.ontouchstart === undefined ?
+                        'Haz clic y arrastra en el área de trazado para hacer zoom' : 'Pinch the chart to zoom in',
+                    align: 'left'
+                },
+                xAxis: {
+                    type: 'datetime'
+                },
+                yAxis: {
+                    title: {
+                        text: 'temperatura (°C)'
+                    }
+                },
+                legend: {
+                    enabled: false
+                },
+                plotOptions: {
+                    area: {
+                        fillColor: {
+                            linearGradient: {
+                                x1: 0,
+                                y1: 0,
+                                x2: 0,
+                                y2: 1
+                            },
+                            stops: [
+                                [0, Highcharts.getOptions().colors[0]],
+                                [1, Highcharts.color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
+                            ]
+                        },
+                        marker: {
+                            radius: 2
+                        },
+                        lineWidth: 1,
+                        states: {
+                            hover: {
+                                lineWidth: 1
+                            }
+                        },
+                        threshold: null
+                    }
+                },
+
+                series: [{
+                    type: 'area',
+                    name: 'temperatura (°C)',
+                    data: data
+                }]
+            });
+        };
+
+    </script> 
+
 
     
 </body>
