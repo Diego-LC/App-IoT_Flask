@@ -135,7 +135,7 @@ const data = await fetch(
     'http://34.239.209.214:8085/static/datosTemp.json'
 ).then(response => response.json());
 
-Highcharts.chart('container', {
+Highcharts.stockChart('container', {
     chart: {
         zoomType: 'x'
     },
