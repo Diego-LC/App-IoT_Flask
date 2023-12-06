@@ -34,7 +34,7 @@
     </style>
 
     <figure class="highcharts-figure">
-        <div id="container"></div>
+        <div id="container1"></div>
         <p class="highcharts-description">
             Gráfica de temperatura en el tiempo
         </p>
@@ -56,7 +56,7 @@
                 'http://34.239.209.214:8085/static/datos.json'
             ).then(response => response.json());
 
-            Highcharts.chart('container', {
+            Highcharts.chart('container1', {
                 chart: {
                     zoomType: 'x'
                 },

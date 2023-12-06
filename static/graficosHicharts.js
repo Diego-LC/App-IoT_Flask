@@ -80,7 +80,7 @@ Highcharts.addEvent(Highcharts.Series, 'addPoint', e => {
 
 
 
-Highcharts.chart('container', {
+Highcharts.chart('container2', {
     chart: {
         type: 'spline',
         events: {
