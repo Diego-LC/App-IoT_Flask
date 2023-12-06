@@ -221,9 +221,13 @@ def get_last_1000_temp_data():
 
     return "Datos guardados exitosamente en datos.json", 200
 
-@app.route('/graficoHistorico', methods=['GET'])
-def graficoHistorico():
-    return render_template('historico1.html', username=session['user'])
+@app.route('/graficoHistoricoTemp', methods=['GET'])
+def graficoHistoricoTemp():
+    return render_template('graficoTempHist.html', username=session['user'])
+
+@app.route('/graficoHistoricoLuz', methods=['GET'])
+def graficoHistoricoLuz():
+    return render_template('graficoLuzHist.html', username=session['user'])
 
 @app.route('/api/manejoLucesYtemp', methods=['GET']) # Ruta de consulta del SP32 que maneja los aparatos
 def encendidoAparatos():
