@@ -81,7 +81,7 @@
 
 
     function updateChart(data) {
-        const { time, medicionLuz, medicionTemperatura } = JSON.parse(data);
+        const { time, medicionLuz, medicionTemperatura } = data.json();
         datoLuz = medicionLuz;
         datoTemperatura = +medicionTemperatura.toFixed(2);
 
