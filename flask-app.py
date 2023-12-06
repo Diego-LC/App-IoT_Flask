@@ -237,7 +237,7 @@ def encendidoAparatos():
 
 @app.route('/api/alertarPuertaAbierta', methods=['POST'])
 def alertar():
-    datos = {"alertar": "true"}
+    datos = {"estaPuertaAbierta": "true"}
     colManejoAparatos.find_one_and_update({"nombrenodo": "Nodo1"}, {"$set": datos})
     print(datos)
     return 'F',200

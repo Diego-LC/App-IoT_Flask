@@ -126,7 +126,31 @@ Highcharts.chart('container2', {
 
     tooltip: {
         headerFormat: '<b>{series.name}</b><br/>',
-        pointFormat: '{point.x:%d-%m-%Y %H:%M:%S}<br/>{point.y:.2f} °C y {point.y:.2f} Lux'
+        pointFormat: '{point.x:%d-%m-%Y %H:%M:%S}<br/>{point.y:.2f}',
+        addPoint: function (point, series, redraw, shift, animation) {
+            // Get the extremes
+            const xAxis = series.xAxis,
+                yAxis = series.yAxis,
+                xExtremes = xAxis.getExtremes(),
+                yExtremes = yAxis.getExtremes();
+
+            // Shift out old points
+            while (series.data.length > 0 && series.data[0].x < xExtremes.min) {
+                series.data[0].remove(false);
+            }
+
+            // Add new point
+            series.addPoint(point, false, redraw, false, animation);
+
+            // Shift out of bounds points off the chart
+            while (series.data.length > 0 && series.data[series.data.length - 1].x > xExtremes.max) {
+                series.data[series.data.length - 1].remove(false);
+            }
+
+            // Redraw
+            xAxis.setExtremes(xExtremes.min, xExtremes.max, false);
+            yAxis.setExtremes(yExtremes.min, yExtremes.max, redraw);
+        }
     },
 
     legend: {
