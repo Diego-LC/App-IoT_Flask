@@ -271,7 +271,9 @@
         })
 
         document.getElementById('graficoHistoricoLuzLink').addEventListener('click', () => {
-            historicoLuz();
+            setTimeout(function() {
+                historicoLuz();
+            }, 1000);
         });
 
         const toastTrigger = document.getElementById('liveToastBtn')
