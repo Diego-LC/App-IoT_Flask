@@ -256,7 +256,10 @@
                     type: 'area',
                     name: 'Luz (lux)',
                     data: data
-                }]
+                }],
+                time: {
+                    useUTC: false
+                }
             });
         };
 
@@ -430,6 +433,9 @@
                 },
                 xAxis: {
                     type: 'datetime'
+                },    
+                time: {
+                    useUTC: false
                 },
                 yAxis: {
                     title: {
