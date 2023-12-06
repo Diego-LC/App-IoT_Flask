@@ -270,8 +270,12 @@
             })
         })
 
-        $('#graficoHistoricoLuz').on('click', function() {
-            historicoLuz();
+        $('#myTab a').on('shown.bs.tab', function (event) {
+            var tabId = $(event.target).attr('href');  // Obtiene el id de la pestaña mostrada
+
+            if (tabId === '#graficoHistoricoLuz') {
+                historicoLuz();  // Llama a la función que crea el gráfico
+            }
         });
 
         const toastTrigger = document.getElementById('liveToastBtn')
