@@ -175,6 +175,77 @@
         <hr>
     </div>
 
+    <script>
+        async function historicoLuz () {
+
+            const data1 = await fetch("/api/generar")
+            .then(response => response);
+            console.log(data1);
+
+            const data = await fetch(
+                'http://34.239.209.214:8085/static/datos.json'
+            ).then(response => response.json());
+
+            Highcharts.chart('container1', {
+                chart: {
+                    zoomType: 'x'
+                },
+                title: {
+                    text: 'Datos del sensor de temperatura',
+                    align: 'left'
+                },
+                subtitle: {
+                    text: document.ontouchstart === undefined ?
+                        'Haz clic y arrastra en el área de trazado para hacer zoom' : 'Pinch the chart to zoom in',
+                    align: 'left'
+                },
+                xAxis: {
+                    type: 'datetime'
+                },
+                yAxis: {
+                    title: {
+                        text: 'temperatura (°C)'
+                    }
+                },
+                legend: {
+                    enabled: false
+                },
+                plotOptions: {
+                    area: {
+                        fillColor: {
+                            linearGradient: {
+                                x1: 0,
+                                y1: 0,
+                                x2: 0,
+                                y2: 1
+                            },
+                            stops: [
+                                [0, Highcharts.getOptions().colors[0]],
+                                [1, Highcharts.color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
+                            ]
+                        },
+                        marker: {
+                            radius: 2
+                        },
+                        lineWidth: 1,
+                        states: {
+                            hover: {
+                                lineWidth: 1
+                            }
+                        },
+                        threshold: null
+                    }
+                },
+
+                series: [{
+                    type: 'area',
+                    name: 'temperatura (°C)',
+                    data: data
+                }]
+            });
+        };
+
+    </script> 
     <!-- Añadido: Script para enviar datos al servidor -->
     <script>
         var notificacionPuerta = true;
@@ -190,9 +261,7 @@
         const highchartsFigure = document.querySelector('.highcharts-figure')
 
         document.getElementById('graficoHistoricoLuzLink').addEventListener('click', () => {
-            $.get("/graficoHistorico").done(function(data) {
-                document.getElementById('grafic-luz-tab-pane').innerHTML = data;
-            });
+            historicoLuz();
         });
 
         triggerTabList.forEach(triggerEl => {
@@ -315,77 +384,6 @@
         }
     </script>
 
-<script>
-    (async () => {
-
-        const data1 = await fetch("/api/generar")
-        .then(response => response);
-        console.log(data1);
-
-        const data = await fetch(
-            'http://34.239.209.214:8085/static/datos.json'
-        ).then(response => response.json());
-
-        Highcharts.chart('container1', {
-            chart: {
-                zoomType: 'x'
-            },
-            title: {
-                text: 'Datos del sensor de temperatura',
-                align: 'left'
-            },
-            subtitle: {
-                text: document.ontouchstart === undefined ?
-                    'Haz clic y arrastra en el área de trazado para hacer zoom' : 'Pinch the chart to zoom in',
-                align: 'left'
-            },
-            xAxis: {
-                type: 'datetime'
-            },
-            yAxis: {
-                title: {
-                    text: 'temperatura (°C)'
-                }
-            },
-            legend: {
-                enabled: false
-            },
-            plotOptions: {
-                area: {
-                    fillColor: {
-                        linearGradient: {
-                            x1: 0,
-                            y1: 0,
-                            x2: 0,
-                            y2: 1
-                        },
-                        stops: [
-                            [0, Highcharts.getOptions().colors[0]],
-                            [1, Highcharts.color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
-                        ]
-                    },
-                    marker: {
-                        radius: 2
-                    },
-                    lineWidth: 1,
-                    states: {
-                        hover: {
-                            lineWidth: 1
-                        }
-                    },
-                    threshold: null
-                }
-            },
-
-            series: [{
-                type: 'area',
-                name: 'temperatura (°C)',
-                data: data
-            }]
-        });
-    })();
-
-</script> 
 
     <script src="/static/datos.js"></script>
     <script src="/static/graficosHicharts.js"></script>

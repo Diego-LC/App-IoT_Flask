@@ -46,7 +46,7 @@
     </div>
 
     <script>
-        (async () => {
+        async function historicoLuz () {
 
             const data1 = await fetch("/api/generar")
             .then(response => response);
@@ -113,7 +113,7 @@
                     data: data
                 }]
             });
-        })();
+        };
 
     </script> 
 
