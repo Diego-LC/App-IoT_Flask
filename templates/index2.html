@@ -261,7 +261,7 @@
         const highchartsFigure = document.querySelector('.highcharts-figure')
 
         document.getElementById('graficoHistoricoLuzLink').addEventListener('click', () => {
-            historicoLuz();
+           
         });
 
         triggerTabList.forEach(triggerEl => {
@@ -270,6 +270,7 @@
             triggerEl.addEventListener('click', event => {
                 event.preventDefault()
                 tabTrigger.show()
+                historicoLuz();
             })
         })
 
