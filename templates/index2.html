@@ -60,7 +60,10 @@
                     <a class="nav-link" href="/data2">Inicio</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="graficoHistoricoLink" href="#">Grafico histórico</a>
+                    <a class="nav-link" id="graficoHistoricoLuzLink" href="#">Grafico histórico de Luz</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="graficoHistoricoTempLink" href="">Grafico histórico de temperatura</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/logout">Cerrar Sesión</a>
@@ -78,6 +81,12 @@
             </li>
             <li class="nav-item" role="presentation">
                 <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">Control calefacción</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="grafic-luz" data-bs-toggle="tab" data-bs-target="#grafic-luz-tab-pane" type="button" role="tab" aria-controls="grafic-luz-tab-pane" aria-selected="false">Grafico luz histórico</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="grafic-temp" data-bs-toggle="tab" data-bs-target="#grafic-temp-tab-pane" type="button" role="tab" aria-controls="grafic-temp-tab-pane" aria-selected="false">Grafico temperatura histórico</button>
             </li>
         </ul>
         <div class="tab-content" id="myTabContent">
@@ -100,7 +109,14 @@
                     <input class="form-check-input" type="checkbox" role="switch" id="onOffcalefaccionSwitch" disabled checked>
                     <label class="form-check-label" for="flexSwitchCheckDisabled">Encendido/apagado de la calefacción</label>
                 </div>
-            </div><!-- 
+            </div>
+            <div class="tab-pane fade p-3" id="grafic-luz-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
+
+            </div>
+            <div class="tab-pane fade p-3" id="grafic-temp-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
+
+            </div>
+            <!-- 
             <div class="tab-pane fade" id="disabled-tab-pane" role="tabpanel" aria-labelledby="disabled-tab" tabindex="0">...</div> -->
         </div>
                                 <!-- Añadido: Botón para abrir el modal -->
@@ -168,7 +184,7 @@
         const triggerTabList = document.querySelectorAll('#myTab button')
         const highchartsFigure = document.querySelector('.highcharts-figure')
 
-        document.getElementById('graficoHistoricoLink').addEventListener('click', () => {
+        document.getElementById('graficoHistoricoLuzLink').addEventListener('click', () => {
             window.location.href = "/graficoHistorico";
         });
 
@@ -294,5 +310,78 @@
 
     <script src="/static/datos.js"></script>
     <script src="/static/graficosHicharts.js"></script>
+
+    
+    <script>
+        (async () => {
+
+            const data1 = await fetch("/api/generar")
+            .then(response => response);
+            console.log(data1);
+
+            const data = await fetch(
+                'http://34.239.209.214:8085/static/datos.json'
+            ).then(response => response.json());
+
+            Highcharts.chart('container', {
+                chart: {
+                    zoomType: 'x'
+                },
+                title: {
+                    text: 'Datos del sensor de temperatura',
+                    align: 'left'
+                },
+                subtitle: {
+                    text: document.ontouchstart === undefined ?
+                        'Haz clic y arrastra en el área de trazado para hacer zoom' : 'Pinch the chart to zoom in',
+                    align: 'left'
+                },
+                xAxis: {
+                    type: 'datetime'
+                },
+                yAxis: {
+                    title: {
+                        text: 'temperatura (°C)'
+                    }
+                },
+                legend: {
+                    enabled: false
+                },
+                plotOptions: {
+                    area: {
+                        fillColor: {
+                            linearGradient: {
+                                x1: 0,
+                                y1: 0,
+                                x2: 0,
+                                y2: 1
+                            },
+                            stops: [
+                                [0, Highcharts.getOptions().colors[0]],
+                                [1, Highcharts.color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
+                            ]
+                        },
+                        marker: {
+                            radius: 2
+                        },
+                        lineWidth: 1,
+                        states: {
+                            hover: {
+                                lineWidth: 1
+                            }
+                        },
+                        threshold: null
+                    }
+                },
+
+                series: [{
+                    type: 'area',
+                    name: 'temperatura (°C)',
+                    data: data
+                }]
+            });
+        })();
+
+    </script> 
 </body>
 </html>
