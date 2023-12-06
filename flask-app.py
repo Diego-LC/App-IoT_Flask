@@ -203,7 +203,7 @@ def last_lux_data():
 @app.route('/api/generar', methods=['GET'])
 def get_last_1000_temp_data():
     # Obtiene los últimos 1000 datos de la colección MongoDB
-    cursor = collection.find(sort=[('_id', -1)], limit=1000)
+    cursor = collection.find(sort=[('_id', -1)], limit=10000)
 
     datos = []
 
