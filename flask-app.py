@@ -161,14 +161,13 @@ def get_last_data():
 
     data = collection.find_one(sort=[('_id', -1)])
     datosAparatos = colManejoAparatos.find_one({"nombrenodo": "Nodo1"})
-    print("Datos: ", datosAparatos)
     #print("Datos: ", data)
     json_data = {
         'time': data['time'],
         'medicionLuz': data['medicionLuz'],
         'medicionTemperatura': data['medicionTemperatura'],
         'estaPuertaAbierta': datosAparatos['estaPuertaAbierta'],
-        'encenderLuces': datosAparatos['encenderLuces'],
+        'encenderLuces': data['encenderLuces'],
         'encenderCalefaccion': datosAparatos['encenderCalefaccion'],
         'encendidoAutomaticoLuces': datosAparatos['encendidoAutomaticoLuces'],
         'encendidoAutomaticoCalefaccion': datosAparatos['encendidoAutomaticoCalefaccion'],
