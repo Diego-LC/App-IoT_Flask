@@ -226,7 +226,7 @@ def graficoHistoricoTemp():
     if 'user' not in session:
         # El usuario no está autenticado, redirige a la página de inicio de sesión
         #return redirect('/login')
-        return render_template('graficoTempHist.html' username="Usuario")
+        return render_template('graficoTempHist.html', username="Usuario")
     return render_template('graficoTempHist.html', username=session['user'])
 
 @app.route('/graficoHistoricoLuz', methods=['GET'])
@@ -234,7 +234,7 @@ def graficoHistoricoLuz():
     if 'user' not in session:
         # El usuario no está autenticado, redirige a la página de inicio de sesión
         #return redirect('/login')
-        return render_template('graficoLuzHist.html' username="Usuario")
+        return render_template('graficoLuzHist.html', username="Usuario")
     return render_template('graficoLuzHist.html', username=session['user'])
 
 @app.route('/api/manejoLucesYtemp', methods=['GET']) # Ruta de consulta del SP32 que maneja los aparatos
